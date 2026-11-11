@@ -11,8 +11,17 @@
 
 // Domínio da cidade do emulador: 5 locais, ataques, proteção e o fluxo completo do jogo.
 import { describe, expect, it } from 'vitest'
-import { LOCAIS, ativarCShield, atacar, criarCidade, liberar, passo } from '../src/domain/cidade.js'
-import { situacao } from '../src/domain/cidade-placar.js'
+import {
+  LOCAIS,
+  ataqueEmMassa,
+  ativarCShield,
+  atacar,
+  criarCidade,
+  liberar,
+  passo,
+  recomecar,
+} from '../src/domain/cidade.js'
+import { PERCEPCAO_SEM_CSHIELD_MIN, placar, situacao } from '../src/domain/cidade-placar.js'
 import { PERFIS_EMULADOR } from '../src/domain/perfis.js'
 
 describe('LOCAIS', () => {
@@ -370,5 +379,69 @@ describe('fluxo completo do jogo', () => {
     expect(sit(c, 'ubs-brasilandia')).toBe('SEGURO_LOTE_EM_ANALISE')
     expect(c.locais['ubs-brasilandia'].exposicao).toBeGreaterThan(0)
     expect(realMs).toBeLessThan(60000)
+  })
+})
+
+describe('ataqueEmMassa', () => {
+  it('ataca os 5 locais e marca o coordenado na hora com n = 5', () => {
+    const c = ataqueEmMassa(criarCidade(), 'CALOR', 5000)
+    for (const def of LOCAIS) {
+      expect(c.locais[def.id].ordem).toBe('CALOR')
+      expect(c.locais[def.id].houveAtaque).toBe(true)
+    }
+    expect(c.coordenado).toEqual({ n: 5, segundos: 0 })
+    expect(c.ataquesRecentes).toHaveLength(5)
+  })
+  it('funciona com frio e não muta a cidade recebida', () => {
+    const antes = criarCidade()
+    const copia = structuredClone(antes)
+    const c = ataqueEmMassa(antes, 'FRIO', 0)
+    expect(antes).toEqual(copia)
+    expect(Object.values(c.locais).every((l) => l.ordem === 'FRIO')).toBe(true)
+  })
+  it('recusa tipo desconhecido', () => {
+    expect(() => ataqueEmMassa(criarCidade(), 'RAIO', 0)).toThrow()
+  })
+  it('só a UBS com C-Shield reage; as outras 4 ficam SOB_ATAQUE', () => {
+    const c = avancar(ataqueEmMassa(criarCidade(), 'CALOR', 0), 2)
+    expect(sit(c, 'ubs-vila-mariana')).toBe('ATAQUE_BLOQUEADO')
+    for (const id of ['ubs-brasilandia', 'hemocentro-consolacao', 'farmacia-mooca', 'mercado-liberdade']) {
+      expect(sit(c, id)).toBe('SOB_ATAQUE')
+    }
+  })
+})
+
+describe('recomecar (W18)', () => {
+  it('volta exatamente ao estado inicial', () => {
+    expect(recomecar()).toEqual(criarCidade())
+  })
+})
+
+describe('placar (W19)', () => {
+  it('antes de qualquer ataque mostra as duas UBS sem tempo de reação', () => {
+    const p = placar(criarCidade())
+    expect(p.map((l) => l.id)).toEqual(['ubs-vila-mariana', 'ubs-brasilandia'])
+    expect(p.map((l) => l.protegido)).toEqual([true, false])
+    expect(p.every((l) => l.reacaoSimMs === null)).toBe(true)
+    expect(p.every((l) => l.situacao === 'NORMAL')).toBe(true)
+  })
+  it('depois do ataque: a UBS com C-Shield reage em segundos simulados e a outra leva 3h30', () => {
+    const c = avancar(ataqueEmMassa(criarCidade(), 'CALOR', 0), 3)
+    const [com, sem] = placar(c)
+    expect(com.reacaoSimMs).toBeGreaterThan(0)
+    expect(com.reacaoSimMs).toBeLessThanOrEqual(2000)
+    expect(sem.reacaoSimMs).toBe(PERCEPCAO_SEM_CSHIELD_MIN * 60000)
+    expect(PERCEPCAO_SEM_CSHIELD_MIN).toBe(210) // 3 h 30 min, do caso ICA
+    expect(com.temperatura).toBeLessThanOrEqual(PERFIS_EMULADOR.VACINA.tMax)
+    expect(sem.temperatura).toBeGreaterThan(PERFIS_EMULADOR.VACINA.tMax)
+    expect(com.exposicao).toBe(0)
+    expect(sem.exposicao).toBeGreaterThan(0)
+    expect(com.situacao).toBe('ATAQUE_BLOQUEADO')
+    expect(sem.situacao).toBe('SOB_ATAQUE')
+  })
+  it('traz nome e bairro para a tela', () => {
+    const [com, sem] = placar(criarCidade())
+    expect(com.nome).toBe('UBS Vila Mariana')
+    expect(sem.nome).toBe('UBS Brasilândia')
   })
 })
