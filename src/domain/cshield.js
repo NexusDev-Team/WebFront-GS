@@ -185,11 +185,30 @@ export function avaliar(leitura, contexto, agoraMs, opcoes = {}) {
     ctx.degeloAtivo = false
   }
 
-  // --- Julgar a ordem do controlador (só quando não há bloqueio ativo) ---
+  // --- 2. Liberação presencial (só depois da trava mínima) ---
+  if (ctx.bloqueado && leitura.liberacao && agoraMs - ctx.inicioBloqueioMs < travaMs) {
+    d.liberacaoRecusada = true // avisa o usuário (LCD) em vez de falhar em silêncio
+  }
+  if (ctx.bloqueado && leitura.liberacao && agoraMs - ctx.inicioBloqueioMs >= travaMs) {
+    d.liberou = true
+    ctx.bloqueado = false
+    ctx.motivoBloqueio = MOTIVOS.NENHUM
+    // O histórico da janela de 60 s pertence ao episódio que acabou de ser bloqueado. Sem
+    // descartá-lo, a subida antiga reabriria o bloqueio por "aquecimento rápido" no mesmo
+    // instante da liberação, mesmo com a temperatura já estável.
+    ctx.histTemp = []
+    ctx.histMs = []
+    if (leitura.valida) registrarAmostra(ctx, leitura.temperatura, agoraMs)
+  }
+
+  // --- 3. Julgar a ordem do controlador (ou ignorá-la durante a trava) ---
   const taxa = calcularTaxa(ctx)
   d.taxaCPorMin = taxa
 
-  if (!ctx.bloqueado) {
+  if (ctx.bloqueado) {
+    const mudouSp = leitura.temSetpoint && leitura.setpoint !== ctx.ultimoSetpoint
+    d.mudancaIgnorada = mudouSp || leitura.degelo !== ctx.ultimoDegelo
+  } else {
     let violada = MOTIVOS.NENHUM
     // Regra 1: setpoint fora da faixa do produto (julga a ordem antes do efeito).
     if (leitura.temSetpoint && (leitura.setpoint < p.tMin || leitura.setpoint > p.tMax)) {
