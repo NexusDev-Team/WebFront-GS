@@ -63,3 +63,38 @@ export function criarCidade() {
     coordenado: null, // null | { n, segundos }
   }
 }
+
+// Ataque coordenado (D8): a central percebe no próprio clique que 3 ou mais locais diferentes
+// foram atacados dentro de 20 s reais.
+const JANELA_COORDENADO_REAL_MS = 20000
+const MIN_LOCAIS_COORDENADO = 3
+
+// Atualiza a lista de ataques recentes e, se der 3 ou mais locais na janela, marca o coordenado.
+// O aviso fica até recomeçar: não some quando a janela passa.
+function registrarAtaque(cidade, localId, agoraRealMs) {
+  const recentes = cidade.ataquesRecentes
+    .filter((a) => a.localId !== localId && agoraRealMs - a.emRealMs <= JANELA_COORDENADO_REAL_MS)
+    .concat({ localId, emRealMs: agoraRealMs })
+  cidade.ataquesRecentes = recentes
+  if (recentes.length >= MIN_LOCAIS_COORDENADO) {
+    const maisAntigo = Math.min(...recentes.map((a) => a.emRealMs))
+    cidade.coordenado = { n: recentes.length, segundos: Math.round((agoraRealMs - maisAntigo) / 1000) }
+  }
+}
+
+// O atacante manda uma ordem ao controlador comercial do local. CALOR: setpoint perigosamente
+// alto e refrigeração do controlador desligada. FRIO: setpoint baixo demais (W26b).
+export function atacar(cidade, localId, tipo, agoraRealMs) {
+  if (!cidade.locais[localId]) throw new Error(`Local desconhecido: ${localId}`)
+  if (tipo !== 'CALOR' && tipo !== 'FRIO') throw new Error(`Tipo de ataque desconhecido: ${tipo}`)
+  const nova = structuredClone(cidade)
+  const local = nova.locais[localId]
+  local.ordem = tipo
+  local.houveAtaque = true
+  local.inicioAtaqueSimMs = nova.relogioSimMs
+  local.reacaoSimMs = null
+  local.liberacaoPendente = false
+  local.liberacaoRecusada = false
+  registrarAtaque(nova, localId, agoraRealMs)
+  return nova
+}
