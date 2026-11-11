@@ -22,3 +22,10 @@ export function formatarDataHora(texto) {
 export function formatarNumero(n) {
   return Number(n ?? 0).toLocaleString('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 1 })
 }
+
+// Data e hora de agora no formato do campo datetime-local ("2026-11-11T14:30", hora local).
+export function agoraParaInput() {
+  const agora = new Date()
+  const local = new Date(agora.getTime() - agora.getTimezoneOffset() * 60000)
+  return local.toISOString().slice(0, 16)
+}
