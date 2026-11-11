@@ -9,9 +9,10 @@
  *   Nicolas Cinel — RM572940
  */
 
-// Rotas do site. Navbar e rodapé provisórios até o T7.
-import { NavLink, Route, Routes } from 'react-router-dom'
-import { NOME_PRODUTO } from './domain/produto.js'
+// Rotas do site. Navbar e rodapé vêm de components/ui.
+import { Route, Routes } from 'react-router-dom'
+import Navbar from './components/ui/Navbar.jsx'
+import Footer from './components/ui/Footer.jsx'
 import Inicio from './pages/Inicio.jsx'
 import Emulador from './pages/Emulador.jsx'
 import SimuladorReal from './pages/SimuladorReal.jsx'
@@ -19,32 +20,17 @@ import Incidentes from './pages/Incidentes.jsx'
 import ComoFunciona from './pages/ComoFunciona.jsx'
 import NaoEncontrada from './pages/NaoEncontrada.jsx'
 
-const LINKS = [
-  { para: '/', rotulo: 'Início' },
-  { para: '/emulador', rotulo: 'Emulador' },
-  { para: '/simulador-real', rotulo: 'Dispositivo real' },
-  { para: '/incidentes', rotulo: 'Incidentes' },
-  { para: '/como-funciona', rotulo: 'Como funciona' },
-]
-
 export default function App() {
   return (
     <>
-      <header>
-        <nav aria-label="Principal">
-          <strong>{NOME_PRODUTO}</strong>
-          <ul>
-            {LINKS.map((link) => (
-              <li key={link.para}>
-                <NavLink to={link.para} end>
-                  {link.rotulo}
-                </NavLink>
-              </li>
-            ))}
-          </ul>
-        </nav>
-      </header>
-      <main>
+      <a
+        href="#conteudo"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-led-forte focus:px-4 focus:py-2 focus:text-noite-950"
+      >
+        Pular para o conteúdo
+      </a>
+      <Navbar />
+      <main id="conteudo" tabIndex={-1} className="mx-auto max-w-6xl px-4 py-10 outline-none">
         <Routes>
           <Route path="/" element={<Inicio />} />
           <Route path="/emulador" element={<Emulador />} />
@@ -54,7 +40,7 @@ export default function App() {
           <Route path="*" element={<NaoEncontrada />} />
         </Routes>
       </main>
-      <footer>Vê de longe. Só obedece de perto. · Nexus Vision · GS 2026.2</footer>
+      <Footer />
     </>
   )
 }
