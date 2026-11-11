@@ -6,7 +6,7 @@ Este arquivo nasceu do `CLAUDE.md` do repositório do Edge (`C:\Users\isacn\Desk
 
 ## 1. O que é o projeto
 
-Global Solution 2026.2 "CitizenTech" (FIAP), equipe **Nexus Vision** (Engenharia de Software, 1º ano). Este site é **uma única aplicação entregue em duas disciplinas**: Front-end Design e Web Development.
+Global Solution 2026.2 "CitizenTech" (FIAP), equipe **Nexus Dev** (Engenharia de Software, 1º ano). Este site é **uma única aplicação entregue em duas disciplinas**: Front-end Design e Web Development.
 
 O produto é o **C-Shield** (de Cyber Shield): um ESP32 instalado junto da câmara fria que mede com sensores próprios, decide com uma política gravada nele e, diante de um ataque ao controlador comercial, assume o controle localmente pelos relés. **Ele não recebe nenhum comando pela rede: só envia dados ao FIWARE.** O bloqueio só termina presencialmente (botão segurado por 3 s). Frase do produto: "Vê de longe. Só obedece de perto."
 

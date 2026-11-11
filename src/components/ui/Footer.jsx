@@ -1,7 +1,7 @@
 /*
  * C-Shield — site da GS 2026.2 "CitizenTech"
  * Front-end Design e Web Development · FIAP
- * Equipe Nexus Vision. Integrantes:
+ * Equipe Nexus Dev. Integrantes:
  *   Isac Nilton Fernandes de Oliveira — RM573282
  *   João Benedito de Oliveira Simplício — RM570206
  *   Leonardo Formigari — RM573291
@@ -38,7 +38,7 @@ export default function Footer() {
             Vê de longe. Só obedece de perto.
           </p>
           <p className="mt-1 font-mono text-sm text-gelo-300">
-            {NOME_PRODUTO} · Nexus Vision · GS 2026.2
+            {NOME_PRODUTO} · Nexus Dev · GS 2026.2
           </p>
         </div>
         <ul className="flex flex-wrap gap-x-6">

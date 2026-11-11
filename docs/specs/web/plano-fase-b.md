@@ -75,7 +75,7 @@ Uma página `/` provisória mostra todos os componentes de `ui/` com os tokens, 
   - `Carregando.jsx` — `texto`; `role="status"`.
   - `ErroMensagem.jsx` — `mensagem`, `aoTentarDeNovo`; `role="alert"`.
   - `Navbar.jsx` — final: logo + `NOME_PRODUTO` + 5 `NavLink` com `aria-current` (W4); no celular, botão de menu com `aria-expanded`.
-  - `Footer.jsx` — frase do produto, links do Edge e do Wokwi, "Nexus Vision · GS 2026.2".
+  - `Footer.jsx` — frase do produto, links do Edge e do Wokwi, "Nexus Dev · GS 2026.2".
   - `BotaoSegurar` fica para o T13 (depende de `useSegurar`).
 - `src/pages/Inicio.jsx` — provisória: vitrine com cada componente e cada variante.
 
@@ -204,7 +204,7 @@ Nenhuma dependência nova. TDD.
 /*
  * C-Shield — site da GS 2026.2 "CitizenTech"
  * Front-end Design e Web Development · FIAP
- * Equipe Nexus Vision. Integrantes:
+ * Equipe Nexus Dev. Integrantes:
  *   Isac Nilton Fernandes de Oliveira — RM573282
  *   João Benedito de Oliveira Simplício — RM570206
  *   Leonardo Formigari — RM573291

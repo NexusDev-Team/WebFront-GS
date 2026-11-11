@@ -106,7 +106,7 @@ Nenhuma cor de texto nova, então a tabela de contraste acima não muda.
 ├──────────────────────────────────────────────────────────────────────────────────────────┤
 │ <main> página                                                                             │
 ├──────────────────────────────────────────────────────────────────────────────────────────┤
-│ Footer: "Vê de longe. Só obedece de perto." · Edge · Wokwi · Nexus Vision · GS 2026.2      │
+│ Footer: "Vê de longe. Só obedece de perto." · Edge · Wokwi · Nexus Dev · GS 2026.2      │
 └──────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 

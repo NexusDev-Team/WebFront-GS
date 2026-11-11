@@ -19,7 +19,7 @@
    A faixa segura nunca muda pela rede (W26). Não é possível remover enquanto o local está bloqueado ("Libere o bloqueio no local primeiro"). A UBS Vila Mariana continua protegida de fábrica, como unidade piloto fixa e fora da API.
 3. **Sai a página `/simulador-real`.** O dispositivo real vira uma seção no fim do emulador (`#dispositivo-real`). Um botão no topo do emulador rola até ela. Os links antigos `/simulador-real` redirecionam para `/emulador#dispositivo-real`.
 4. **Nova página "Nexus Dev"** (`/nexus-dev`), última do menu. Mostra cada integrante com nome, função no projeto, foto e RM, e tem seções sobre a visão e a cultura da equipe e sobre a GS.
-5. **A equipe passa a se chamar Nexus Dev** em todo o site e nos cabeçalhos dos arquivos (antes, Nexus Vision).
+5. **A equipe passa a se chamar Nexus Dev** em todo o site e nos cabeçalhos dos arquivos (antes, Nexus Dev).
 6. **A T14 (incidente automático) sai do plano.** W28 a W35 ficam obsoletos e o código de incidentes é removido. As partes reaproveitáveis viram peças de `ui/`.
 
 ### Regras que continuam valendo
@@ -37,7 +37,7 @@
 
 ## R1 — Rotas, menu e nome da equipe
 
-**Objetivo:** o menu mostra Início · Emulador · Notícias · Como funciona · Nexus Dev. `/incidentes` e `/simulador-real` redirecionam; "Nexus Dev" substitui "Nexus Vision" em todo lugar.
+**Objetivo:** o menu mostra Início · Emulador · Notícias · Como funciona · Nexus Dev. `/incidentes` e `/simulador-real` redirecionam; "Nexus Dev" substitui "Nexus Dev" em todo lugar.
 
 - `src/components/ui/Navbar.jsx`: novos links `/`, `/emulador`, `/noticias` ("Notícias"), `/como-funciona` e `/nexus-dev` ("Nexus Dev").
 - `src/App.jsx`:
@@ -46,7 +46,7 @@
   - `/simulador-real` → `<Navigate to="/emulador#dispositivo-real" replace />`.
 - Páginas provisórias `src/pages/Noticias.jsx` e `src/pages/NexusDev.jsx`.
 - Apagar `src/pages/SimuladorReal.jsx`.
-- Troca mecânica de `Nexus Vision` por `Nexus Dev` em todos os cabeçalhos de `src/`, `tests/` e `vite.config.js`, no rodapé (`Footer.jsx`), no `CLAUDE.md` §1 e nos specs (`docs/specs/web/*.md`). Conferir com `grep -rn "Nexus Vision" src tests docs CLAUDE.md`, que deve voltar vazio.
+- Troca mecânica de `Nexus Dev` por `Nexus Dev` em todos os cabeçalhos de `src/`, `tests/` e `vite.config.js`, no rodapé (`Footer.jsx`), no `CLAUDE.md` §1 e nos specs (`docs/specs/web/*.md`). Conferir com `grep -rn "Nexus Dev" src tests docs CLAUDE.md`, que deve voltar vazio.
 - **Passos:**
   1. Rotas e menu. Commit `feat: reorganiza as rotas com noticias e nexus dev`.
   2. Troca do nome. Commit `chore: renomeia a equipe para nexus dev`.
@@ -183,6 +183,6 @@ Igual ao plano anterior: `PlacarComparativo`, `Lcd16x2`, `LedEstado`, `Equipamen
 ## Verificação geral (fim)
 - `npx vitest run` verde e `npm run build` sem erro.
 - `npm run lint` sem erro novo.
-- Greps do `CLAUDE.md` §7, nenhum `fetch` fora de `src/services` e `grep -rn "Nexus Vision"` vazio.
+- Greps do `CLAUDE.md` §7, nenhum `fetch` fora de `src/services` e `grep -rn "Nexus Dev"` vazio.
 - Capturas em 390 e 1440 px de `/noticias`, `/emulador` (incluindo a seção do dispositivo real) e `/nexus-dev`.
 - Relatório ao usuário com as pendências: URL da MockAPI com o recurso `instalacoes` (campos `localId`, `apelido`, `observacao`, `instaladoEm`), as funções e as fotos da equipe, a revisão dos textos e a conferência das manchetes marcadas para verificar.
