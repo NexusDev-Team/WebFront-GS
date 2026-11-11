@@ -18,6 +18,7 @@
  * Prioridade dos estados: CRITICO > BLOQUEIO > FALHA_SENSOR > ATENCAO > NORMAL.
  */
 import {
+  ALARME_INICIAL_MS,
   CONFIRMACOES,
   DEGELO_MAX_MS,
   DHT_TEMP_MAX_FISICA,
@@ -276,7 +277,13 @@ export function avaliar(leitura, contexto, agoraMs, opcoes = {}) {
   d.cortaAquecedor = atua && modoCalor
   d.ligaVentoinha = atua && modoCalor
 
+  // Apito: toca enquanto o bloqueio (ou o crítico) estiver com a temperatura fora da faixa, e
+  // para quando ela regulariza. O bloqueio NÃO acaba com o apito: só a liberação presencial.
+  // Sem leitura válida não dá para saber se regularizou, então o apito continua. Nos primeiros
+  // ALARME_INICIAL_MS de um bloqueio o apito toca de qualquer jeito (ataque com temperatura boa).
+  const inicioDoBloqueio = ctx.bloqueado && agoraMs - ctx.inicioBloqueioMs < ALARME_INICIAL_MS
   d.bloqueado = ctx.bloqueado
+  d.alarme = (ctx.bloqueado || critico) && (!leitura.valida || deriva || inicioDoBloqueio)
   d.exposicao = ctx.exposicao
   if (ctx.bloqueado) {
     const decorrido = agoraMs - ctx.inicioBloqueioMs
