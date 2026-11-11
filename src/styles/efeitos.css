@@ -18,6 +18,10 @@
  */
 
 @layer components {
+  .faisca-pulsa {
+    animation: faisca-pulsa 1.25s ease-in-out infinite;
+  }
+
   /* Brilho azul suave e estável: repouso. */
   .led-brilho {
     text-shadow: 0 0 10px color-mix(in srgb, var(--color-led-forte) 45%, transparent);
@@ -123,6 +127,12 @@
   70% { text-shadow: none; }
 }
 
+/* Faíscas da ilustração: pulso suave de opacidade, 0,8 Hz (nunca perto de 3 por segundo). */
+@keyframes faisca-pulsa {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+
 @keyframes cursor-terminal {
   0%, 100% { opacity: 1; }
   50% { opacity: 0; }
@@ -135,6 +145,7 @@
   }
 
   .led-falha,
+  .faisca-pulsa,
   .glitch-ataque,
   .cursor-terminal::after {
     animation: none;

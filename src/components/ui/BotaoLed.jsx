@@ -9,7 +9,7 @@
  *   Nicolas Cinel — RM572940
  */
 
-// Botão com alvo de toque de pelo menos 44 x 44 px (W48).
+// Botão (ou link, com as=...) com alvo de toque de pelo menos 44 x 44 px (W48).
 // `ariaLabel` serve aos textos em leet (4T4QU3 D3 C4L0R = "Ataque de calor").
 const VARIANTES = {
   primario:
@@ -21,6 +21,7 @@ const VARIANTES = {
 }
 
 export default function BotaoLed({
+  as: Tag = 'button',
   variante = 'primario',
   ariaLabel,
   type = 'button',
@@ -29,13 +30,13 @@ export default function BotaoLed({
   ...resto
 }) {
   return (
-    <button
-      type={type}
+    <Tag
+      type={Tag === 'button' ? type : undefined}
       aria-label={ariaLabel}
       className={`inline-flex min-h-11 min-w-11 cursor-pointer items-center justify-center gap-2 rounded-lg border px-4 py-2 font-titulo text-base font-semibold transition-colors duration-200 disabled:cursor-not-allowed disabled:opacity-50 ${VARIANTES[variante]} ${className}`}
       {...resto}
     >
       {children}
-    </button>
+    </Tag>
   )
 }
