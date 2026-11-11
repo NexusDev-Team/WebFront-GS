@@ -18,6 +18,7 @@
  * Prioridade dos estados: CRITICO > BLOQUEIO > FALHA_SENSOR > ATENCAO > NORMAL.
  */
 import {
+  CONFIRMACOES,
   DEGELO_MAX_MS,
   DHT_TEMP_MAX_FISICA,
   DHT_TEMP_MIN_FISICA,
@@ -155,8 +156,23 @@ export function avaliar(leitura, contexto, agoraMs, opcoes = {}) {
 
   const travaMs = opcoes.travaMs ?? TRAVA_MS
 
-  // --- Sensor e histórico da taxa ---
-  if (leitura.valida) registrarAmostra(ctx, leitura.temperatura, agoraMs)
+  // Intervalo desde o ciclo anterior, em minutos (para integrar a exposição).
+  const dtMin = ctx.iniciado ? (agoraMs - ctx.ultimoMs) / 60000 : 0
+
+  // --- 1. Sensor, histórico, exposição e CRITICO ---
+  if (leitura.valida) {
+    ctx.contInvalido = 0
+    registrarAmostra(ctx, leitura.temperatura, agoraMs)
+    if (leitura.temperatura > p.tMax) ctx.exposicao += (leitura.temperatura - p.tMax) * dtMin
+    const alemTolerancia =
+      leitura.temperatura > p.tMax + p.tolerancia || leitura.temperatura < p.tMin - p.tolerancia
+    ctx.contCritico = alemTolerancia ? ctx.contCritico + 1 : 0
+  } else {
+    ctx.contInvalido++
+    ctx.contCritico = 0 // sem leitura não há como confirmar temperatura ruim
+  }
+  const falhaSensor = ctx.contInvalido >= CONFIRMACOES
+  const critico = ctx.contCritico >= CONFIRMACOES
   const porta = portaAberta(leitura.luzPct)
 
   // Acompanha o tempo do degelo comandado.
@@ -184,13 +200,14 @@ export function avaliar(leitura, contexto, agoraMs, opcoes = {}) {
     } else if (leitura.degelo && leitura.horaValida && !degeloPermitidoNaHora(leitura.hora)) {
       violada = MOTIVOS.DEGELO_FORA_HORARIO
       // Regra 3: aquecimento rápido com a porta fechada (porta aberta é só ATENCAO).
-    } else if (leitura.valida && !porta && taxa > TAXA_MAX_C_POR_MIN) {
+    } else if (leitura.valida && !falhaSensor && !porta && taxa > TAXA_MAX_C_POR_MIN) {
       violada = MOTIVOS.AQUECIMENTO_RAPIDO
       // Regra 4, o espelho da 3: resfriamento rápido. Frio demais também estraga (sangue, vacina).
       // A porta aberta não explica esfriar, então não alivia a regra. Só vale abaixo do centro da
       // faixa: voltar do calor até o centro (a ventoinha esfriando) não é ataque.
     } else if (
       leitura.valida &&
+      !falhaSensor &&
       leitura.temperatura < (p.tMin + p.tMax) / 2 &&
       taxa < -TAXA_MAX_RESFRIAMENTO_C_POR_MIN
     ) {
@@ -211,9 +228,15 @@ export function avaliar(leitura, contexto, agoraMs, opcoes = {}) {
 
   // --- Estado final pela prioridade e ações nos relés ---
   const deriva = leitura.valida && (leitura.temperatura < p.tMin || leitura.temperatura > p.tMax)
-  if (ctx.bloqueado) {
+  if (critico) {
+    d.estado = ESTADOS.CRITICO
+    d.motivo = ctx.bloqueado ? ctx.motivoBloqueio : MOTIVOS.TEMP_FORA_TOLERANCIA
+  } else if (ctx.bloqueado) {
     d.estado = ESTADOS.BLOQUEIO
     d.motivo = ctx.motivoBloqueio
+  } else if (falhaSensor) {
+    d.estado = ESTADOS.FALHA_SENSOR
+    d.motivo = MOTIVOS.SENSOR_SEM_LEITURA
   } else if (porta) {
     d.estado = ESTADOS.ATENCAO
     d.motivo = MOTIVOS.PORTA_ABERTA
@@ -227,7 +250,7 @@ export function avaliar(leitura, contexto, agoraMs, opcoes = {}) {
   //   frio:  deixa o aquecedor liberado e NÃO liga a ventoinha (esfriar mais estragaria o produto).
   // A temperatura medida manda; com ela dentro da faixa vale a direção do ataque.
   // Nunca mexe no compressor: o C-Shield só veta o que aumenta o risco.
-  const atua = ctx.bloqueado
+  const atua = ctx.bloqueado || critico
   const muitoQuente = leitura.valida && leitura.temperatura > p.tMax
   const muitoFrio = leitura.valida && leitura.temperatura < p.tMin
   const modoCalor = muitoQuente || (!muitoFrio && !ctx.bloqueioFrio)
@@ -235,6 +258,7 @@ export function avaliar(leitura, contexto, agoraMs, opcoes = {}) {
   d.ligaVentoinha = atua && modoCalor
 
   d.bloqueado = ctx.bloqueado
+  d.exposicao = ctx.exposicao
   if (ctx.bloqueado) {
     const decorrido = agoraMs - ctx.inicioBloqueioMs
     d.travaRestanteMs = decorrido >= travaMs ? 0 : travaMs - decorrido
