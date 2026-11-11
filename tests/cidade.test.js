@@ -11,7 +11,7 @@
 
 // Domínio da cidade do emulador: 5 locais, ataques, proteção e o fluxo completo do jogo.
 import { describe, expect, it } from 'vitest'
-import { LOCAIS, atacar, criarCidade } from '../src/domain/cidade.js'
+import { LOCAIS, atacar, criarCidade, passo } from '../src/domain/cidade.js'
 import { PERFIS_EMULADOR } from '../src/domain/perfis.js'
 
 describe('LOCAIS', () => {
@@ -140,5 +140,123 @@ describe('ataque coordenado (D8)', () => {
     expect(c.coordenado).toBeNull()
     c = ataca(c, 'hemocentro-consolacao', 40000)
     expect(c.coordenado).toEqual({ n: 3, segundos: 10 })
+  })
+})
+
+// Avança a cidade como o jogo faria: quadros de 100 ms reais até somar `segundosReais`.
+function avancar(cidade, segundosReais, quadroMs = 100) {
+  let c = cidade
+  for (let ms = 0; ms < segundosReais * 1000; ms += quadroMs) c = passo(c, quadroMs)
+  return c
+}
+
+describe('passo: relógio', () => {
+  it('1 s real vale 1 min simulado, em ciclos de 2 s simulados', () => {
+    const c = passo(criarCidade(), 1000)
+    expect(c.relogioSimMs).toBe(60000)
+    expect(c.restoSimMs).toBe(0)
+  })
+  it('guarda a fração de ciclo que ainda não deu', () => {
+    const c = passo(criarCidade(), 10) // 600 ms simulados: nenhum ciclo completo
+    expect(c.relogioSimMs).toBe(0)
+    expect(c.restoSimMs).toBe(600)
+    const d = passo(c, 25) // +1500 => 2100: um ciclo e sobram 100
+    expect(d.relogioSimMs).toBe(2000)
+    expect(d.restoSimMs).toBe(100)
+  })
+  it('não muta a cidade recebida', () => {
+    const antes = atacar(criarCidade(), 'ubs-vila-mariana', 'CALOR', 0)
+    const copia = structuredClone(antes)
+    passo(antes, 500)
+    expect(antes).toEqual(copia)
+  })
+})
+
+describe('passo: câmara sem C-Shield (cidade acelerada)', () => {
+  it('sem ataque a temperatura fica no alvo e a exposição em zero', () => {
+    const c = avancar(criarCidade(), 5)
+    for (const def of LOCAIS) {
+      expect(c.locais[def.id].temperatura).toBeCloseTo(PERFIS_EMULADOR[def.perfil].tAlvo, 6)
+      expect(c.locais[def.id].exposicao).toBe(0)
+    }
+  })
+  it('ataque de calor tira o local da faixa em cerca de 1 s real', () => {
+    const inicial = atacar(criarCidade(), 'ubs-brasilandia', 'CALOR', 0)
+    const tMax = PERFIS_EMULADOR.VACINA.tMax
+    expect(avancar(inicial, 0.7).locais['ubs-brasilandia'].temperatura).toBeLessThanOrEqual(tMax)
+    expect(avancar(inicial, 1.4).locais['ubs-brasilandia'].temperatura).toBeGreaterThan(tMax)
+  })
+  it('desprotegido não tem decisão, perde a refrigeração e acumula exposição', () => {
+    const c = avancar(atacar(criarCidade(), 'ubs-brasilandia', 'CALOR', 0), 3)
+    const l = c.locais['ubs-brasilandia']
+    expect(l.decisao).toBeNull()
+    expect(l.refrigeracaoLigada).toBe(false)
+    expect(l.exposicao).toBeGreaterThan(0)
+  })
+  it('o ataque só afeta o local atacado', () => {
+    const c = avancar(atacar(criarCidade(), 'ubs-brasilandia', 'CALOR', 0), 3)
+    expect(c.locais['farmacia-mooca'].temperatura).toBeCloseTo(PERFIS_EMULADOR.INSULINA.tAlvo, 6)
+    expect(c.locais['farmacia-mooca'].exposicao).toBe(0)
+  })
+  it('todos os perfis saem da faixa em cerca de 1 s real, no calor e no frio', () => {
+    for (const def of LOCAIS.filter((l) => l.id !== 'ubs-vila-mariana')) {
+      const p = PERFIS_EMULADOR[def.perfil]
+      const quente = avancar(atacar(criarCidade(), def.id, 'CALOR', 0), 1.4).locais[def.id]
+      expect(quente.temperatura).toBeGreaterThan(p.tMax)
+      const frio = avancar(atacar(criarCidade(), def.id, 'FRIO', 0), 1.4).locais[def.id]
+      expect(frio.temperatura).toBeLessThan(p.tMin)
+      expect(frio.exposicao).toBe(0) // exposição só conta calor acima do máximo
+    }
+  })
+})
+
+describe('passo: câmara com C-Shield', () => {
+  it('bloqueia no primeiro ciclo por SETPOINT_INVALIDO, cortando o aquecedor e ligando a ventoinha', () => {
+    const c = passo(atacar(criarCidade(), 'ubs-vila-mariana', 'CALOR', 0), 34) // 1 ciclo
+    const l = c.locais['ubs-vila-mariana']
+    expect(l.decisao.estado).toBe('BLOQUEIO')
+    expect(l.decisao.motivo).toBe('SETPOINT_INVALIDO')
+    expect(l.decisao.novoBloqueio).toBe(true)
+    expect(l.decisao.cortaAquecedor && l.decisao.ligaVentoinha).toBe(true)
+    expect(l.reacaoSimMs).toBeLessThanOrEqual(2000)
+    expect(l.reacaoSimMs).toBeGreaterThan(0)
+  })
+  it('a temperatura continua dentro da faixa durante todo o ataque', () => {
+    let c = atacar(criarCidade(), 'ubs-vila-mariana', 'CALOR', 0)
+    const p = PERFIS_EMULADOR.VACINA
+    for (let i = 0; i < 100; i++) {
+      c = passo(c, 100)
+      const t = c.locais['ubs-vila-mariana'].temperatura
+      expect(t).toBeLessThanOrEqual(p.tMax)
+      expect(t).toBeGreaterThanOrEqual(p.tMin)
+    }
+    expect(c.locais['ubs-vila-mariana'].exposicao).toBe(0)
+  })
+  it('conta um bloqueio só, mesmo com o ataque continuando', () => {
+    const c = avancar(atacar(criarCidade(), 'ubs-vila-mariana', 'CALOR', 0), 5)
+    expect(c.locais['ubs-vila-mariana'].contexto.bloqueios).toBe(1)
+  })
+  it('ataque de frio inverte os relés: aquecedor liberado e ventoinha desligada', () => {
+    const c = passo(atacar(criarCidade(), 'ubs-vila-mariana', 'FRIO', 0), 34)
+    const d = c.locais['ubs-vila-mariana'].decisao
+    expect(d.estado).toBe('BLOQUEIO')
+    expect(d.motivo).toBe('SETPOINT_INVALIDO')
+    expect(d.cortaAquecedor).toBe(false)
+    expect(d.ligaVentoinha).toBe(false)
+  })
+  it('sem ataque o protegido fica NORMAL', () => {
+    const d = avancar(criarCidade(), 3).locais['ubs-vila-mariana'].decisao
+    expect(d.estado).toBe('NORMAL')
+  })
+})
+
+describe('passo: histórico', () => {
+  it('guarda pontos { tSimMin, temperatura } e no máximo 120', () => {
+    const c = avancar(criarCidade(), 40, 200)
+    const h = c.locais['ubs-brasilandia'].historico
+    expect(h.length).toBeGreaterThan(10)
+    expect(h.length).toBeLessThanOrEqual(120)
+    expect(Object.keys(h[0]).sort()).toEqual(['temperatura', 'tSimMin'])
+    expect(h[h.length - 1].tSimMin).toBeGreaterThan(h[0].tSimMin)
   })
 })
