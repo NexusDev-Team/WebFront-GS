@@ -22,7 +22,7 @@ import {
   passo,
   travaRestanteSimMs,
 } from '../src/domain/cidade.js'
-import { eventosDoPasso } from '../src/domain/cidade-eventos.js'
+import { eventosDoPasso, resultadoDaLiberacao } from '../src/domain/cidade-eventos.js'
 
 function avancar(c, segundosReais) {
   for (let ms = 0; ms < segundosReais * 1000; ms += 100) c = passo(c, 100)
@@ -90,5 +90,22 @@ describe('travaRestanteSimMs', () => {
     expect(restante).toBeLessThan(TRAVA_SIM_MS)
     c = avancar(c, 10)
     expect(travaRestanteSimMs(c.locais['ubs-vila-mariana'], c.relogioSimMs)).toBe(0)
+  })
+})
+
+describe('resultadoDaLiberacao', () => {
+  const VILA = 'ubs-vila-mariana'
+  it('sem bloqueio não há nada a liberar', () => {
+    const c = criarCidade()
+    expect(resultadoDaLiberacao(liberar(c, VILA), VILA)).toBe('SEM_BLOQUEIO')
+    expect(resultadoDaLiberacao(liberar(c, 'farmacia-mooca'), 'farmacia-mooca')).toBe('SEM_BLOQUEIO')
+  })
+  it('antes da trava é recusada', () => {
+    const c = avancar(atacar(criarCidade(), VILA, 'CALOR', 0), 5)
+    expect(resultadoDaLiberacao(liberar(c, VILA), VILA)).toBe('RECUSADA')
+  })
+  it('depois da trava é aceita', () => {
+    const c = avancar(atacar(criarCidade(), VILA, 'CALOR', 0), 11)
+    expect(resultadoDaLiberacao(liberar(c, VILA), VILA)).toBe('ACEITA')
   })
 })

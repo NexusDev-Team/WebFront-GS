@@ -31,3 +31,13 @@ export function eventosDoPasso(antes, depois) {
   }
   return { novosBloqueios, liberados }
 }
+
+// O que aconteceu com um pedido de liberação, olhando a cidade devolvida por liberar():
+//   SEM_BLOQUEIO  o local não estava bloqueado (nada a liberar);
+//   RECUSADA      a trava mínima ainda não acabou;
+//   ACEITA        a liberação vale no próximo ciclo.
+export function resultadoDaLiberacao(cidadeDepois, localId) {
+  const local = cidadeDepois.locais[localId]
+  if (!local.contexto.bloqueado) return 'SEM_BLOQUEIO'
+  return local.liberacaoRecusada ? 'RECUSADA' : 'ACEITA'
+}
