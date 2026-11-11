@@ -22,6 +22,18 @@
     animation: faisca-pulsa 1.25s ease-in-out infinite;
   }
 
+  /* LED amarelo piscando (FALHA_SENSOR): 0,8 Hz, bem abaixo das 3 piscadas por segundo (W46). */
+  .led-pisca {
+    animation: led-pisca 1.25s steps(1, end) infinite;
+  }
+
+  /* Ventoinha ligada: gira devagar. */
+  .gira {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: gira 1.1s linear infinite;
+  }
+
   /* Linha de ataque do mapa: o tracejado corre do atacante ao alvo (movimento contínuo, sem piscar). */
   .linha-fluxo {
     stroke-dasharray: 14 10;
@@ -139,6 +151,15 @@
   50% { opacity: 0.35; }
 }
 
+@keyframes led-pisca {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.2; }
+}
+
+@keyframes gira {
+  to { transform: rotate(360deg); }
+}
+
 @keyframes linha-fluxo {
   to { stroke-dashoffset: -24; }
 }
@@ -156,6 +177,8 @@
 
   .led-falha,
   .faisca-pulsa,
+  .led-pisca,
+  .gira,
   .linha-fluxo,
   .glitch-ataque,
   .cursor-terminal::after {
