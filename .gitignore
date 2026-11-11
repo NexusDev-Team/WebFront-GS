@@ -27,3 +27,6 @@ dist-ssr
 .env
 .env.*
 !.env.example
+
+# Configuração local do Claude Code (caminhos desta máquina)
+.claude/settings.local.json
