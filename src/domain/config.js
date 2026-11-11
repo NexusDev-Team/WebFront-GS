@@ -109,3 +109,10 @@ export const EMULADOR_TRAVA_MS_REAL = 10000
 
 // Tempo simulado: 1 minuto da câmara passa a cada 1 s reais.
 export const EMULADOR_MINUTOS_POR_SEGUNDO = 1
+
+// Velocidades do modelo térmico do emulador (fisica.js), em 1/min de tempo simulado. São
+// ilustrativas: K_ATAQUE foi escolhida para um ataque de calor sem proteção tirar a vacina da
+// faixa em cerca de 3 min simulados (3 s reais); com a proteção o retorno é bem mais rápido.
+export const K_ATAQUE = 0.026
+export const K_PROTECAO = 0.6
+export const K_NORMAL = 0.1
