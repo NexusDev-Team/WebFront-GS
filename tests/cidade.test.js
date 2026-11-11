@@ -11,7 +11,8 @@
 
 // Domínio da cidade do emulador: 5 locais, ataques, proteção e o fluxo completo do jogo.
 import { describe, expect, it } from 'vitest'
-import { LOCAIS, atacar, criarCidade, passo } from '../src/domain/cidade.js'
+import { LOCAIS, ativarCShield, atacar, criarCidade, liberar, passo } from '../src/domain/cidade.js'
+import { situacao } from '../src/domain/cidade-placar.js'
 import { PERFIS_EMULADOR } from '../src/domain/perfis.js'
 
 describe('LOCAIS', () => {
@@ -258,5 +259,116 @@ describe('passo: histórico', () => {
     expect(h.length).toBeLessThanOrEqual(120)
     expect(Object.keys(h[0]).sort()).toEqual(['tSimMin', 'temperatura'])
     expect(h[h.length - 1].tSimMin).toBeGreaterThan(h[0].tSimMin)
+  })
+})
+
+const sit = (c, id) => situacao(c.locais[id])
+
+describe('situacao (W17)', () => {
+  it('local sem ataque é NORMAL', () => {
+    expect(sit(criarCidade(), 'farmacia-mooca')).toBe('NORMAL')
+    expect(sit(avancar(criarCidade(), 2), 'ubs-vila-mariana')).toBe('NORMAL')
+  })
+  it('local atacado sem C-Shield está SOB_ATAQUE', () => {
+    const c = avancar(atacar(criarCidade(), 'ubs-brasilandia', 'CALOR', 0), 2)
+    expect(sit(c, 'ubs-brasilandia')).toBe('SOB_ATAQUE')
+  })
+  it('local atacado com C-Shield está com o ATAQUE_BLOQUEADO', () => {
+    const c = avancar(atacar(criarCidade(), 'ubs-vila-mariana', 'CALOR', 0), 1)
+    expect(sit(c, 'ubs-vila-mariana')).toBe('ATAQUE_BLOQUEADO')
+  })
+})
+
+describe('ativarCShield', () => {
+  it('protege todos os locais e não muta a cidade recebida', () => {
+    const antes = criarCidade()
+    const copia = structuredClone(antes)
+    const depois = ativarCShield(antes)
+    expect(antes).toEqual(copia)
+    for (const def of LOCAIS) expect(depois.locais[def.id].protegido).toBe(true)
+  })
+  it('um local atacado vira ATAQUE_BLOQUEADO logo depois e a câmara volta à faixa', () => {
+    let c = avancar(atacar(criarCidade(), 'ubs-brasilandia', 'CALOR', 0), 3)
+    expect(sit(c, 'ubs-brasilandia')).toBe('SOB_ATAQUE')
+    c = ativarCShield(c)
+    c = avancar(c, 0.2)
+    expect(sit(c, 'ubs-brasilandia')).toBe('ATAQUE_BLOQUEADO')
+    expect(c.locais['ubs-brasilandia'].decisao.motivo).toBe('SETPOINT_INVALIDO')
+    c = avancar(c, 5)
+    expect(c.locais['ubs-brasilandia'].temperatura).toBeLessThanOrEqual(PERFIS_EMULADOR.VACINA.tMax)
+    expect(sit(c, 'ubs-brasilandia')).toBe('ATAQUE_BLOQUEADO') // o bloqueio só termina presencialmente
+  })
+  it('a exposição de antes da proteção não se perde', () => {
+    let c = avancar(atacar(criarCidade(), 'ubs-brasilandia', 'CALOR', 0), 3)
+    const antes = c.locais['ubs-brasilandia'].exposicao
+    expect(antes).toBeGreaterThan(0)
+    c = avancar(ativarCShield(c), 0.2)
+    expect(c.locais['ubs-brasilandia'].exposicao).toBeGreaterThanOrEqual(antes)
+  })
+  it('a reação conta a partir de quando o C-Shield foi ativado', () => {
+    let c = avancar(atacar(criarCidade(), 'ubs-brasilandia', 'CALOR', 0), 3)
+    c = avancar(ativarCShield(c), 0.2)
+    expect(c.locais['ubs-brasilandia'].reacaoSimMs).toBeLessThanOrEqual(2000)
+  })
+})
+
+describe('liberar (botão de 3 s, trava de 10 s reais)', () => {
+  it('antes de 10 s reais é recusado; depois é aceito', () => {
+    let c = avancar(atacar(criarCidade(), 'ubs-vila-mariana', 'CALOR', 0), 9)
+    c = liberar(c, 'ubs-vila-mariana')
+    expect(c.locais['ubs-vila-mariana'].liberacaoRecusada).toBe(true)
+    c = avancar(c, 0.5)
+    expect(sit(c, 'ubs-vila-mariana')).toBe('ATAQUE_BLOQUEADO')
+    c = avancar(c, 1) // passou dos 10 s reais de trava
+    c = liberar(c, 'ubs-vila-mariana')
+    expect(c.locais['ubs-vila-mariana'].liberacaoRecusada).toBe(false)
+    c = avancar(c, 0.2)
+    expect(c.locais['ubs-vila-mariana'].decisao.liberou).toBe(true)
+    expect(c.locais['ubs-vila-mariana'].decisao.bloqueado).toBe(false)
+  })
+  it('liberar um local sem bloqueio não faz nada', () => {
+    const c = criarCidade()
+    expect(liberar(c, 'ubs-vila-mariana')).toEqual(c)
+    expect(liberar(c, 'farmacia-mooca')).toEqual(c)
+  })
+  it('liberar não muta a cidade recebida', () => {
+    const c = avancar(atacar(criarCidade(), 'ubs-vila-mariana', 'CALOR', 0), 11)
+    const copia = structuredClone(c)
+    liberar(c, 'ubs-vila-mariana')
+    expect(c).toEqual(copia)
+  })
+})
+
+describe('fluxo completo do jogo', () => {
+  it('local protegido: ataque, bloqueio, liberação e SEGURO sem exposição, em menos de 1 min reais', () => {
+    let realMs = 0
+    const rodar = (c, s) => {
+      realMs += s * 1000
+      return avancar(c, s)
+    }
+    let c = atacar(criarCidade(), 'ubs-vila-mariana', 'CALOR', 0)
+    c = rodar(c, 0.5)
+    expect(sit(c, 'ubs-vila-mariana')).toBe('ATAQUE_BLOQUEADO')
+    c = rodar(c, 10.5) // espera a trava de 10 s reais
+    c = liberar(c, 'ubs-vila-mariana')
+    c = rodar(c, 0.5)
+    expect(sit(c, 'ubs-vila-mariana')).toBe('SEGURO')
+    expect(realMs).toBeLessThan(60000)
+  })
+  it('local que levou o ataque e depois ganhou C-Shield termina SEGURO_LOTE_EM_ANALISE', () => {
+    let realMs = 0
+    const rodar = (c, s) => {
+      realMs += s * 1000
+      return avancar(c, s)
+    }
+    let c = atacar(criarCidade(), 'ubs-brasilandia', 'CALOR', 0)
+    c = rodar(c, 3) // sem proteção a câmara esquenta
+    c = ativarCShield(c)
+    c = rodar(c, 11) // bloqueia, esfria e espera a trava
+    c = liberar(c, 'ubs-brasilandia')
+    c = rodar(c, 0.5)
+    expect(sit(c, 'ubs-brasilandia')).toBe('SEGURO_LOTE_EM_ANALISE')
+    expect(c.locais['ubs-brasilandia'].exposicao).toBeGreaterThan(0)
+    expect(realMs).toBeLessThan(60000)
   })
 })
