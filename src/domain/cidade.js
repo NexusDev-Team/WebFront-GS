@@ -121,7 +121,7 @@ const HISTORICO_MAX_PONTOS = 120
 
 // Setpoint que o controlador comercial está mandando, conforme a ordem do atacante.
 // Calor: 45 °C (ou tMax + 30 nos congelados). Frio: tMin − 12. Normal: o alvo do perfil.
-function setpointDaOrdem(perfil, ordem) {
+export function setpointDaOrdem(perfil, ordem) {
   if (ordem === 'CALOR') return perfil.tMax < 0 ? perfil.tMax + 30 : SETPOINT_DEMO_ATAQUE
   if (ordem === 'FRIO') return perfil.tMin - 12
   return perfil.tAlvo
