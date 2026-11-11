@@ -12,6 +12,7 @@
 // Casos de edge/test/test_decisao.cpp portados para o Vitest: um describe por função do C++,
 // cada CHECK vira um expect com os mesmos valores.
 import { describe, expect, it } from 'vitest'
+import { SETPOINT_AUSENTE, TRAVA_MS } from '../src/domain/config.js'
 import { ESTADOS, MOTIVOS, temperaturaValida } from '../src/domain/cshield.js'
 import { PASSO, T0, base, sessao } from './helpers.js'
 
@@ -54,5 +55,73 @@ describe('teste_deriva (R16)', () => {
     s.avalia(l, T0)
     const d = s.avalia(l, T0 + PASSO)
     expect(d.estado === ESTADOS.ATENCAO && d.motivo === MOTIVOS.DERIVA).toBe(true)
+  })
+})
+
+describe('teste_setpoint_invalido (R20, R17)', () => {
+  it('setpoint fora da faixa bloqueia, corta o aquecedor e liga a ventoinha', () => {
+    const s = sessao()
+    const l = base()
+    l.setpoint = 40.0
+    const d = s.avalia(l, T0)
+    expect(d.estado).toBe(ESTADOS.BLOQUEIO)
+    expect(d.motivo).toBe(MOTIVOS.SETPOINT_INVALIDO)
+    expect(d.novoBloqueio).toBe(true)
+    expect(s.ctx.bloqueios).toBe(1)
+    expect(d.cortaAquecedor && d.ligaVentoinha).toBe(true) // R5, R17
+    expect(d.travaRestanteMs).toBe(TRAVA_MS)
+  })
+})
+
+describe('teste_sem_setpoint (R11)', () => {
+  it('sem setpoint observado não bloqueia', () => {
+    const s = sessao()
+    const l = base()
+    l.temSetpoint = false
+    l.setpoint = SETPOINT_AUSENTE
+    expect(s.avalia(l, T0).estado).toBe(ESTADOS.NORMAL)
+  })
+})
+
+describe('teste_degelo_longo (R21)', () => {
+  it('bloqueia só depois de 30 min de degelo comandado', () => {
+    const s = sessao()
+    const l = base()
+    l.degelo = true
+    l.hora = 6 // 6h: horário permitido
+    let d = s.avalia(l, T0)
+    expect(d.estado).toBe(ESTADOS.NORMAL)
+    // Dentro dos 30 min: não bloqueia (a cada 60 s; 30 passos = exatamente 30 min).
+    for (let i = 1; i <= 30; i++) d = s.avalia(l, T0 + i * 60000)
+    expect(d.estado).toBe(ESTADOS.NORMAL)
+    // Passou de 30 min: bloqueia.
+    d = s.avalia(l, T0 + 31 * 60000)
+    expect(d.estado === ESTADOS.BLOQUEIO && d.motivo === MOTIVOS.DEGELO_LONGO).toBe(true)
+  })
+})
+
+describe('teste_degelo_fora_horario (R22, R13)', () => {
+  it('degelo às 12h bloqueia', () => {
+    const s = sessao()
+    const l = base()
+    l.degelo = true
+    l.hora = 12 // 12h: fora de 6h e 18h
+    const d = s.avalia(l, T0)
+    expect(d.estado === ESTADOS.BLOQUEIO && d.motivo === MOTIVOS.DEGELO_FORA_HORARIO).toBe(true)
+  })
+  it('degelo às 18h (janela permitida) não bloqueia', () => {
+    const s = sessao()
+    const l = base()
+    l.degelo = true
+    l.hora = 18
+    expect(s.avalia(l, T0).estado).toBe(ESTADOS.NORMAL)
+  })
+  it('offline (sem hora válida) só vale a duração máxima', () => {
+    const s = sessao()
+    const l = base()
+    l.degelo = true
+    l.horaValida = false
+    l.hora = 0
+    expect(s.avalia(l, T0).estado).toBe(ESTADOS.NORMAL)
   })
 })
