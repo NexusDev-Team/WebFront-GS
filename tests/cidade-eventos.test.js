@@ -14,7 +14,6 @@ import { describe, expect, it } from 'vitest'
 import {
   MS_SIM_POR_MS_REAL,
   TRAVA_SIM_MS,
-  instalarCShield,
   atacar,
   ataqueEmMassa,
   criarCidade,
@@ -22,6 +21,7 @@ import {
   passo,
   travaRestanteSimMs,
 } from '../src/domain/cidade.js'
+import { instalarCShield } from '../src/domain/cidade-protecao.js'
 import { eventosDoPasso, resultadoDaLiberacao } from '../src/domain/cidade-eventos.js'
 
 function avancar(c, segundosReais) {

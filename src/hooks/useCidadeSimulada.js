@@ -22,12 +22,12 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
   ataqueEmMassa as ataqueEmMassaNaCidade,
   atacar as atacarNaCidade,
-  ativarCShield as ativarNaCidade,
   criarCidade,
   liberar as liberarNaCidade,
   passo,
   recomecar as recomecarCidade,
 } from '../domain/cidade.js'
+import { ativarCShield as ativarNaCidade } from '../domain/cidade-protecao.js'
 import { eventosDoPasso, resultadoDaLiberacao } from '../domain/cidade-eventos.js'
 import { placar as placarDaCidade } from '../domain/cidade-placar.js'
 

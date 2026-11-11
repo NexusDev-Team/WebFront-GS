@@ -12,18 +12,16 @@
 // Domínio da cidade do emulador: 5 locais, ataques, proteção e o fluxo completo do jogo.
 import { describe, expect, it } from 'vitest'
 import {
+  ID_PILOTO,
   LOCAIS,
   ataqueEmMassa,
-  ID_PILOTO,
-  instalarCShield,
-  removerCShield,
-  sincronizarProtecao,
   atacar,
   criarCidade,
   liberar,
   passo,
   recomecar,
 } from '../src/domain/cidade.js'
+import { instalarCShield, removerCShield, sincronizarProtecao } from '../src/domain/cidade-protecao.js'
 import { PERCEPCAO_SEM_CSHIELD_MIN, formatarReacao, placar, situacao } from '../src/domain/cidade-placar.js'
 import { PERFIS_EMULADOR } from '../src/domain/perfis.js'
 

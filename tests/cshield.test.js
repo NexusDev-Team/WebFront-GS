@@ -554,7 +554,7 @@ describe('teste_alarme_ate_regularizar (R50, R51)', () => {
     let d = c2.avalia(q, (u += PASSO))
     expect(d.estado === ESTADOS.CRITICO && d.alarme && d.bloqueado).toBe(true)
     q.temperatura = 5.0
-    d = c2.avalia(q, (u += PASSO))
+    d = c2.avalia(q, u + PASSO)
     expect(d.estado === ESTADOS.BLOQUEIO && !d.alarme && d.bloqueado).toBe(true)
   })
   it('sem leitura não dá para saber: alarme', () => {
@@ -563,7 +563,7 @@ describe('teste_alarme_ate_regularizar (R50, R51)', () => {
     const cega = base()
     cega.valida = false
     c3.avalia(cega, (v += PASSO))
-    const d = c3.avalia(cega, (v += PASSO))
+    const d = c3.avalia(cega, v + PASSO)
     expect(d.bloqueado && d.alarme).toBe(true)
   })
   it('sem bloqueio nem crítico: nunca alarme (deriva é só ATENCAO)', () => {
