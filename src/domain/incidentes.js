@@ -115,3 +115,8 @@ export function novoIncidenteManual(form) {
     acaoTomada: String(form.acaoTomada ?? '').trim(),
   }
 }
+
+// true se o incidente passa nos filtros da lista (campo vazio = sem filtro).
+export function casaComFiltros(item, { status = '', tipo = '' } = {}) {
+  return (!status || item.status === status) && (!tipo || item.tipo === tipo)
+}

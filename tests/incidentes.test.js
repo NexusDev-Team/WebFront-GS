@@ -16,6 +16,7 @@ import {
   ROTULOS,
   STATUS,
   TIPOS,
+  casaComFiltros,
   novoIncidenteManual,
   validarEdicao,
   validarIncidente,
@@ -136,5 +137,18 @@ describe('novoIncidenteManual', () => {
     expect(p.exposicao).toBe(0)
     expect(p.status).toBe('ABERTO')
     expect(p.acaoTomada).toBe('')
+  })
+})
+
+describe('casaComFiltros', () => {
+  const item = { status: 'ABERTO', tipo: 'CALOR' }
+  it('filtro vazio deixa tudo passar', () => {
+    expect(casaComFiltros(item, { status: '', tipo: '' })).toBe(true)
+    expect(casaComFiltros(item, {})).toBe(true)
+  })
+  it('exige status e tipo iguais quando preenchidos', () => {
+    expect(casaComFiltros(item, { status: 'ABERTO', tipo: 'CALOR' })).toBe(true)
+    expect(casaComFiltros(item, { status: 'RESOLVIDO', tipo: '' })).toBe(false)
+    expect(casaComFiltros(item, { status: '', tipo: 'FRIO' })).toBe(false)
   })
 })
