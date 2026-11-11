@@ -35,8 +35,9 @@ export const LOCAIS = [
   { id: 'mercado-liberdade', nome: 'Mercado Liberdade', bairro: 'Liberdade', perfil: 'CONGELADO', x: 640, y: 410 },
 ]
 
-// Só esta unidade já nasce com o C-Shield instalado; as outras mostram o que acontece sem ele.
-const ID_PROTEGIDO_INICIAL = 'ubs-vila-mariana'
+// A unidade piloto: já nasce com o C-Shield e nunca sai. As outras mostram o que acontece sem ele
+// até o jogador instalar (instalações cadastradas na API).
+export const ID_PILOTO = 'ubs-vila-mariana'
 
 // Perfil (faixa de temperatura) de um local pelo id.
 export function perfilDoLocal(localId) {
@@ -46,7 +47,7 @@ export function perfilDoLocal(localId) {
 
 function criarLocal(def) {
   return {
-    protegido: def.id === ID_PROTEGIDO_INICIAL,
+    protegido: def.id === ID_PILOTO,
     temperatura: PERFIS_EMULADOR[def.perfil].tAlvo,
     ordem: 'NORMAL', // o que o atacante manda ao controlador: 'NORMAL' | 'CALOR' | 'FRIO'
     houveAtaque: false,
@@ -205,23 +206,61 @@ export function passo(cidade, dtRealMs) {
 // Proteção e liberação
 // ---------------------------------------------------------------------------
 
-// Instala o C-Shield em todos os locais. A política não muda (W26): é a mesma de sempre, gravada
-// no dispositivo. Quem já estava sob ataque passa a ser protegido dali em diante: a exposição
-// acumulada até agora continua valendo e a reação conta a partir da ativação.
-export function ativarCShield(cidade) {
+// Instala o C-Shield num local. A política não muda (W26): é a mesma de sempre, gravada no
+// dispositivo. Se o local já estava sob ataque, passa a ser protegido dali em diante: a exposição
+// acumulada continua valendo e a reação conta a partir da instalação.
+function instalarNoLocal(nova, local) {
+  if (local.protegido) return
+  local.protegido = true
+  local.contexto = criarContexto()
+  local.contexto.exposicao = local.exposicao
+  local.decisao = null
+  if (local.ordem !== 'NORMAL') {
+    local.inicioAtaqueSimMs = nova.relogioSimMs
+    local.reacaoSimMs = null
+  }
+}
+
+export function instalarCShield(cidade, localId) {
+  if (!cidade.locais[localId]) throw new Error(`Local desconhecido: ${localId}`)
   const nova = structuredClone(cidade)
-  for (const local of Object.values(nova.locais)) {
-    if (local.protegido) continue
-    local.protegido = true
-    local.contexto = criarContexto()
-    local.contexto.exposicao = local.exposicao
-    local.decisao = null
-    if (local.ordem !== 'NORMAL') {
-      local.inicioAtaqueSimMs = nova.relogioSimMs
-      local.reacaoSimMs = null
-    }
+  instalarNoLocal(nova, nova.locais[localId])
+  return nova
+}
+
+// Tira o C-Shield de um local. Não faz nada se for a unidade piloto, se não estiver instalado ou
+// se estiver com o ataque bloqueado: o bloqueio só termina presencialmente, então primeiro é
+// preciso liberar. Sem proteção, o local volta a sofrer o ataque sem ninguém reagir.
+export function removerCShield(cidade, localId) {
+  const atual = cidade.locais[localId]
+  if (!atual || localId === ID_PILOTO || !atual.protegido || atual.contexto.bloqueado) return cidade
+  const nova = structuredClone(cidade)
+  const local = nova.locais[localId]
+  local.protegido = false
+  local.decisao = null
+  local.contexto = criarContexto()
+  local.liberacaoPendente = false
+  local.liberacaoRecusada = false
+  return nova
+}
+
+// Põe a proteção da cidade de acordo com a lista de instalações cadastradas: instala quem está na
+// lista e remove quem saiu. A unidade piloto sempre fica; ids desconhecidos são ignorados; um
+// local bloqueado só sai depois de liberado (ver removerCShield).
+export function sincronizarProtecao(cidade, idsInstalados) {
+  let nova = cidade
+  for (const def of LOCAIS) {
+    const deveTer = def.id === ID_PILOTO || idsInstalados.includes(def.id)
+    const tem = nova.locais[def.id].protegido
+    if (deveTer && !tem) nova = instalarCShield(nova, def.id)
+    else if (!deveTer && tem) nova = removerCShield(nova, def.id)
   }
   return nova
+}
+
+// Apelido temporário do botão antigo "Ativar C-Shield" (protege tudo). Sai quando o hook migrar.
+export function ativarCShield(cidade) {
+  return LOCAIS.reduce((c, def) => instalarCShield(c, def.id), cidade)
 }
 
 // Liberação presencial (botão segurado por 3 s). Só vale depois da trava mínima; antes disso é
