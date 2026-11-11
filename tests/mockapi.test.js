@@ -9,9 +9,9 @@
  *   Nicolas Cinel — RM572940
  */
 
-// Serviço da MockAPI com um fetch falso: URLs, corpos e erros normalizados.
+// Cliente genérico da MockAPI (um por recurso) com um fetch falso: URLs, corpos e erros.
 import { describe, expect, it, vi } from 'vitest'
-import { ErroApi, criarClienteIncidentes } from '../src/services/mockapi.js'
+import { ErroApi, criarCliente } from '../src/services/mockapi.js'
 
 const BASE = 'https://exemplo.mockapi.io/api/v1'
 
@@ -19,75 +19,85 @@ const BASE = 'https://exemplo.mockapi.io/api/v1'
 function resposta(status, corpo) {
   return { ok: status >= 200 && status < 300, status, json: async () => corpo }
 }
-function clienteCom(respostas) {
+function clienteCom(respostas, opcoes = {}) {
   const fetchFalso = vi.fn()
   for (const r of respostas) {
     if (r instanceof Error) fetchFalso.mockRejectedValueOnce(r)
     else fetchFalso.mockResolvedValueOnce(r)
   }
-  return { api: criarClienteIncidentes(BASE, fetchFalso), fetchFalso }
+  return { api: criarCliente(BASE, 'instalacoes', { fetchImpl: fetchFalso, ...opcoes }), fetchFalso }
 }
 
 describe('listar', () => {
-  it('pede a lista mais recente primeiro, sem filtros', async () => {
+  it('pede o recurso certo, sem filtros nem ordem', async () => {
     const { api, fetchFalso } = clienteCom([resposta(200, [{ id: '1' }])])
     expect(await api.listar()).toEqual([{ id: '1' }])
-    expect(fetchFalso).toHaveBeenCalledWith(`${BASE}/incidentes?sortBy=inicio&order=desc`, expect.anything())
+    expect(fetchFalso).toHaveBeenCalledWith(`${BASE}/instalacoes`, expect.anything())
   })
   it('manda só os filtros preenchidos', async () => {
     const { api, fetchFalso } = clienteCom([resposta(200, []), resposta(200, [])])
-    await api.listar({ status: 'ABERTO', tipo: 'CALOR' })
-    expect(fetchFalso.mock.calls[0][0]).toBe(`${BASE}/incidentes?status=ABERTO&tipo=CALOR&sortBy=inicio&order=desc`)
-    await api.listar({ status: '', tipo: 'FRIO' })
-    expect(fetchFalso.mock.calls[1][0]).toBe(`${BASE}/incidentes?tipo=FRIO&sortBy=inicio&order=desc`)
+    await api.listar({ localId: 'farmacia-mooca', apelido: '' })
+    expect(fetchFalso.mock.calls[0][0]).toBe(`${BASE}/instalacoes?localId=farmacia-mooca`)
+    await api.listar({ apelido: '' })
+    expect(fetchFalso.mock.calls[1][0]).toBe(`${BASE}/instalacoes`)
   })
-  it('a MockAPI responde 404 quando o filtro não acha nada: vira lista vazia', async () => {
+  it('ordena quando o cliente foi criado com ordem', async () => {
+    const { api, fetchFalso } = clienteCom([resposta(200, [])], { ordem: { campo: 'instaladoEm', sentido: 'asc' } })
+    await api.listar()
+    expect(fetchFalso.mock.calls[0][0]).toBe(`${BASE}/instalacoes?sortBy=instaladoEm&order=asc`)
+  })
+  it('a MockAPI responde 404 quando não acha nada: vira lista vazia', async () => {
     const { api } = clienteCom([resposta(404, 'Not found')])
-    expect(await api.listar({ status: 'RESOLVIDO' })).toEqual([])
+    expect(await api.listar()).toEqual([])
   })
   it('aceita a barra final na URL base', async () => {
     const fetchFalso = vi.fn().mockResolvedValue(resposta(200, []))
-    await criarClienteIncidentes(`${BASE}/`, fetchFalso).listar()
-    expect(fetchFalso.mock.calls[0][0]).toBe(`${BASE}/incidentes?sortBy=inicio&order=desc`)
+    await criarCliente(`${BASE}/`, 'instalacoes', { fetchImpl: fetchFalso }).listar()
+    expect(fetchFalso.mock.calls[0][0]).toBe(`${BASE}/instalacoes`)
   })
 })
 
 describe('criar, atualizar e excluir', () => {
   it('criar manda POST com o corpo em JSON e devolve o criado', async () => {
-    const { api, fetchFalso } = clienteCom([resposta(201, { id: '9', localNome: 'A' })])
-    expect(await api.criar({ localNome: 'A' })).toEqual({ id: '9', localNome: 'A' })
+    const { api, fetchFalso } = clienteCom([resposta(201, { id: '9', localId: 'ubs-brasilandia' })])
+    expect(await api.criar({ localId: 'ubs-brasilandia' })).toEqual({ id: '9', localId: 'ubs-brasilandia' })
     const [url, opcoes] = fetchFalso.mock.calls[0]
-    expect(url).toBe(`${BASE}/incidentes`)
+    expect(url).toBe(`${BASE}/instalacoes`)
     expect(opcoes.method).toBe('POST')
     expect(opcoes.headers['Content-Type']).toBe('application/json')
-    expect(JSON.parse(opcoes.body)).toEqual({ localNome: 'A' })
+    expect(JSON.parse(opcoes.body)).toEqual({ localId: 'ubs-brasilandia' })
   })
   it('atualizar manda PUT para o id', async () => {
-    const { api, fetchFalso } = clienteCom([resposta(200, { id: '9', status: 'RESOLVIDO' })])
-    expect(await api.atualizar('9', { status: 'RESOLVIDO' })).toEqual({ id: '9', status: 'RESOLVIDO' })
+    const { api, fetchFalso } = clienteCom([resposta(200, { id: '9', apelido: 'Sala 3' })])
+    expect(await api.atualizar('9', { apelido: 'Sala 3' })).toEqual({ id: '9', apelido: 'Sala 3' })
     const [url, opcoes] = fetchFalso.mock.calls[0]
-    expect(url).toBe(`${BASE}/incidentes/9`)
+    expect(url).toBe(`${BASE}/instalacoes/9`)
     expect(opcoes.method).toBe('PUT')
-    expect(JSON.parse(opcoes.body)).toEqual({ status: 'RESOLVIDO' })
+    expect(JSON.parse(opcoes.body)).toEqual({ apelido: 'Sala 3' })
   })
   it('excluir manda DELETE para o id', async () => {
     const { api, fetchFalso } = clienteCom([resposta(200, { id: '9' })])
     await api.excluir('9')
     const [url, opcoes] = fetchFalso.mock.calls[0]
-    expect(url).toBe(`${BASE}/incidentes/9`)
+    expect(url).toBe(`${BASE}/instalacoes/9`)
     expect(opcoes.method).toBe('DELETE')
+  })
+  it('cada cliente fala só com o seu recurso', async () => {
+    const fetchFalso = vi.fn().mockResolvedValue(resposta(200, []))
+    await criarCliente(BASE, 'outro', { fetchImpl: fetchFalso }).listar()
+    expect(fetchFalso.mock.calls[0][0]).toBe(`${BASE}/outro`)
   })
 })
 
 describe('erros normalizados', () => {
   it('sem URL configurada: erro claro e nenhuma chamada de rede', async () => {
     const fetchFalso = vi.fn()
-    const api = criarClienteIncidentes('', fetchFalso)
+    const api = criarCliente('', 'instalacoes', { fetchImpl: fetchFalso })
     for (const chamada of [() => api.listar(), () => api.criar({}), () => api.atualizar('1', {}), () => api.excluir('1')]) {
       await expect(chamada()).rejects.toMatchObject({
         name: 'ErroApi',
         status: 0,
-        message: 'A API de incidentes não está configurada (VITE_MOCKAPI_URL).',
+        message: 'A API do C-Shield não está configurada (VITE_MOCKAPI_URL).',
       })
     }
     expect(fetchFalso).not.toHaveBeenCalled()
