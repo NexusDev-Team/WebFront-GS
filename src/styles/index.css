@@ -12,6 +12,7 @@
 /* Estilos globais do site. Tokens e efeitos ficam em arquivos próprios. */
 @import "tailwindcss";
 @import "./tokens.css";
+@import "./efeitos.css";
 
 @layer base {
   html {
