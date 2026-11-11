@@ -24,8 +24,13 @@ import {
   HORA_DEGELO_1,
   HORA_DEGELO_2,
   JANELA_DEGELO_H,
+  JANELA_TAXA_MS,
   LIMIAR_PORTA_PCT,
+  N_AMOSTRAS_TAXA,
   SETPOINT_AUSENTE,
+  TAXA_MAX_C_POR_MIN,
+  TAXA_MAX_RESFRIAMENTO_C_POR_MIN,
+  TAXA_MIN_INTERVALO_MS,
   TRAVA_MS,
 } from './config.js'
 import { perfilAtivo } from './perfis.js'
@@ -73,6 +78,32 @@ export function degeloPermitidoNaHora(hora) {
     (hora >= HORA_DEGELO_1 && hora < HORA_DEGELO_1 + JANELA_DEGELO_H) ||
     (hora >= HORA_DEGELO_2 && hora < HORA_DEGELO_2 + JANELA_DEGELO_H)
   )
+}
+
+// Guarda a temperatura no histórico e descarta o que saiu da janela de JANELA_TAXA_MS.
+function registrarAmostra(ctx, temp, agoraMs) {
+  if (ctx.histTemp.length >= N_AMOSTRAS_TAXA) {
+    // cheio: descarta a mais antiga
+    ctx.histTemp.shift()
+    ctx.histMs.shift()
+  }
+  ctx.histTemp.push(temp)
+  ctx.histMs.push(agoraMs)
+  // Remove amostras mais velhas que a janela, sempre mantendo ao menos a mais nova.
+  while (ctx.histTemp.length > 1 && agoraMs - ctx.histMs[0] > JANELA_TAXA_MS) {
+    ctx.histTemp.shift()
+    ctx.histMs.shift()
+  }
+}
+
+// Taxa de variação da temperatura em °C/min (positiva = aquecendo), medida entre a amostra mais
+// antiga e a mais nova da janela. 0 se ainda não há intervalo suficiente.
+export function calcularTaxa(ctx) {
+  const n = ctx.histTemp.length
+  if (n < 2) return 0
+  const dt = ctx.histMs[n - 1] - ctx.histMs[0]
+  if (dt < TAXA_MIN_INTERVALO_MS) return 0
+  return (ctx.histTemp[n - 1] - ctx.histTemp[0]) / (dt / 60000)
 }
 
 // Zera toda a memória entre ciclos (iniciarContexto do firmware).
@@ -123,6 +154,9 @@ export function avaliar(leitura, contexto, agoraMs, opcoes = {}) {
   }
 
   const travaMs = opcoes.travaMs ?? TRAVA_MS
+
+  // --- Sensor e histórico da taxa ---
+  if (leitura.valida) registrarAmostra(ctx, leitura.temperatura, agoraMs)
   const porta = portaAberta(leitura.luzPct)
 
   // Acompanha o tempo do degelo comandado.
@@ -136,6 +170,9 @@ export function avaliar(leitura, contexto, agoraMs, opcoes = {}) {
   }
 
   // --- Julgar a ordem do controlador (só quando não há bloqueio ativo) ---
+  const taxa = calcularTaxa(ctx)
+  d.taxaCPorMin = taxa
+
   if (!ctx.bloqueado) {
     let violada = MOTIVOS.NENHUM
     // Regra 1: setpoint fora da faixa do produto (julga a ordem antes do efeito).
@@ -146,8 +183,24 @@ export function avaliar(leitura, contexto, agoraMs, opcoes = {}) {
       violada = MOTIVOS.DEGELO_LONGO
     } else if (leitura.degelo && leitura.horaValida && !degeloPermitidoNaHora(leitura.hora)) {
       violada = MOTIVOS.DEGELO_FORA_HORARIO
+      // Regra 3: aquecimento rápido com a porta fechada (porta aberta é só ATENCAO).
+    } else if (leitura.valida && !porta && taxa > TAXA_MAX_C_POR_MIN) {
+      violada = MOTIVOS.AQUECIMENTO_RAPIDO
+      // Regra 4, o espelho da 3: resfriamento rápido. Frio demais também estraga (sangue, vacina).
+      // A porta aberta não explica esfriar, então não alivia a regra. Só vale abaixo do centro da
+      // faixa: voltar do calor até o centro (a ventoinha esfriando) não é ataque.
+    } else if (
+      leitura.valida &&
+      leitura.temperatura < (p.tMin + p.tMax) / 2 &&
+      taxa < -TAXA_MAX_RESFRIAMENTO_C_POR_MIN
+    ) {
+      violada = MOTIVOS.RESFRIAMENTO_RAPIDO
     }
     if (violada !== MOTIVOS.NENHUM) {
+      // Direção do ataque: setpoint abaixo da faixa e resfriamento rápido são ataques de FRIO.
+      ctx.bloqueioFrio =
+        violada === MOTIVOS.RESFRIAMENTO_RAPIDO ||
+        (violada === MOTIVOS.SETPOINT_INVALIDO && leitura.setpoint < p.tMin)
       ctx.bloqueado = true
       ctx.inicioBloqueioMs = agoraMs
       ctx.motivoBloqueio = violada
@@ -169,9 +222,17 @@ export function avaliar(leitura, contexto, agoraMs, opcoes = {}) {
     d.motivo = MOTIVOS.DERIVA
   }
 
-  // Resposta nos relés (calor: corta o aquecedor e liga a ventoinha de emergência).
-  d.cortaAquecedor = ctx.bloqueado
-  d.ligaVentoinha = ctx.bloqueado
+  // Resposta nos relés, sempre para o lado que protege o produto:
+  //   calor: corta o aquecedor e liga a ventoinha de emergência;
+  //   frio:  deixa o aquecedor liberado e NÃO liga a ventoinha (esfriar mais estragaria o produto).
+  // A temperatura medida manda; com ela dentro da faixa vale a direção do ataque.
+  // Nunca mexe no compressor: o C-Shield só veta o que aumenta o risco.
+  const atua = ctx.bloqueado
+  const muitoQuente = leitura.valida && leitura.temperatura > p.tMax
+  const muitoFrio = leitura.valida && leitura.temperatura < p.tMin
+  const modoCalor = muitoQuente || (!muitoFrio && !ctx.bloqueioFrio)
+  d.cortaAquecedor = atua && modoCalor
+  d.ligaVentoinha = atua && modoCalor
 
   d.bloqueado = ctx.bloqueado
   if (ctx.bloqueado) {
