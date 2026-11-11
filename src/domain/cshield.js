@@ -18,10 +18,15 @@
  * Prioridade dos estados: CRITICO > BLOQUEIO > FALHA_SENSOR > ATENCAO > NORMAL.
  */
 import {
+  DEGELO_MAX_MS,
   DHT_TEMP_MAX_FISICA,
   DHT_TEMP_MIN_FISICA,
+  HORA_DEGELO_1,
+  HORA_DEGELO_2,
+  JANELA_DEGELO_H,
   LIMIAR_PORTA_PCT,
   SETPOINT_AUSENTE,
+  TRAVA_MS,
 } from './config.js'
 import { perfilAtivo } from './perfis.js'
 
@@ -60,6 +65,14 @@ export function temperaturaValida(t) {
 // true se a luminosidade indica porta aberta.
 export function portaAberta(luzPct) {
   return luzPct > LIMIAR_PORTA_PCT
+}
+
+// true se o degelo é permitido nessa hora (janelas de HORA_DEGELO_1 e HORA_DEGELO_2).
+export function degeloPermitidoNaHora(hora) {
+  return (
+    (hora >= HORA_DEGELO_1 && hora < HORA_DEGELO_1 + JANELA_DEGELO_H) ||
+    (hora >= HORA_DEGELO_2 && hora < HORA_DEGELO_2 + JANELA_DEGELO_H)
+  )
 }
 
 // Zera toda a memória entre ciclos (iniciarContexto do firmware).
@@ -109,9 +122,46 @@ export function avaliar(leitura, contexto, agoraMs, opcoes = {}) {
     travaRestanteMs: 0,
   }
 
+  const travaMs = opcoes.travaMs ?? TRAVA_MS
   const porta = portaAberta(leitura.luzPct)
+
+  // Acompanha o tempo do degelo comandado.
+  if (leitura.degelo) {
+    if (!ctx.degeloAtivo) {
+      ctx.degeloAtivo = true
+      ctx.inicioDegeloMs = agoraMs
+    }
+  } else {
+    ctx.degeloAtivo = false
+  }
+
+  // --- Julgar a ordem do controlador (só quando não há bloqueio ativo) ---
+  if (!ctx.bloqueado) {
+    let violada = MOTIVOS.NENHUM
+    // Regra 1: setpoint fora da faixa do produto (julga a ordem antes do efeito).
+    if (leitura.temSetpoint && (leitura.setpoint < p.tMin || leitura.setpoint > p.tMax)) {
+      violada = MOTIVOS.SETPOINT_INVALIDO
+      // Regra 2: degelo por tempo demais, ou fora dos horários permitidos (hora válida).
+    } else if (leitura.degelo && ctx.degeloAtivo && agoraMs - ctx.inicioDegeloMs > DEGELO_MAX_MS) {
+      violada = MOTIVOS.DEGELO_LONGO
+    } else if (leitura.degelo && leitura.horaValida && !degeloPermitidoNaHora(leitura.hora)) {
+      violada = MOTIVOS.DEGELO_FORA_HORARIO
+    }
+    if (violada !== MOTIVOS.NENHUM) {
+      ctx.bloqueado = true
+      ctx.inicioBloqueioMs = agoraMs
+      ctx.motivoBloqueio = violada
+      ctx.bloqueios++
+      d.novoBloqueio = true
+    }
+  }
+
+  // --- Estado final pela prioridade e ações nos relés ---
   const deriva = leitura.valida && (leitura.temperatura < p.tMin || leitura.temperatura > p.tMax)
-  if (porta) {
+  if (ctx.bloqueado) {
+    d.estado = ESTADOS.BLOQUEIO
+    d.motivo = ctx.motivoBloqueio
+  } else if (porta) {
     d.estado = ESTADOS.ATENCAO
     d.motivo = MOTIVOS.PORTA_ABERTA
   } else if (deriva) {
@@ -119,7 +169,20 @@ export function avaliar(leitura, contexto, agoraMs, opcoes = {}) {
     d.motivo = MOTIVOS.DERIVA
   }
 
+  // Resposta nos relés (calor: corta o aquecedor e liga a ventoinha de emergência).
+  d.cortaAquecedor = ctx.bloqueado
+  d.ligaVentoinha = ctx.bloqueado
+
+  d.bloqueado = ctx.bloqueado
+  if (ctx.bloqueado) {
+    const decorrido = agoraMs - ctx.inicioBloqueioMs
+    d.travaRestanteMs = decorrido >= travaMs ? 0 : travaMs - decorrido
+  }
+
+  // Memória para o próximo ciclo.
   ctx.iniciado = true
   ctx.ultimoMs = agoraMs
+  if (leitura.temSetpoint) ctx.ultimoSetpoint = leitura.setpoint
+  ctx.ultimoDegelo = leitura.degelo
   return { decisao: d, contexto: ctx }
 }
