@@ -68,6 +68,34 @@ Movimento: transições de interface entre 150 e 300 ms; nada anima `width`/`hei
 
 Ícones: SVG próprios inline (atacante, central, escudo, frasco, gota de sangue, carrinho, cruz de farmácia). Sem emoji como ícone.
 
+### Camada "hacker + gelo" (decisão do João, 11/11)
+
+O tema é ataque cibernético a refrigeradores, então a sala de controle mistura duas linguagens visuais, cada uma com um dono:
+
+- **Hacker = o invasor.** Terminal, código, falha de sinal. Aparece no que vem da rede e no ataque: prompts de terminal, texto em leet nos botões de ataque, glitch e `ataque` vermelho.
+- **Gelo = o C-Shield e a cadeia do frio.** Cristal, geada, escudo com floco de neve (a logo do C-Shield). Aparece no que protege: painéis com geada nas bordas, escudo, `led-forte`.
+
+Durante um ataque, o hacker "racha" o gelo (glitch); quando o C-Shield assume, o gelo volta firme. A tese "a cor é estado" continua valendo: nenhum elemento dessa camada usa verde, amarelo ou vermelho fora do papel de estado ou de ataque.
+
+Elementos:
+
+- **Logo** em SVG próprio (`ui/Logo.jsx`): escudo com floco de neve de 6 braços em traço `led-forte`, wordmark "C-SHIELD" em Chakra Petch 700 e o slogan "Segurança inteligente para câmaras frias." em `gelo-300`. Variantes: completa, compacta (só escudo + nome) e só o escudo. O nome sai de `NOME_PRODUTO`.
+- **Prompt de terminal** (`ui/PromptTerminal.jsx`): rótulos e sobretítulos em IBM Plex Mono no formato `> cshield --status` ou `$ sala_vacina_01`, com cursor `▌` piscando a 1 Hz (para com reduced-motion). Texto em `gelo-300`, prompt `>` em `led-forte`.
+- **Grade de sala de controle:** fundo da página com linhas finas a cada 32 px na cor `grade` (borda a 6%), estática.
+- **Scanlines:** sobre os painéis, `repeating-linear-gradient` com opacidade de no máximo 4%, estático (nunca sobre o LCD).
+- **Geada:** cantos dos painéis com um brilho radial `geada` (branco-gelo a 6%) e cantoneiras de HUD (`[ ]`) em `borda`. O texto continua opaco.
+- **Glitch de ataque** (`glitch-ataque`): deslocamento RGB do texto (`ataque` e `led-forte` a 2 px) em keyframes de no máximo 3 quedas por segundo, só junto com `led-falha` e só durante ataque. Com reduced-motion vira uma troca estática de cor.
+- **Cristais:** padrão hexagonal (geometria do floco de neve) em SVG a 3–4% de opacidade, só em fundos de seção grandes.
+
+Tokens novos (decorativos, nunca em texto):
+
+| Token | Valor | Uso |
+| --- | --- | --- |
+| `geada` | `rgba(234, 246, 255, 0.06)` | Brilho de geada nos cantos dos painéis |
+| `grade` | `rgba(125, 211, 252, 0.06)` | Grade do fundo e scanlines |
+
+Nenhuma cor de texto nova, então a tabela de contraste acima não muda.
+
 ## 3. Esboço das páginas
 
 ### Layout comum
