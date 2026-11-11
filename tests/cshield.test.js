@@ -358,3 +358,112 @@ describe('teste_ataque_frio: recuperação do calor (R52 a R54)', () => {
     expect(d.estado === ESTADOS.NORMAL && !d.bloqueado).toBe(true)
   })
 })
+
+describe('teste_trava_ignora_ordem (R25)', () => {
+  it('nova ordem do controlador durante o bloqueio é ignorada e registrada', () => {
+    const s = sessao()
+    bloquearPorSetpoint(s)
+    const l = base()
+    l.setpoint = 50.0 // controlador muda de novo
+    let d = s.avalia(l, T0 + PASSO)
+    expect(d.estado).toBe(ESTADOS.BLOQUEIO)
+    expect(d.mudancaIgnorada).toBe(true)
+    expect(d.novoBloqueio).toBe(false)
+    expect(s.ctx.bloqueios).toBe(1)
+    d = s.avalia(l, T0 + 2 * PASSO) // sem nova mudança: nada a registrar
+    expect(d.mudancaIgnorada).toBe(false)
+  })
+})
+
+describe('teste_liberacao_antes_da_trava (R26, R30)', () => {
+  it('botão antes da trava mínima não libera e avisa', () => {
+    const s = sessao()
+    bloquearPorSetpoint(s)
+    const l = base()
+    l.liberacao = true // setpoint de volta a 5
+    const d = s.avalia(l, T0 + TRAVA_MS - PASSO)
+    expect(d.estado).toBe(ESTADOS.BLOQUEIO)
+    expect(s.ctx.bloqueado).toBe(true)
+    expect(d.travaRestanteMs).toBe(PASSO)
+    expect(d.liberacaoRecusada && !d.liberou).toBe(true) // o usuário precisa ser avisado
+  })
+})
+
+describe('teste_liberacao_temperatura_boa (R26)', () => {
+  it('liberação com temperatura boa volta ao NORMAL', () => {
+    const s = sessao()
+    bloquearPorSetpoint(s)
+    const l = base()
+    l.liberacao = true
+    const d = s.avalia(l, T0 + TRAVA_MS)
+    expect(d.estado).toBe(ESTADOS.NORMAL)
+    expect(s.ctx.bloqueado).toBe(false)
+    expect(!d.cortaAquecedor && !d.ligaVentoinha).toBe(true)
+    expect(d.travaRestanteMs).toBe(0)
+    expect(d.liberou && !d.liberacaoRecusada).toBe(true)
+  })
+})
+
+describe('teste_liberacao_temperatura_ruim (R27, R18)', () => {
+  it('liberação com temperatura ruim vai para CRITICO', () => {
+    const s = sessao()
+    bloquearPorSetpoint(s)
+    const l = base()
+    l.temperatura = 12.0 // além da tolerância (acima de 9)
+    let d
+    let t = T0 + PASSO
+    for (; t < T0 + TRAVA_MS + 4000; t += PASSO) d = s.avalia(l, t)
+    expect(d.estado).toBe(ESTADOS.CRITICO) // crítico já durante o bloqueio
+    l.liberacao = true
+    d = s.avalia(l, t) // depois da trava, com o botão
+    expect(s.ctx.bloqueado).toBe(false)
+    expect(d.estado).toBe(ESTADOS.CRITICO)
+    expect(d.cortaAquecedor && d.ligaVentoinha).toBe(true)
+  })
+})
+
+describe('teste_liberacao_descarta_historico_da_taxa (R26)', () => {
+  it('a liberação não reabre o bloqueio por uma subida antiga', () => {
+    const s = sessao()
+    const l = base()
+    l.temperatura = 2.0
+    l.setpoint = 40.0
+    s.avalia(l, T0) // bloqueia por setpoint com 2,0 °C
+    l.temperatura = 5.0
+    l.setpoint = 5.0 // a temperatura sobe durante a trava
+    for (let t = T0 + PASSO; t < T0 + TRAVA_MS; t += PASSO) s.avalia(l, t)
+    l.liberacao = true
+    const d = s.avalia(l, T0 + TRAVA_MS) // a subida antiga já é história
+    expect(d.estado).toBe(ESTADOS.NORMAL)
+    expect(s.ctx.bloqueado).toBe(false)
+    expect(s.ctx.bloqueios).toBe(1)
+  })
+})
+
+describe('teste_liberacao_ordem_ainda_invalida (R28)', () => {
+  it('liberar com a ordem ainda inválida reabre o bloqueio e recomeça a trava', () => {
+    const s = sessao()
+    bloquearPorSetpoint(s) // setpoint 40
+    const l = base()
+    l.setpoint = 40.0
+    l.liberacao = true
+    const d = s.avalia(l, T0 + TRAVA_MS)
+    expect(d.estado === ESTADOS.BLOQUEIO && d.motivo === MOTIVOS.SETPOINT_INVALIDO).toBe(true)
+    expect(d.novoBloqueio).toBe(true)
+    expect(s.ctx.bloqueios).toBe(2)
+    expect(d.travaRestanteMs).toBe(TRAVA_MS) // a trava recomeça
+  })
+})
+
+describe('opcoes.travaMs (emulador, D6)', () => {
+  it('com trava de 10 s o botão libera em 10 s e é recusado em 8 s', () => {
+    const s = sessao({ travaMs: 10000 })
+    bloquearPorSetpoint(s)
+    const l = base()
+    l.liberacao = true
+    let d = s.avalia(l, T0 + 8000)
+    expect(d.liberacaoRecusada && d.bloqueado && d.travaRestanteMs === 2000).toBe(true)
+    d = s.avalia(l, T0 + 10000)
+    expect(d.liberou && !d.bloqueado).toBe(true)
+  })
+})
