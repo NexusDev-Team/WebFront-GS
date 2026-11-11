@@ -26,38 +26,19 @@ import {
   HORA_DEGELO_1,
   HORA_DEGELO_2,
   JANELA_DEGELO_H,
-  JANELA_TAXA_MS,
   LIMIAR_PORTA_PCT,
-  N_AMOSTRAS_TAXA,
   SETPOINT_AUSENTE,
   TAXA_MAX_C_POR_MIN,
   TAXA_MAX_RESFRIAMENTO_C_POR_MIN,
-  TAXA_MIN_INTERVALO_MS,
   TRAVA_MS,
 } from './config.js'
+import { calcularTaxa, registrarAmostra } from './historico.js'
+import { ESTADOS, MOTIVOS } from './nomes.js'
 import { perfilAtivo } from './perfis.js'
 
-// Nomes canônicos (iguais ao Edge, sem variações).
-export const ESTADOS = {
-  NORMAL: 'NORMAL',
-  ATENCAO: 'ATENCAO',
-  BLOQUEIO: 'BLOQUEIO',
-  CRITICO: 'CRITICO',
-  FALHA_SENSOR: 'FALHA_SENSOR',
-}
-
-export const MOTIVOS = {
-  NENHUM: '-',
-  PORTA_ABERTA: 'PORTA_ABERTA',
-  DERIVA: 'DERIVA',
-  SETPOINT_INVALIDO: 'SETPOINT_INVALIDO',
-  DEGELO_FORA_HORARIO: 'DEGELO_FORA_HORARIO',
-  DEGELO_LONGO: 'DEGELO_LONGO',
-  AQUECIMENTO_RAPIDO: 'AQUECIMENTO_RAPIDO',
-  RESFRIAMENTO_RAPIDO: 'RESFRIAMENTO_RAPIDO',
-  TEMP_FORA_TOLERANCIA: 'TEMP_FORA_TOLERANCIA',
-  SENSOR_SEM_LEITURA: 'SENSOR_SEM_LEITURA',
-}
+// Reexporta para quem já importa tudo de cshield.js.
+export { calcularTaxa } from './historico.js'
+export { ESTADOS, MOTIVOS } from './nomes.js'
 
 // ---------------------------------------------------------------------------
 // Funções auxiliares (puras)
@@ -80,32 +61,6 @@ export function degeloPermitidoNaHora(hora) {
     (hora >= HORA_DEGELO_1 && hora < HORA_DEGELO_1 + JANELA_DEGELO_H) ||
     (hora >= HORA_DEGELO_2 && hora < HORA_DEGELO_2 + JANELA_DEGELO_H)
   )
-}
-
-// Guarda a temperatura no histórico e descarta o que saiu da janela de JANELA_TAXA_MS.
-function registrarAmostra(ctx, temp, agoraMs) {
-  if (ctx.histTemp.length >= N_AMOSTRAS_TAXA) {
-    // cheio: descarta a mais antiga
-    ctx.histTemp.shift()
-    ctx.histMs.shift()
-  }
-  ctx.histTemp.push(temp)
-  ctx.histMs.push(agoraMs)
-  // Remove amostras mais velhas que a janela, sempre mantendo ao menos a mais nova.
-  while (ctx.histTemp.length > 1 && agoraMs - ctx.histMs[0] > JANELA_TAXA_MS) {
-    ctx.histTemp.shift()
-    ctx.histMs.shift()
-  }
-}
-
-// Taxa de variação da temperatura em °C/min (positiva = aquecendo), medida entre a amostra mais
-// antiga e a mais nova da janela. 0 se ainda não há intervalo suficiente.
-export function calcularTaxa(ctx) {
-  const n = ctx.histTemp.length
-  if (n < 2) return 0
-  const dt = ctx.histMs[n - 1] - ctx.histMs[0]
-  if (dt < TAXA_MIN_INTERVALO_MS) return 0
-  return (ctx.histTemp[n - 1] - ctx.histTemp[0]) / (dt / 60000)
 }
 
 // Zera toda a memória entre ciclos (iniciarContexto do firmware).
