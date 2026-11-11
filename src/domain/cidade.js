@@ -112,9 +112,9 @@ export function atacar(cidade, localId, tipo, agoraRealMs) {
 // ---------------------------------------------------------------------------
 
 // Tempo do jogo: cada ms real vale 60 ms simulados (1 s real = 1 min simulado).
-const MS_SIM_POR_MS_REAL = EMULADOR_MINUTOS_POR_SEGUNDO * 60
+export const MS_SIM_POR_MS_REAL = EMULADOR_MINUTOS_POR_SEGUNDO * 60
 // A trava mínima do emulador é de 10 s reais (D6), ou seja, 10 min simulados.
-const TRAVA_SIM_MS = EMULADOR_TRAVA_MS_REAL * MS_SIM_POR_MS_REAL
+export const TRAVA_SIM_MS = EMULADOR_TRAVA_MS_REAL * MS_SIM_POR_MS_REAL
 // Um ponto do histórico a cada 10 s simulados; guarda os últimos 120 (cerca de 20 min simulados).
 const HISTORICO_INTERVALO_SIM_MS = 10000
 const HISTORICO_MAX_PONTOS = 120
@@ -257,4 +257,10 @@ export function ataqueEmMassa(cidade, tipo, agoraRealMs) {
 // Volta ao começo do jogo (W18).
 export function recomecar() {
   return criarCidade()
+}
+
+// Quanto falta da trava mínima de um local, em ms simulados (0 se não há bloqueio ou já passou).
+export function travaRestanteSimMs(local, relogioSimMs) {
+  if (!local.contexto.bloqueado) return 0
+  return Math.max(0, TRAVA_SIM_MS - (relogioSimMs - local.contexto.inicioBloqueioMs))
 }
