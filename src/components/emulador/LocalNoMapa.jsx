@@ -76,7 +76,8 @@ export default function LocalNoMapa({ def, local, situacaoLocal, selecionado, ao
           {ICONES[def.perfil]}
         </g>
       </g>
-      <g textAnchor="middle" style={{ pointerEvents: 'none' }}>
+      {/* No celular os rótulos ficariam pequenos demais: quem mostra o texto é a ListaLocais */}
+      <g textAnchor="middle" style={{ pointerEvents: 'none' }} className="max-sm:hidden">
         <text y={RAIO_ESCUDO + 30} fontSize={28} fontWeight={600} fill="var(--color-gelo-50)" style={HALO}>
           {def.bairro}
         </text>

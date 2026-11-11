@@ -19,6 +19,7 @@ import Central from './Central.jsx'
 import { VIEWBOX } from './geometria.js'
 import LinhaAtaque from './LinhaAtaque.jsx'
 import LinhaDados from './LinhaDados.jsx'
+import ListaLocais from './ListaLocais.jsx'
 import LocalNoMapa from './LocalNoMapa.jsx'
 
 export default function MapaCidade({ cidade, selecionadoId, aoSelecionar, reduzirMovimento }) {
@@ -70,7 +71,10 @@ export default function MapaCidade({ cidade, selecionadoId, aoSelecionar, reduzi
         ))}
       </svg>
 
-      <div role="status" className="pointer-events-none absolute inset-x-0 top-[17%] flex justify-center px-2">
+      <ListaLocais cidade={cidade} selecionadoId={selecionadoId} aoSelecionar={aoSelecionar} />
+
+      {/* No celular o aviso fica abaixo do mapa; em telas maiores, em cima dele, perto da central */}
+      <div role="status" className="mt-2 flex justify-center sm:pointer-events-none sm:absolute sm:inset-x-0 sm:top-[17%] sm:mt-0 sm:px-2">
         {coordenado ? (
           <p className="max-w-xs rounded-lg border border-ataque bg-noite-950 px-3 py-2 text-center font-semibold text-gelo-50 sm:max-w-md">
             <span aria-hidden="true" className="mr-1 font-mono text-ataque">
