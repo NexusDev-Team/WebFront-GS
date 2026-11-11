@@ -200,3 +200,44 @@ export function passo(cidade, dtRealMs) {
   }
   return nova
 }
+
+// ---------------------------------------------------------------------------
+// Proteção e liberação
+// ---------------------------------------------------------------------------
+
+// Instala o C-Shield em todos os locais. A política não muda (W26): é a mesma de sempre, gravada
+// no dispositivo. Quem já estava sob ataque passa a ser protegido dali em diante: a exposição
+// acumulada até agora continua valendo e a reação conta a partir da ativação.
+export function ativarCShield(cidade) {
+  const nova = structuredClone(cidade)
+  for (const local of Object.values(nova.locais)) {
+    if (local.protegido) continue
+    local.protegido = true
+    local.contexto = criarContexto()
+    local.contexto.exposicao = local.exposicao
+    local.decisao = null
+    if (local.ordem !== 'NORMAL') {
+      local.inicioAtaqueSimMs = nova.relogioSimMs
+      local.reacaoSimMs = null
+    }
+  }
+  return nova
+}
+
+// Liberação presencial (botão segurado por 3 s). Só vale depois da trava mínima; antes disso é
+// recusada e o bloqueio continua. Aceita, a pessoa também desfaz a ordem do atacante no
+// controlador, e o próximo ciclo leva liberacao: true.
+export function liberar(cidade, localId) {
+  const nova = structuredClone(cidade)
+  const local = nova.locais[localId]
+  if (!local || !local.protegido || !local.contexto.bloqueado) return nova
+  const decorrido = nova.relogioSimMs - local.contexto.inicioBloqueioMs
+  if (decorrido < TRAVA_SIM_MS) {
+    local.liberacaoRecusada = true
+    return nova
+  }
+  local.liberacaoRecusada = false
+  local.liberacaoPendente = true
+  local.ordem = 'NORMAL'
+  return nova
+}

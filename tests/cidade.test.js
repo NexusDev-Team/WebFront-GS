@@ -322,7 +322,7 @@ describe('liberar (botão de 3 s, trava de 10 s reais)', () => {
     c = avancar(c, 1) // passou dos 10 s reais de trava
     c = liberar(c, 'ubs-vila-mariana')
     expect(c.locais['ubs-vila-mariana'].liberacaoRecusada).toBe(false)
-    c = avancar(c, 0.2)
+    c = passo(c, 34) // um ciclo: o da liberação
     expect(c.locais['ubs-vila-mariana'].decisao.liberou).toBe(true)
     expect(c.locais['ubs-vila-mariana'].decisao.bloqueado).toBe(false)
   })
