@@ -14,6 +14,8 @@
  * comparando a UBS com C-Shield e a sem (W19). Só lê a cidade; quem a altera é o cidade.js.
  */
 
+import { LOCAIS } from './cidade.js'
+
 // Acima desta exposição (°C·min acima do máximo) o lote precisa de análise mesmo depois de
 // o local voltar ao normal. Abaixo disso a perda é desprezível e o local fica só "seguro".
 export const EXPOSICAO_MAX_SEGURA = 1
@@ -30,4 +32,35 @@ export function situacao(local) {
   if (local.ordem !== 'NORMAL') return 'SOB_ATAQUE'
   if (!local.houveAtaque) return 'NORMAL'
   return local.exposicao > EXPOSICAO_MAX_SEGURA ? 'SEGURO_LOTE_EM_ANALISE' : 'SEGURO'
+}
+
+// Quanto tempo uma câmara sem C-Shield leva para alguém perceber o problema: 3 h 30 min, do caso
+// real que inspirou o projeto (ICA). É um dado do caso, não uma simulação.
+export const PERCEPCAO_SEM_CSHIELD_MIN = 210
+
+// As duas UBS comparadas no placar (W19): a que nasce com C-Shield e a que nasce sem.
+const IDS_PLACAR = ['ubs-vila-mariana', 'ubs-brasilandia']
+
+// Placar: para cada UBS, temperatura, quanto tempo levou para reagir, exposição e situação.
+// reacaoSimMs é null enquanto não houve ataque (ou o C-Shield ainda não reagiu). Com C-Shield é a
+// reação medida na simulação (alguns segundos); sem ele, a constante do caso ICA.
+export function placar(cidade) {
+  return IDS_PLACAR.map((id) => {
+    const def = LOCAIS.find((l) => l.id === id)
+    const local = cidade.locais[id]
+    let reacaoSimMs = null
+    if (local.houveAtaque) {
+      reacaoSimMs = local.protegido ? local.reacaoSimMs : PERCEPCAO_SEM_CSHIELD_MIN * 60000
+    }
+    return {
+      id,
+      nome: def.nome,
+      bairro: def.bairro,
+      protegido: local.protegido,
+      temperatura: local.temperatura,
+      reacaoSimMs,
+      exposicao: local.exposicao,
+      situacao: situacao(local),
+    }
+  })
 }

@@ -241,3 +241,20 @@ export function liberar(cidade, localId) {
   local.ordem = 'NORMAL'
   return nova
 }
+
+// ---------------------------------------------------------------------------
+// Ataque em massa e recomeço
+// ---------------------------------------------------------------------------
+
+// Ataca os 5 locais de uma vez. Como todos caem no mesmo instante, o coordenado é detectado na
+// hora, com n = 5 e 0 s (D8).
+export function ataqueEmMassa(cidade, tipo, agoraRealMs) {
+  let nova = cidade
+  for (const def of LOCAIS) nova = atacar(nova, def.id, tipo, agoraRealMs)
+  return nova
+}
+
+// Volta ao começo do jogo (W18).
+export function recomecar() {
+  return criarCidade()
+}
