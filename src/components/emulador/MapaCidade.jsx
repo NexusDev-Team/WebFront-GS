@@ -70,7 +70,7 @@ export default function MapaCidade({ cidade, selecionadoId, aoSelecionar, reduzi
         ))}
       </svg>
 
-      <div role="status" className="pointer-events-none absolute inset-x-0 top-[64%] flex justify-center px-2">
+      <div role="status" className="pointer-events-none absolute inset-x-0 top-[17%] flex justify-center px-2">
         {coordenado ? (
           <p className="max-w-xs rounded-lg border border-ataque bg-noite-950 px-3 py-2 text-center font-semibold text-gelo-50 sm:max-w-md">
             <span aria-hidden="true" className="mr-1 font-mono text-ataque">

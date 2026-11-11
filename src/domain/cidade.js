@@ -30,8 +30,8 @@ import { PERFIS_EMULADOR } from './perfis.js'
 export const LOCAIS = [
   { id: 'ubs-vila-mariana', nome: 'UBS Vila Mariana', bairro: 'Vila Mariana', perfil: 'VACINA', x: 300, y: 380 },
   { id: 'ubs-brasilandia', nome: 'UBS Brasilândia', bairro: 'Brasilândia', perfil: 'VACINA', x: 140, y: 170 },
-  { id: 'hemocentro-consolacao', nome: 'Hemocentro Consolação', bairro: 'Consolação', perfil: 'PLASMA', x: 800, y: 150 },
-  { id: 'farmacia-mooca', nome: 'Farmácia Mooca', bairro: 'Mooca', perfil: 'INSULINA', x: 860, y: 300 },
+  { id: 'hemocentro-consolacao', nome: 'Hemocentro Consolação', bairro: 'Consolação', perfil: 'PLASMA', x: 860, y: 430 },
+  { id: 'farmacia-mooca', nome: 'Farmácia Mooca', bairro: 'Mooca', perfil: 'INSULINA', x: 900, y: 210 },
   { id: 'mercado-liberdade', nome: 'Mercado Liberdade', bairro: 'Liberdade', perfil: 'CONGELADO', x: 640, y: 410 },
 ]
 

@@ -84,7 +84,7 @@ export default function Emulador() {
       </PainelVidro>
       <AvisoAoVivo cidade={jogo.cidade} />
 
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="grid items-start gap-6 lg:grid-cols-2">
         <ControlesAtaque
           selecionado={selecionado}
           aoAtacar={(tipo) => jogo.atacar(selecionadoId, tipo)}
