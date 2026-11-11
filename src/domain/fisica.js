@@ -15,12 +15,15 @@
  * proteção. Lei de Newton por passo: T += (alvo − T) × (1 − e^(−k·dtMin)); como o fator fica
  * entre 0 e 1, a temperatura converge para o alvo e nunca passa dele.
  */
-import { K_ATAQUE, K_NORMAL, K_PROTECAO, SETPOINT_DEMO_ATAQUE } from './config.js'
+import { K_ATAQUE, K_NORMAL, K_PROTECAO, TEMPO_ATE_SAIR_MIN } from './config.js'
 
-// Quanto o ataque de frio empurra a temperatura abaixo do mínimo da faixa.
-const FOLGA_ATAQUE_FRIO_C = 12
-// Nos congelados o ataque de calor leva a câmara a tMax + 30 °C (45 °C seria absurdo).
-const FOLGA_ATAQUE_CALOR_CONGELADO_C = 30
+// Alvo do ataque: o valor para o qual a câmara caminha de modo a cruzar o limite da faixa
+// exatamente em TEMPO_ATE_SAIR_MIN, partindo do tAlvo. Vem de inverter a lei de Newton:
+//   limite = tAlvo + (alvo − tAlvo)(1 − e^(−k·T))  =>  alvo = tAlvo + (limite − tAlvo)/(1 − e^(−k·T)).
+// Assim todos os perfis reagem no mesmo ritmo, e o jogo fica previsível.
+function alvoDoAtaque(perfil, limite) {
+  return perfil.tAlvo + (limite - perfil.tAlvo) / (1 - Math.exp(-K_ATAQUE * TEMPO_ATE_SAIR_MIN))
+}
 
 // Para onde a temperatura caminha, e com que velocidade, na situação descrita.
 //   perfil               { tMin, tMax, tAlvo }
@@ -29,9 +32,9 @@ const FOLGA_ATAQUE_CALOR_CONGELADO_C = 30
 //   ventoinhaEmergencia  a ventoinha de emergência do C-Shield está ligada
 //   refrigeracaoLigada   a refrigeração do controlador comercial está funcionando
 // Devolve { alvo, k } (k em 1/min).
-//   calor sem proteção: 45 °C (setpoint do atacante) ou tMax + 30 nos congelados;
+//   calor sem proteção: além do máximo, rápido (alvoDoAtaque);
 //   calor com o aquecedor cortado e a ventoinha ligada: tAlvo, mais rápido;
-//   frio sem proteção: tMin − 12; frio com o aquecedor liberado: tAlvo, mais rápido;
+//   frio sem proteção: abaixo do mínimo, rápido; frio com o aquecedor liberado: tAlvo, mais rápido;
 //   normal (ou calor com a refrigeração ainda ligada): tAlvo, devagar.
 export function alvoTermico({ perfil, ordem, aquecedorLigado, ventoinhaEmergencia, refrigeracaoLigada }) {
   const normal = { alvo: perfil.tAlvo, k: K_NORMAL }
@@ -39,12 +42,11 @@ export function alvoTermico({ perfil, ordem, aquecedorLigado, ventoinhaEmergenci
 
   if (ordem === 'CALOR' && !refrigeracaoLigada) {
     if (!aquecedorLigado && ventoinhaEmergencia) return protegido
-    const alvo = perfil.tMax < 0 ? perfil.tMax + FOLGA_ATAQUE_CALOR_CONGELADO_C : SETPOINT_DEMO_ATAQUE
-    return { alvo, k: K_ATAQUE }
+    return { alvo: alvoDoAtaque(perfil, perfil.tMax), k: K_ATAQUE }
   }
   if (ordem === 'FRIO') {
     if (aquecedorLigado) return protegido
-    return { alvo: perfil.tMin - FOLGA_ATAQUE_FRIO_C, k: K_ATAQUE }
+    return { alvo: alvoDoAtaque(perfil, perfil.tMin), k: K_ATAQUE }
   }
   return normal
 }

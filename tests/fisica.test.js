@@ -11,7 +11,7 @@
 
 // Modelo térmico ilustrativo do emulador: alvo por situação e passo de Newton.
 import { describe, expect, it } from 'vitest'
-import { K_ATAQUE, K_NORMAL, K_PROTECAO, SETPOINT_DEMO_ATAQUE } from '../src/domain/config.js'
+import { K_ATAQUE, K_NORMAL, K_PROTECAO, TEMPO_ATE_SAIR_MIN } from '../src/domain/config.js'
 import { alvoTermico, passoTermico } from '../src/domain/fisica.js'
 import { PERFIS_EMULADOR } from '../src/domain/perfis.js'
 
@@ -59,102 +59,83 @@ describe('passoTermico', () => {
   })
 })
 
+// Alvo para o qual o ataque empurra a câmara: calculado para ela cruzar o limite exatamente em
+// TEMPO_ATE_SAIR_MIN, qualquer que seja o perfil (jogo rápido: 1 min simulado = 1 s real).
+function alvoDoAtaque(perfil, limite) {
+  return perfil.tAlvo + (limite - perfil.tAlvo) / (1 - Math.exp(-K_ATAQUE * TEMPO_ATE_SAIR_MIN))
+}
+const CALOR_SEM_CSHIELD = { ordem: 'CALOR', aquecedorLigado: true, ventoinhaEmergencia: false, refrigeracaoLigada: false }
+
 describe('alvoTermico', () => {
   it('normal: o alvo é o tAlvo do perfil, com a velocidade de repouso', () => {
     expect(alvoTermico({ perfil: VACINA, ordem: 'NORMAL', ...REPOUSO })).toEqual({ alvo: 5, k: K_NORMAL })
     expect(alvoTermico({ perfil: CONGELADO, ordem: 'NORMAL', ...REPOUSO })).toEqual({ alvo: -20, k: K_NORMAL })
   })
-  it('calor sem C-Shield: vacina vai a 45 °C (o setpoint do atacante)', () => {
-    const r = alvoTermico({
-      perfil: VACINA,
-      ordem: 'CALOR',
-      aquecedorLigado: true,
-      ventoinhaEmergencia: false,
-      refrigeracaoLigada: false,
-    })
-    expect(r).toEqual({ alvo: SETPOINT_DEMO_ATAQUE, k: K_ATAQUE })
-  })
-  it('calor sem C-Shield: congelado vai a tMax + 30', () => {
-    const r = alvoTermico({
-      perfil: CONGELADO,
-      ordem: 'CALOR',
-      aquecedorLigado: true,
-      ventoinhaEmergencia: false,
-      refrigeracaoLigada: false,
-    })
-    expect(r).toEqual({ alvo: CONGELADO.tMax + 30, k: K_ATAQUE })
+  it('calor sem C-Shield: vai além do máximo, rápido', () => {
+    for (const perfil of Object.values(PERFIS_EMULADOR)) {
+      const r = alvoTermico({ perfil, ...CALOR_SEM_CSHIELD })
+      expect(r.k).toBe(K_ATAQUE)
+      expect(r.alvo).toBeCloseTo(alvoDoAtaque(perfil, perfil.tMax), 10)
+      expect(r.alvo).toBeGreaterThan(perfil.tMax)
+    }
   })
   it('calor com C-Shield: aquecedor cortado e ventoinha ligada levam ao tAlvo, mais rápido', () => {
-    const r = alvoTermico({
-      perfil: VACINA,
-      ordem: 'CALOR',
-      aquecedorLigado: false,
-      ventoinhaEmergencia: true,
-      refrigeracaoLigada: false,
-    })
+    const r = alvoTermico({ perfil: VACINA, ordem: 'CALOR', aquecedorLigado: false, ventoinhaEmergencia: true, refrigeracaoLigada: false })
     expect(r).toEqual({ alvo: 5, k: K_PROTECAO })
   })
   it('calor com o aquecedor cortado mas sem ventoinha ainda é ataque', () => {
-    const r = alvoTermico({
-      perfil: VACINA,
-      ordem: 'CALOR',
-      aquecedorLigado: false,
-      ventoinhaEmergencia: false,
-      refrigeracaoLigada: false,
-    })
-    expect(r.alvo).toBe(SETPOINT_DEMO_ATAQUE)
+    const r = alvoTermico({ perfil: VACINA, ordem: 'CALOR', aquecedorLigado: false, ventoinhaEmergencia: false, refrigeracaoLigada: false })
+    expect(r.alvo).toBeGreaterThan(VACINA.tMax)
   })
   it('calor com a refrigeração do controlador ainda ligada não aquece', () => {
-    const r = alvoTermico({ perfil: VACINA, ordem: 'CALOR', ...REPOUSO })
-    expect(r).toEqual({ alvo: 5, k: K_NORMAL })
+    expect(alvoTermico({ perfil: VACINA, ordem: 'CALOR', ...REPOUSO })).toEqual({ alvo: 5, k: K_NORMAL })
   })
-  it('frio sem C-Shield: vai a tMin − 12', () => {
-    const r = alvoTermico({ perfil: VACINA, ordem: 'FRIO', ...REPOUSO })
-    expect(r).toEqual({ alvo: VACINA.tMin - 12, k: K_ATAQUE })
+  it('frio sem C-Shield: vai abaixo do mínimo, rápido', () => {
+    for (const perfil of Object.values(PERFIS_EMULADOR)) {
+      const r = alvoTermico({ perfil, ordem: 'FRIO', ...REPOUSO })
+      expect(r.k).toBe(K_ATAQUE)
+      expect(r.alvo).toBeCloseTo(alvoDoAtaque(perfil, perfil.tMin), 10)
+      expect(r.alvo).toBeLessThan(perfil.tMin)
+    }
   })
   it('frio com C-Shield: aquecedor liberado leva ao tAlvo, mais rápido', () => {
-    const r = alvoTermico({ perfil: VACINA, ordem: 'FRIO', ...REPOUSO, aquecedorLigado: true })
-    expect(r).toEqual({ alvo: 5, k: K_PROTECAO })
+    expect(alvoTermico({ perfil: VACINA, ordem: 'FRIO', ...REPOUSO, aquecedorLigado: true })).toEqual({ alvo: 5, k: K_PROTECAO })
   })
 })
 
-describe('tempo para sair da faixa (calibragem de K_ATAQUE)', () => {
-  // Minutos simulados até a temperatura sair da faixa, em passos de 0,1 min.
-  function minutosAteSair(perfil, params, inicio) {
+describe('tempo para sair da faixa (jogo rápido)', () => {
+  // Minutos simulados até a temperatura sair da faixa, em passos de 0,05 min.
+  function minutosAteSair(perfil, params) {
     const { alvo, k } = alvoTermico({ perfil, ...params })
-    let t = inicio
-    for (let i = 1; i <= 600; i++) {
-      t = passoTermico(t, alvo, k, 0.1)
-      if (t > perfil.tMax || t < perfil.tMin) return i * 0.1
+    let t = perfil.tAlvo
+    for (let i = 1; i <= 2000; i++) {
+      t = passoTermico(t, alvo, k, 0.05)
+      if (t > perfil.tMax || t < perfil.tMin) return i * 0.05
     }
     return Infinity
   }
-  const calor = { ordem: 'CALOR', aquecedorLigado: true, ventoinhaEmergencia: false, refrigeracaoLigada: false }
-
-  it('ataque de calor sem proteção tira a vacina da faixa em 2 a 4 min simulados', () => {
-    const min = minutosAteSair(VACINA, calor, VACINA.tAlvo)
-    expect(min).toBeGreaterThanOrEqual(2)
-    expect(min).toBeLessThanOrEqual(4)
+  it('ataque de calor tira TODOS os perfis da faixa em cerca de 1 min simulado (1 s real)', () => {
+    for (const perfil of Object.values(PERFIS_EMULADOR)) {
+      const min = minutosAteSair(perfil, CALOR_SEM_CSHIELD)
+      expect(min).toBeGreaterThanOrEqual(TEMPO_ATE_SAIR_MIN - 0.1)
+      expect(min).toBeLessThanOrEqual(TEMPO_ATE_SAIR_MIN + 0.1)
+    }
   })
-  it('o mesmo vale para o congelado', () => {
-    const min = minutosAteSair(CONGELADO, calor, CONGELADO.tAlvo)
-    expect(min).toBeGreaterThanOrEqual(2)
-    expect(min).toBeLessThanOrEqual(4)
+  it('ataque de frio também, em todos os perfis', () => {
+    for (const perfil of Object.values(PERFIS_EMULADOR)) {
+      const min = minutosAteSair(perfil, { ordem: 'FRIO', ...REPOUSO })
+      expect(min).toBeGreaterThanOrEqual(TEMPO_ATE_SAIR_MIN - 0.1)
+      expect(min).toBeLessThanOrEqual(TEMPO_ATE_SAIR_MIN + 0.1)
+    }
   })
-  it('com C-Shield a câmara volta para dentro da faixa em menos de 3 min', () => {
-    const { alvo, k } = alvoTermico({
-      perfil: VACINA,
-      ordem: 'CALOR',
-      aquecedorLigado: false,
-      ventoinhaEmergencia: true,
-      refrigeracaoLigada: false,
-    })
+  it('com C-Shield a câmara volta para dentro da faixa em menos de 1 min simulado', () => {
+    const { alvo, k } = alvoTermico({ perfil: VACINA, ordem: 'CALOR', aquecedorLigado: false, ventoinhaEmergencia: true, refrigeracaoLigada: false })
     let t = 12
     let min = 0
     while (t > VACINA.tMax && min < 60) {
-      t = passoTermico(t, alvo, k, 0.1)
-      min += 0.1
+      t = passoTermico(t, alvo, k, 0.05)
+      min += 0.05
     }
-    expect(min).toBeLessThan(3)
+    expect(min).toBeLessThan(1)
   })
 })
