@@ -1,0 +1,42 @@
+/*
+ * C-Shield — site da GS 2026.2 "CitizenTech"
+ * Front-end Design e Web Development · FIAP
+ * Equipe Nexus Vision. Integrantes:
+ *   Isac Nilton Fernandes de Oliveira — RM573282
+ *   João Benedito de Oliveira Simplício — RM570206
+ *   Leonardo Formigari — RM573291
+ *   Luis Fernando — RM570959
+ *   Nicolas Cinel — RM572940
+ */
+
+/*
+ * Tokens da "Sala de controle às 2h da manhã" (docs/specs/web/design.md §2).
+ * Tailwind v4: o @theme gera as utilidades (bg-noite-950, text-gelo-50...).
+ * Regras de contraste: led-fraco NUNCA em texto; critico em texto pequeno só
+ * sobre noite-950/noite-900; geada e grade são só decoração.
+ */
+@theme {
+  --color-noite-950: #050b14;
+  --color-noite-900: #0a1626;
+  --color-painel: rgba(14, 32, 56, 0.45);
+  --color-borda: rgba(125, 211, 252, 0.18);
+  --color-gelo-50: #eaf6ff;
+  --color-gelo-300: #9cc9e8;
+  --color-led-fraco: #1e6fa3;
+  --color-led-forte: #38bdf8;
+  --color-ok: #22c55e;
+  --color-atencao: #eab308;
+  --color-critico: #ef4444;
+  --color-ataque: #ff3b4e;
+  --color-lcd-fundo: #a8c64e;
+  --color-lcd-texto: #1b2a0b;
+
+  /* Camada hacker + gelo (decorativos) */
+  --color-geada: rgba(234, 246, 255, 0.06);
+  --color-grade: rgba(125, 211, 252, 0.06);
+
+  --font-titulo: "Chakra Petch", system-ui, sans-serif;
+  --font-texto: "IBM Plex Sans", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+  --font-lcd: "VT323", ui-monospace, monospace;
+}
