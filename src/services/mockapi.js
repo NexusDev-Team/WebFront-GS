@@ -87,6 +87,3 @@ const URL_BASE = import.meta.env.VITE_MOCKAPI_URL
 export const instalacoesApi = criarCliente(URL_BASE, 'instalacoes', {
   ordem: { campo: 'instaladoEm', sentido: 'asc' },
 })
-
-// Temporário: o hook antigo de incidentes ainda importa isto. Sai com o código de incidentes.
-export const incidentesApi = criarCliente(URL_BASE, 'incidentes', { ordem: { campo: 'inicio', sentido: 'desc' } })

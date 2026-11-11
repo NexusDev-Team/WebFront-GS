@@ -9,23 +9,11 @@
  *   Nicolas Cinel — RM572940
  */
 
-// Formatos de tela dos incidentes (só apresentação; as regras ficam em domain/incidentes.js).
+// Formatos de tela de datas e números (só apresentação; as regras ficam em src/domain).
 
 // "11/11/26, 14:30"; se o texto não for uma data, mostra como veio.
 export function formatarDataHora(texto) {
   const data = new Date(texto)
   if (Number.isNaN(data.getTime())) return String(texto ?? '')
   return data.toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' })
-}
-
-// Número com vírgula e uma casa decimal, por exemplo "1,5".
-export function formatarNumero(n) {
-  return Number(n ?? 0).toLocaleString('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 1 })
-}
-
-// Data e hora de agora no formato do campo datetime-local ("2026-11-11T14:30", hora local).
-export function agoraParaInput() {
-  const agora = new Date()
-  const local = new Date(agora.getTime() - agora.getTimezoneOffset() * 60000)
-  return local.toISOString().slice(0, 16)
 }
