@@ -64,3 +64,14 @@ export function placar(cidade) {
     }
   })
 }
+
+// Texto do "tempo até reagir" de uma linha do placar. Com C-Shield: segundos simulados ("2 s").
+// Sem C-Shield: o tempo do caso real, escrito como "3h30 até alguém perceber". null = ainda não
+// houve ataque.
+export function formatarReacao({ protegido, reacaoSimMs }) {
+  if (reacaoSimMs === null || reacaoSimMs === undefined) return null
+  if (protegido) return `${Math.round(reacaoSimMs / 1000)} s`
+  const minutos = Math.round(reacaoSimMs / 60000)
+  const horas = Math.floor(minutos / 60)
+  return `${horas}h${String(minutos % 60).padStart(2, '0')} até alguém perceber`
+}
