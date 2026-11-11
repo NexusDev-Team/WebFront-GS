@@ -256,7 +256,7 @@ describe('passo: histórico', () => {
     const h = c.locais['ubs-brasilandia'].historico
     expect(h.length).toBeGreaterThan(10)
     expect(h.length).toBeLessThanOrEqual(120)
-    expect(Object.keys(h[0]).sort()).toEqual(['temperatura', 'tSimMin'])
+    expect(Object.keys(h[0]).sort()).toEqual(['tSimMin', 'temperatura'])
     expect(h[h.length - 1].tSimMin).toBeGreaterThan(h[0].tSimMin)
   })
 })
