@@ -13,12 +13,13 @@
 // cada CHECK vira um expect com os mesmos valores.
 import { describe, expect, it } from 'vitest'
 import {
+  ALARME_INICIAL_MS,
   SETPOINT_AUSENTE,
   TAXA_MAX_C_POR_MIN,
   TAXA_MAX_RESFRIAMENTO_C_POR_MIN,
   TRAVA_MS,
 } from '../src/domain/config.js'
-import { ESTADOS, MOTIVOS, temperaturaValida } from '../src/domain/cshield.js'
+import { ESTADOS, MOTIVOS, avaliar, criarContexto, temperaturaValida } from '../src/domain/cshield.js'
 import { PASSO, T0, base, bloquearPorSetpoint, quase, sessao } from './helpers.js'
 
 describe('teste_validacao_temperatura (R7)', () => {
@@ -465,5 +466,156 @@ describe('opcoes.travaMs (emulador, D6)', () => {
     expect(d.liberacaoRecusada && d.bloqueado && d.travaRestanteMs === 2000).toBe(true)
     d = s.avalia(l, T0 + 10000)
     expect(d.liberou && !d.bloqueado).toBe(true)
+  })
+})
+
+describe('teste_reles_por_estado (R5, R17, R18)', () => {
+  const montar = {
+    NORMAL: (s, l) => s.avalia(l, T0),
+    ATENCAO: (s, l) => {
+      l.luzPct = 80.0
+      return s.avalia(l, T0)
+    },
+    FALHA_SENSOR: (s, l) => {
+      l.valida = false
+      s.avalia(l, T0)
+      return s.avalia(l, T0 + PASSO)
+    },
+    BLOQUEIO: (s, l) => {
+      l.setpoint = 40.0
+      return s.avalia(l, T0)
+    },
+    CRITICO: (s, l) => {
+      l.temperatura = 12.0
+      s.avalia(l, T0)
+      return s.avalia(l, T0 + PASSO)
+    },
+  }
+  for (const alvo of Object.keys(montar)) {
+    it(`${alvo}: relés só atuam em BLOQUEIO e CRITICO`, () => {
+      const d = montar[alvo](sessao(), base())
+      expect(d.estado).toBe(alvo)
+      const atua = alvo === ESTADOS.BLOQUEIO || alvo === ESTADOS.CRITICO
+      expect(d.cortaAquecedor).toBe(atua)
+      expect(d.ligaVentoinha).toBe(atua)
+    })
+  }
+})
+
+describe('teste_nomes (R34)', () => {
+  it('nomes canônicos de estado e motivo', () => {
+    expect(ESTADOS.NORMAL).toBe('NORMAL')
+    expect(ESTADOS.ATENCAO).toBe('ATENCAO')
+    expect(ESTADOS.BLOQUEIO).toBe('BLOQUEIO')
+    expect(ESTADOS.CRITICO).toBe('CRITICO')
+    expect(ESTADOS.FALHA_SENSOR).toBe('FALHA_SENSOR')
+    expect(MOTIVOS.NENHUM).toBe('-')
+    expect(MOTIVOS.SETPOINT_INVALIDO).toBe('SETPOINT_INVALIDO')
+    expect(Object.values(MOTIVOS)).toEqual([
+      '-',
+      'PORTA_ABERTA',
+      'DERIVA',
+      'SETPOINT_INVALIDO',
+      'DEGELO_FORA_HORARIO',
+      'DEGELO_LONGO',
+      'AQUECIMENTO_RAPIDO',
+      'RESFRIAMENTO_RAPIDO',
+      'TEMP_FORA_TOLERANCIA',
+      'SENSOR_SEM_LEITURA',
+    ])
+  })
+})
+
+describe('teste_alarme_ate_regularizar (R50, R51)', () => {
+  it('bloqueio com temperatura boa: aviso inicial, depois silêncio, bloqueio fica', () => {
+    const s = sessao()
+    const t = bloquearPorSetpoint(s) // bloqueio com a temperatura boa (5 °C)
+    const l = base()
+    let d = s.avalia(l, t + PASSO)
+    expect(d.bloqueado && d.alarme).toBe(true) // aviso inicial, mesmo com temperatura boa
+    d = s.avalia(l, t + ALARME_INICIAL_MS + PASSO)
+    expect(d.bloqueado && !d.alarme).toBe(true)
+
+    l.temperatura = 8.5 // acima da faixa: o alarme volta
+    d = s.avalia(l, t + ALARME_INICIAL_MS + 2 * PASSO)
+    expect(d.bloqueado && d.alarme).toBe(true)
+    l.temperatura = 5.0 // regularizou: silêncio, bloqueio fica
+    d = s.avalia(l, t + ALARME_INICIAL_MS + 3 * PASSO)
+    expect(d.bloqueado && !d.alarme && d.estado === ESTADOS.BLOQUEIO).toBe(true)
+    d = s.avalia(l, t + 2 * 3600 * 1000) // horas depois, sem botão
+    expect(d.bloqueado && !d.alarme).toBe(true)
+  })
+  it('CRITICO: alarme até voltar à faixa', () => {
+    const c2 = sessao()
+    let u = bloquearPorSetpoint(c2) + ALARME_INICIAL_MS + PASSO
+    const q = base()
+    q.temperatura = 12.0
+    c2.avalia(q, (u += PASSO))
+    let d = c2.avalia(q, (u += PASSO))
+    expect(d.estado === ESTADOS.CRITICO && d.alarme && d.bloqueado).toBe(true)
+    q.temperatura = 5.0
+    d = c2.avalia(q, (u += PASSO))
+    expect(d.estado === ESTADOS.BLOQUEIO && !d.alarme && d.bloqueado).toBe(true)
+  })
+  it('sem leitura não dá para saber: alarme', () => {
+    const c3 = sessao()
+    let v = bloquearPorSetpoint(c3) + ALARME_INICIAL_MS + PASSO
+    const cega = base()
+    cega.valida = false
+    c3.avalia(cega, (v += PASSO))
+    const d = c3.avalia(cega, (v += PASSO))
+    expect(d.bloqueado && d.alarme).toBe(true)
+  })
+  it('sem bloqueio nem crítico: nunca alarme (deriva é só ATENCAO)', () => {
+    const c4 = sessao()
+    let d = c4.avalia(base(), T0)
+    expect(!d.bloqueado && !d.alarme).toBe(true)
+    const quente = base()
+    quente.temperatura = 8.5
+    c4.avalia(quente, T0 + PASSO)
+    d = c4.avalia(quente, T0 + 2 * PASSO)
+    expect(d.estado === ESTADOS.ATENCAO && !d.alarme).toBe(true)
+  })
+  it('liberar apaga o bloqueio e o alarme', () => {
+    const c5 = sessao()
+    const w = bloquearPorSetpoint(c5)
+    const lib = base()
+    lib.liberacao = true
+    const d = c5.avalia(lib, w + TRAVA_MS)
+    expect(d.liberou && !d.bloqueado && !d.alarme).toBe(true)
+  })
+})
+
+describe('teste_ataque_frio: alarme (R52 a R54)', () => {
+  it('toca fora da faixa e para ao regularizar, com o bloqueio mantido', () => {
+    const s = sessao()
+    const l = base()
+    l.setpoint = 0.0
+    s.avalia(l, T0)
+    l.temperatura = 0.5
+    let d = s.avalia(l, T0 + ALARME_INICIAL_MS + PASSO)
+    expect(d.alarme && d.bloqueado).toBe(true)
+    l.temperatura = 5.0
+    d = s.avalia(l, T0 + ALARME_INICIAL_MS + 2 * PASSO)
+    expect(!d.alarme && d.bloqueado).toBe(true)
+  })
+})
+
+describe('imutabilidade do contexto', () => {
+  it('avaliar não muta o contexto de entrada', () => {
+    const entrada = criarContexto()
+    const copia = structuredClone(entrada)
+    const l = base()
+    l.setpoint = 40.0
+    const { contexto } = avaliar(l, entrada, T0)
+    expect(entrada).toEqual(copia)
+    expect(contexto).not.toBe(entrada)
+    expect(contexto.bloqueado).toBe(true)
+  })
+  it('o mesmo contexto avaliado duas vezes dá o mesmo resultado', () => {
+    const entrada = criarContexto()
+    const a = avaliar(base(), entrada, T0)
+    const b = avaliar(base(), entrada, T0)
+    expect(a).toEqual(b)
   })
 })
