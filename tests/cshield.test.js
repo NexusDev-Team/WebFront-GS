@@ -19,7 +19,7 @@ import {
   TRAVA_MS,
 } from '../src/domain/config.js'
 import { ESTADOS, MOTIVOS, temperaturaValida } from '../src/domain/cshield.js'
-import { PASSO, T0, base, bloquearPorSetpoint, sessao } from './helpers.js'
+import { PASSO, T0, base, bloquearPorSetpoint, quase, sessao } from './helpers.js'
 
 describe('teste_validacao_temperatura (R7)', () => {
   it('aceita só números dentro da faixa física do DHT22', () => {
@@ -217,5 +217,144 @@ describe('teste_ataque_frio (R52 a R54)', () => {
     l.temperatura = 5.0 // e de volta: retoma a direção original (calor)
     d = s.avalia(l, t + 2 * PASSO)
     expect(d.cortaAquecedor && d.ligaVentoinha).toBe(true)
+  })
+})
+
+describe('teste_sensor_invalido (R7, R9, R19a)', () => {
+  it('só confirma FALHA_SENSOR no segundo ciclo inválido e sai quando a leitura volta', () => {
+    const s = sessao()
+    const l = base()
+    l.valida = false
+    let d = s.avalia(l, T0)
+    expect(d.estado).toBe(ESTADOS.NORMAL) // 1 ciclo inválido ainda não confirma
+    d = s.avalia(l, T0 + PASSO)
+    expect(d.estado === ESTADOS.FALHA_SENSOR && d.motivo === MOTIVOS.SENSOR_SEM_LEITURA).toBe(true)
+    expect(!d.cortaAquecedor && !d.ligaVentoinha).toBe(true)
+    d = s.avalia(base(), T0 + 2 * PASSO) // leitura válida volta: sai da falha
+    expect(d.estado).toBe(ESTADOS.NORMAL)
+  })
+})
+
+describe('teste_falha_sensor_mantem_regras_1_e_2 (R29)', () => {
+  it('setpoint inválido continua bloqueando com o sensor em falha', () => {
+    const s = sessao()
+    const l = base()
+    l.valida = false
+    l.setpoint = 40.0
+    s.avalia(l, T0)
+    const d = s.avalia(l, T0 + PASSO)
+    expect(d.estado === ESTADOS.BLOQUEIO && d.motivo === MOTIVOS.SETPOINT_INVALIDO).toBe(true)
+  })
+  it('degelo fora do horário continua bloqueando com o sensor em falha', () => {
+    const s = sessao()
+    const l = base()
+    l.valida = false
+    l.degelo = true
+    l.hora = 12
+    s.avalia(l, T0)
+    const d = s.avalia(l, T0 + PASSO)
+    expect(d.estado === ESTADOS.BLOQUEIO && d.motivo === MOTIVOS.DEGELO_FORA_HORARIO).toBe(true)
+  })
+})
+
+describe('teste_critico (R18, R9)', () => {
+  it('acima de 9 °C por 2 ciclos é CRITICO e liga a ventoinha', () => {
+    const s = sessao()
+    const l = base()
+    l.temperatura = 10.0 // acima de 9 (8 + tolerância)
+    let d = s.avalia(l, T0)
+    expect(d.estado).not.toBe(ESTADOS.CRITICO) // 1 ciclo ainda não confirma
+    d = s.avalia(l, T0 + PASSO)
+    expect(d.estado === ESTADOS.CRITICO && d.motivo === MOTIVOS.TEMP_FORA_TOLERANCIA).toBe(true)
+    expect(d.cortaAquecedor && d.ligaVentoinha).toBe(true)
+  })
+  it('abaixo de 1 °C por 2 ciclos é CRITICO, mas no frio o aquecedor fica liberado (R52)', () => {
+    const s = sessao()
+    const l = base()
+    l.temperatura = 0.0
+    s.avalia(l, T0)
+    const d = s.avalia(l, T0 + PASSO)
+    expect(d.estado).toBe(ESTADOS.CRITICO)
+    expect(!d.cortaAquecedor && !d.ligaVentoinha).toBe(true)
+  })
+  it('pico isolado não gera CRITICO', () => {
+    const s = sessao()
+    const l = base()
+    l.temperatura = 10.0
+    s.avalia(l, T0)
+    l.temperatura = 5.0
+    s.avalia(l, T0 + PASSO)
+    const d = s.avalia(l, T0 + 2 * PASSO)
+    expect(d.estado).toBe(ESTADOS.NORMAL)
+  })
+})
+
+describe('teste_exposicao (R31)', () => {
+  it('acumula °C·min acima de T_MAX e para de acumular abaixo dele', () => {
+    const s = sessao()
+    const l = base()
+    l.temperatura = 10.0 // 2 °C acima de T_MAX (8)
+    let d
+    for (let i = 0; i < 10; i++) d = s.avalia(l, T0 + i * PASSO)
+    // 9 intervalos de 2 s = 18 s = 0,3 min; 2 °C acima => 0,6 °C·min.
+    expect(quase(d.exposicao, 0.6)).toBe(true)
+    l.temperatura = 5.0 // abaixo de T_MAX não acumula
+    const d2 = s.avalia(l, T0 + 10 * PASSO)
+    expect(quase(d2.exposicao, d.exposicao)).toBe(true)
+  })
+})
+
+describe('teste_prioridade (R19)', () => {
+  it('CRITICO vence BLOQUEIO e preserva o motivo do ataque', () => {
+    const s = sessao()
+    const l = base()
+    l.setpoint = 40.0
+    l.temperatura = 12.0
+    s.avalia(l, T0)
+    const d = s.avalia(l, T0 + PASSO)
+    expect(d.estado).toBe(ESTADOS.CRITICO)
+    expect(s.ctx.bloqueado).toBe(true)
+    expect(d.motivo).toBe(MOTIVOS.SETPOINT_INVALIDO)
+  })
+  it('BLOQUEIO vence FALHA_SENSOR', () => {
+    const s = sessao()
+    const l = base()
+    l.valida = false
+    l.setpoint = 40.0
+    s.avalia(l, T0)
+    expect(s.avalia(l, T0 + PASSO).estado).toBe(ESTADOS.BLOQUEIO)
+  })
+  it('FALHA_SENSOR vence ATENCAO', () => {
+    const s = sessao()
+    const l = base()
+    l.valida = false
+    l.luzPct = 80.0
+    s.avalia(l, T0)
+    expect(s.avalia(l, T0 + PASSO).estado).toBe(ESTADOS.FALHA_SENSOR)
+  })
+  it('ATENCAO vence NORMAL', () => {
+    const s = sessao()
+    const l = base()
+    l.luzPct = 80.0
+    expect(s.avalia(l, T0).estado).toBe(ESTADOS.ATENCAO)
+  })
+})
+
+describe('teste_ataque_frio: recuperação do calor (R52 a R54)', () => {
+  it('voltar do calor até o centro da faixa não é ataque de frio', () => {
+    const s = sessao()
+    const l = base()
+    l.temperatura = 12.0
+    s.avalia(l, T0)
+    let d = s.avalia(l, T0 + PASSO)
+    expect(d.estado === ESTADOS.CRITICO && d.cortaAquecedor && d.ligaVentoinha).toBe(true)
+    let t = T0 + PASSO
+    for (let temp = 9.0; temp >= 5.0; temp -= 1.0) {
+      // cai 30 °C/min até o centro da faixa
+      l.temperatura = temp
+      t += PASSO
+      d = s.avalia(l, t)
+    }
+    expect(d.estado === ESTADOS.NORMAL && !d.bloqueado).toBe(true)
   })
 })
