@@ -14,7 +14,7 @@ import { describe, expect, it } from 'vitest'
 import {
   MS_SIM_POR_MS_REAL,
   TRAVA_SIM_MS,
-  ativarCShield,
+  instalarCShield,
   atacar,
   ataqueEmMassa,
   criarCidade,
@@ -59,9 +59,9 @@ describe('eventosDoPasso', () => {
     const antes = ataqueEmMassa(criarCidade(), 'CALOR', 0)
     expect(eventosDoPasso(antes, passo(antes, 100)).novosBloqueios).toEqual(['ubs-vila-mariana'])
   })
-  it('ativar o C-Shield num local atacado gera o bloqueio dele', () => {
+  it('instalar o C-Shield num local atacado gera o bloqueio dele', () => {
     const atacada = avancar(atacar(criarCidade(), 'ubs-brasilandia', 'CALOR', 0), 2)
-    const antes = ativarCShield(atacada)
+    const antes = instalarCShield(atacada, 'ubs-brasilandia')
     expect(eventosDoPasso(antes, passo(antes, 100)).novosBloqueios).toEqual(['ubs-brasilandia'])
   })
   it('liberação aceita gera o evento de liberado', () => {

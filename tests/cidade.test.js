@@ -14,7 +14,10 @@ import { describe, expect, it } from 'vitest'
 import {
   LOCAIS,
   ataqueEmMassa,
-  ativarCShield,
+  ID_PILOTO,
+  instalarCShield,
+  removerCShield,
+  sincronizarProtecao,
   atacar,
   criarCidade,
   liberar,
@@ -288,18 +291,28 @@ describe('situacao (W17)', () => {
   })
 })
 
-describe('ativarCShield', () => {
-  it('protege todos os locais e não muta a cidade recebida', () => {
+describe('instalarCShield', () => {
+  it('protege só o local escolhido e não muta a cidade recebida', () => {
     const antes = criarCidade()
     const copia = structuredClone(antes)
-    const depois = ativarCShield(antes)
+    const depois = instalarCShield(antes, 'ubs-brasilandia')
     expect(antes).toEqual(copia)
-    for (const def of LOCAIS) expect(depois.locais[def.id].protegido).toBe(true)
+    expect(depois.locais['ubs-brasilandia'].protegido).toBe(true)
+    expect(depois.locais['farmacia-mooca'].protegido).toBe(false)
+    expect(depois.locais['mercado-liberdade'].protegido).toBe(false)
+  })
+  it('instalar de novo num local já protegido não muda nada', () => {
+    const c = instalarCShield(criarCidade(), 'ubs-brasilandia')
+    expect(instalarCShield(c, 'ubs-brasilandia')).toEqual(c)
+    expect(instalarCShield(c, ID_PILOTO)).toEqual(c)
+  })
+  it('recusa local que não existe', () => {
+    expect(() => instalarCShield(criarCidade(), 'nao-existe')).toThrow()
   })
   it('um local atacado vira ATAQUE_BLOQUEADO logo depois e a câmara volta à faixa', () => {
     let c = avancar(atacar(criarCidade(), 'ubs-brasilandia', 'CALOR', 0), 3)
     expect(sit(c, 'ubs-brasilandia')).toBe('SOB_ATAQUE')
-    c = ativarCShield(c)
+    c = instalarCShield(c, 'ubs-brasilandia')
     c = avancar(c, 0.2)
     expect(sit(c, 'ubs-brasilandia')).toBe('ATAQUE_BLOQUEADO')
     expect(c.locais['ubs-brasilandia'].decisao.motivo).toBe('SETPOINT_INVALIDO')
@@ -311,12 +324,12 @@ describe('ativarCShield', () => {
     let c = avancar(atacar(criarCidade(), 'ubs-brasilandia', 'CALOR', 0), 3)
     const antes = c.locais['ubs-brasilandia'].exposicao
     expect(antes).toBeGreaterThan(0)
-    c = avancar(ativarCShield(c), 0.2)
+    c = avancar(instalarCShield(c, 'ubs-brasilandia'), 0.2)
     expect(c.locais['ubs-brasilandia'].exposicao).toBeGreaterThanOrEqual(antes)
   })
   it('a reação conta a partir de quando o C-Shield foi ativado', () => {
     let c = avancar(atacar(criarCidade(), 'ubs-brasilandia', 'CALOR', 0), 3)
-    c = avancar(ativarCShield(c), 0.2)
+    c = avancar(instalarCShield(c, 'ubs-brasilandia'), 0.2)
     expect(c.locais['ubs-brasilandia'].reacaoSimMs).toBeLessThanOrEqual(2000)
   })
 })
@@ -372,7 +385,7 @@ describe('fluxo completo do jogo', () => {
     }
     let c = atacar(criarCidade(), 'ubs-brasilandia', 'CALOR', 0)
     c = rodar(c, 3) // sem proteção a câmara esquenta
-    c = ativarCShield(c)
+    c = instalarCShield(c, 'ubs-brasilandia')
     c = rodar(c, 11) // bloqueia, esfria e espera a trava
     c = liberar(c, 'ubs-brasilandia')
     c = rodar(c, 0.5)
@@ -465,5 +478,72 @@ describe('formatarReacao', () => {
     const [com, sem] = placar(c)
     expect(formatarReacao(com)).toBe('2 s')
     expect(formatarReacao(sem)).toBe('3h30 até alguém perceber')
+  })
+})
+
+describe('removerCShield', () => {
+  it('tira a proteção de um local instalado e volta a mostrar o ataque sem reação', () => {
+    let c = instalarCShield(criarCidade(), 'ubs-brasilandia')
+    c = avancar(c, 0.5)
+    c = removerCShield(c, 'ubs-brasilandia')
+    const l = c.locais['ubs-brasilandia']
+    expect(l.protegido).toBe(false)
+    expect(l.decisao).toBeNull()
+    expect(sit(c, 'ubs-brasilandia')).toBe('NORMAL')
+  })
+  it('depois de remover, um ataque volta a esquentar a câmara', () => {
+    let c = removerCShield(instalarCShield(criarCidade(), 'ubs-brasilandia'), 'ubs-brasilandia')
+    c = avancar(atacar(c, 'ubs-brasilandia', 'CALOR', 0), 2)
+    expect(sit(c, 'ubs-brasilandia')).toBe('SOB_ATAQUE')
+    expect(c.locais['ubs-brasilandia'].temperatura).toBeGreaterThan(PERFIS_EMULADOR.VACINA.tMax)
+  })
+  it('não remove enquanto o local está bloqueado (só depois de liberar)', () => {
+    let c = avancar(atacar(instalarCShield(criarCidade(), 'ubs-brasilandia'), 'ubs-brasilandia', 'CALOR', 0), 1)
+    expect(sit(c, 'ubs-brasilandia')).toBe('ATAQUE_BLOQUEADO')
+    expect(removerCShield(c, 'ubs-brasilandia')).toEqual(c)
+    c = avancar(c, 10.5)
+    c = avancar(liberar(c, 'ubs-brasilandia'), 0.2)
+    expect(sit(c, 'ubs-brasilandia')).toBe('SEGURO')
+    expect(removerCShield(c, 'ubs-brasilandia').locais['ubs-brasilandia'].protegido).toBe(false)
+  })
+  it('o piloto nunca sai e remover quem não está instalado não faz nada', () => {
+    const c = criarCidade()
+    expect(removerCShield(c, ID_PILOTO)).toEqual(c)
+    expect(removerCShield(c, 'farmacia-mooca')).toEqual(c)
+  })
+  it('não muta a cidade recebida', () => {
+    const c = instalarCShield(criarCidade(), 'ubs-brasilandia')
+    const copia = structuredClone(c)
+    removerCShield(c, 'ubs-brasilandia')
+    expect(c).toEqual(copia)
+  })
+})
+
+describe('sincronizarProtecao', () => {
+  const protegidos = (c) => Object.entries(c.locais).filter(([, l]) => l.protegido).map(([id]) => id)
+
+  it('instala quem está na lista e mantém o piloto', () => {
+    const c = sincronizarProtecao(criarCidade(), ['farmacia-mooca', 'mercado-liberdade'])
+    expect(protegidos(c).sort()).toEqual(['farmacia-mooca', 'mercado-liberdade', ID_PILOTO].sort())
+  })
+  it('remove quem saiu da lista, menos o piloto', () => {
+    let c = sincronizarProtecao(criarCidade(), ['farmacia-mooca', 'mercado-liberdade'])
+    c = sincronizarProtecao(c, ['mercado-liberdade'])
+    expect(protegidos(c).sort()).toEqual(['mercado-liberdade', ID_PILOTO].sort())
+    c = sincronizarProtecao(c, [])
+    expect(protegidos(c)).toEqual([ID_PILOTO])
+  })
+  it('ignora ids desconhecidos e não muta a cidade recebida', () => {
+    const antes = criarCidade()
+    const copia = structuredClone(antes)
+    const c = sincronizarProtecao(antes, ['nao-existe', 'ubs-brasilandia'])
+    expect(antes).toEqual(copia)
+    expect(protegidos(c).sort()).toEqual(['ubs-brasilandia', ID_PILOTO].sort())
+  })
+  it('um local bloqueado continua instalado mesmo que saia da lista', () => {
+    let c = sincronizarProtecao(criarCidade(), ['ubs-brasilandia'])
+    c = avancar(atacar(c, 'ubs-brasilandia', 'CALOR', 0), 1)
+    c = sincronizarProtecao(c, [])
+    expect(c.locais['ubs-brasilandia'].protegido).toBe(true)
   })
 })
