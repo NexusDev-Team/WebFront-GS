@@ -21,7 +21,7 @@ import {
   passo,
   recomecar,
 } from '../src/domain/cidade.js'
-import { PERCEPCAO_SEM_CSHIELD_MIN, placar, situacao } from '../src/domain/cidade-placar.js'
+import { PERCEPCAO_SEM_CSHIELD_MIN, formatarReacao, placar, situacao } from '../src/domain/cidade-placar.js'
 import { PERFIS_EMULADOR } from '../src/domain/perfis.js'
 
 describe('LOCAIS', () => {
@@ -443,5 +443,27 @@ describe('placar (W19)', () => {
     const [com, sem] = placar(criarCidade())
     expect(com.nome).toBe('UBS Vila Mariana')
     expect(sem.nome).toBe('UBS Brasilândia')
+  })
+})
+
+describe('formatarReacao', () => {
+  it('sem ataque não mostra tempo', () => {
+    expect(formatarReacao({ protegido: true, reacaoSimMs: null })).toBeNull()
+    expect(formatarReacao({ protegido: false, reacaoSimMs: null })).toBeNull()
+  })
+  it('com C-Shield mostra segundos simulados', () => {
+    expect(formatarReacao({ protegido: true, reacaoSimMs: 2000 })).toBe('2 s')
+    expect(formatarReacao({ protegido: true, reacaoSimMs: 1400 })).toBe('1 s')
+  })
+  it('sem C-Shield mostra o tempo do caso: 3h30 até alguém perceber', () => {
+    expect(formatarReacao({ protegido: false, reacaoSimMs: PERCEPCAO_SEM_CSHIELD_MIN * 60000 })).toBe(
+      '3h30 até alguém perceber',
+    )
+  })
+  it('funciona com o placar real', () => {
+    const c = avancar(ataqueEmMassa(criarCidade(), 'CALOR', 0), 2)
+    const [com, sem] = placar(c)
+    expect(formatarReacao(com)).toBe('2 s')
+    expect(formatarReacao(sem)).toBe('3h30 até alguém perceber')
   })
 })
