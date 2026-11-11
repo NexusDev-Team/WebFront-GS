@@ -18,9 +18,9 @@ import Logo from './Logo.jsx'
 const LINKS = [
   { para: '/', rotulo: 'Início' },
   { para: '/emulador', rotulo: 'Emulador' },
-  { para: '/simulador-real', rotulo: 'Dispositivo real' },
-  { para: '/incidentes', rotulo: 'Incidentes' },
+  { para: '/noticias', rotulo: 'Notícias' },
   { para: '/como-funciona', rotulo: 'Como funciona' },
+  { para: '/nexus-dev', rotulo: 'Nexus Dev' },
 ]
 
 function classeDoLink({ isActive }) {

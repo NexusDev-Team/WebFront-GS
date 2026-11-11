@@ -9,12 +9,12 @@
  *   Nicolas Cinel — RM572940
  */
 
-// Página SimuladorReal (provisória, T6).
-export default function SimuladorReal() {
+// Página Notícias (provisória): por que o C-Shield existe. As manchetes entram na etapa R2.
+export default function Noticias() {
   return (
     <section>
-      <h1>Dispositivo real</h1>
-      <p>Leitura do C-Shield no Wokwi pelo FIWARE (em construção).</p>
+      <h1>Notícias</h1>
+      <p>Por que o C-Shield existe (em construção).</p>
     </section>
   )
 }

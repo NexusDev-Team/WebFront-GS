@@ -10,13 +10,13 @@
  */
 
 // Rotas do site. Navbar e rodapé vêm de components/ui.
-import { Route, Routes } from 'react-router-dom'
+import { Navigate, Route, Routes } from 'react-router-dom'
 import Navbar from './components/ui/Navbar.jsx'
 import Footer from './components/ui/Footer.jsx'
 import Inicio from './pages/Inicio.jsx'
 import Emulador from './pages/Emulador.jsx'
-import SimuladorReal from './pages/SimuladorReal.jsx'
-import Incidentes from './pages/Incidentes.jsx'
+import Noticias from './pages/Noticias.jsx'
+import NexusDev from './pages/NexusDev.jsx'
 import ComoFunciona from './pages/ComoFunciona.jsx'
 import NaoEncontrada from './pages/NaoEncontrada.jsx'
 
@@ -34,9 +34,12 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Inicio />} />
           <Route path="/emulador" element={<Emulador />} />
-          <Route path="/simulador-real" element={<SimuladorReal />} />
-          <Route path="/incidentes" element={<Incidentes />} />
+          <Route path="/noticias" element={<Noticias />} />
           <Route path="/como-funciona" element={<ComoFunciona />} />
+          <Route path="/nexus-dev" element={<NexusDev />} />
+          {/* Rotas antigas: o dispositivo real virou seção do emulador e os incidentes viraram notícias. */}
+          <Route path="/simulador-real" element={<Navigate to="/emulador#dispositivo-real" replace />} />
+          <Route path="/incidentes" element={<Navigate to="/noticias" replace />} />
           <Route path="*" element={<NaoEncontrada />} />
         </Routes>
       </main>
