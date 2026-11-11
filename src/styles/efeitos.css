@@ -22,6 +22,12 @@
     animation: faisca-pulsa 1.25s ease-in-out infinite;
   }
 
+  /* Linha de ataque do mapa: o tracejado corre do atacante ao alvo (movimento contínuo, sem piscar). */
+  .linha-fluxo {
+    stroke-dasharray: 14 10;
+    animation: linha-fluxo 0.7s linear infinite;
+  }
+
   /* Brilho azul suave e estável: repouso. */
   .led-brilho {
     text-shadow: 0 0 10px color-mix(in srgb, var(--color-led-forte) 45%, transparent);
@@ -133,6 +139,10 @@
   50% { opacity: 0.35; }
 }
 
+@keyframes linha-fluxo {
+  to { stroke-dashoffset: -24; }
+}
+
 @keyframes cursor-terminal {
   0%, 100% { opacity: 1; }
   50% { opacity: 0; }
@@ -146,6 +156,7 @@
 
   .led-falha,
   .faisca-pulsa,
+  .linha-fluxo,
   .glitch-ataque,
   .cursor-terminal::after {
     animation: none;
