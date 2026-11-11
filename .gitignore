@@ -30,3 +30,6 @@ dist-ssr
 
 # Configuração local do Claude Code (caminhos desta máquina)
 .claude/settings.local.json
+
+# Capturas do Playwright MCP (locais)
+.playwright-mcp/
