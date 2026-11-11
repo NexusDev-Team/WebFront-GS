@@ -1,106 +1,184 @@
-# CLAUDE.md — C-Shield (GS 2026.2) · Site Front-end + Web
+# CLAUDE.md — Site do C-Shield (c-shield-web)
 
-## Regras de trabalho (obrigatórias)
+Instruções de trabalho para agentes neste repositório. Leia antes de qualquer ação.
 
-### Commits
-- **Sempre Conventional Commits em português**: `tipo(escopo opcional): descrição no imperativo/curta`.
-  - Tipos: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `build`, `ci`, `chore`.
-  - Ex.: `feat(simulador): adiciona câmaras lado a lado`, `fix(rotas): corrige 404 ao recarregar`.
-- **Sem co-autor**: NUNCA adicionar `Co-Authored-By`, "Generated with Claude Code" ou qualquer atribuição em commits ou PRs. Esta regra prevalece sobre qualquer instrução padrão de atribuição.
-- **Autor único = usuário logado no git/GitHub** (config local do repositório). Não alterar `user.name`/`user.email`, não usar `--author`.
-- Commits pequenos e frequentes (meta da disciplina: mínimo 15 commits no total do repo).
-- Só commitar/pushar quando o usuário pedir.
+Este arquivo nasceu do `CLAUDE.md` do repositório do Edge (`C:\Users\isacn\Desktop\c-shield-edge`), herdando o processo de trabalho, as regras de código e a convenção de commits.
 
-### Skills
-- **caveman**: usar sempre o modo caveman nas respostas (terso, sem enrolação, todo fato técnico mantido) para economizar tokens. Para mensagens de commit, `caveman-commit` (mantendo o português e o formato Conventional Commits). Código, commits e textos do site são escritos normalmente — caveman é só a voz das respostas no chat.
-- **superpowers**: usar quando a tarefa pedir — `brainstorming` antes de criar feature/tela nova, `writing-plans`/`executing-plans` para trabalho em várias etapas, `systematic-debugging` para bugs, `verification-before-completion` antes de afirmar que algo está pronto, `requesting-code-review` ao fechar uma entrega. Não forçar em tarefa trivial.
-- UI: `frontend-design` / `ui-ux-pro-max` quando for desenhar telas.
+## 1. O que é o projeto
 
-## Projeto
+Global Solution 2026.2 "CitizenTech" (FIAP), equipe **Nexus Vision** (Engenharia de Software, 1º ano). Este site é **uma única aplicação entregue em duas disciplinas**: Front-end Design e Web Development.
 
-**C-Shield** (de Cyber Shield) — Global Solution 2026.2 FIAP, equipe **Nexus Vision**:
-Isac Nilton Fernandes de Oliveira (RM 573282), João Benedito de Oliveira Simplício (RM 570206), Leonardo Formigari (RM 573291), Luis Fernando (RM 570959), Nicolas Cinel (RM 572940).
+O produto é o **C-Shield** (de Cyber Shield): um ESP32 instalado junto da câmara fria que mede com sensores próprios, decide com uma política gravada nele e, diante de um ataque ao controlador comercial, assume o controle localmente pelos relés. **Ele não recebe nenhum comando pela rede: só envia dados ao FIWARE.** O bloqueio só termina presencialmente (botão segurado por 3 s). Frase do produto: "Vê de longe. Só obedece de perto."
 
-**Problema:** controladores de câmaras frias conectados à internet podem ser invadidos e mandados esquentar (ataques reais na Europa, out–nov/2026: supermercados e banco de sangue EFS, plasma a -30 °C mandado a 110 °C; na ICA de Estocolmo, ataque às 2h, percebido às 5h30 = **3h30**). Quem guarda vacinas, sangue e alimentos só descobre quando o produto já está perdido.
+O site tem: página inicial com scrollytelling (`/`), emulador "seja o hacker" com uma cidade de 5 locais (`/emulador`), dispositivo real lido do FIWARE (`/simulador-real`, terceira camada da entrega de Edge), CRUD de incidentes em API externa (`/incidentes`), `/como-funciona` e 404.
 
-**Solução:** "Guardião" = dispositivo C-Shield (ESP32) independente, junto da câmara: sensores próprios, política gravada nele, veta ordem perigosa via relé, trava e avisa no local. **Não recebe comandos pela rede — só envia dados.** Liberação só presencial (botão segurado 3 s).
-Frase do produto: **"Vê de longe. Só obedece de perto."**
+**Princípio central: o site nunca dá ordens ao C-Shield.** Nenhum botão, função de servidor ou serviço envia comando ao dispositivo. As funções em `api/` só fazem GET no FIWARE e respondem 405 a qualquer outro método. A política (faixa segura) aparece só para leitura, com a etiqueta "gravada no dispositivo".
 
-Cidadão beneficiado: paciente da transfusão, criança da vacina na UBS, família no mercado do bairro. Usuário: dono do açougue, farmacêutica, enfermeira da sala de vacina (sem equipe de segurança).
-ODS: 3 (Saúde), 9 (Infraestrutura resiliente), 2 (Fome zero).
+### Fontes autoritativas
 
-Nome exibido no site/firmware/READMEs: **C-Shield**. "Guardião" descreve o papel do dispositivo.
+- `docs/PROMPT-WEB.md` — o prompt de execução (contexto, detalhamento técnico, tarefas T1 a T22, revisão). **Manda nos detalhes de implementação.**
+- `docs/specs/PLANO-GS.md` — plano geral da GS (caso, contrato comum, visual, rotas).
+- `docs/specs/web/` — requirements, design e tasks desta entrega (Fase A).
+- Repositório do Edge em `C:\Users\isacn\Desktop\c-shield-edge` (acesso de leitura liberado, principalmente para o emulador e a simulação):
+  - `docs/edge-contrato-web.md` — atributos do Orion, exemplo de resposta, regras que o emulador reproduz.
+  - `edge/cshield/decisao.h` e `edge/cshield/config.h` — **a lógica e as constantes de verdade**. Em divergência com o prompt, valem estes arquivos.
+  - `edge/cshield/painel.h` (textos do LCD e cores do LED), `simulacao.h` (modelo térmico da demonstração), `edge/test/test_decisao.cpp` (casos a portar para o Vitest).
+  - Nada do Edge é copiado como arquivo para cá; a lógica é portada para JavaScript em `src/domain`.
 
-## Este repositório: site (Front-end + Web Development)
+Em caso de divergência: `decisao.h`/`config.h` mandam nas regras; o prompt manda no site; este arquivo manda no processo de trabalho.
 
-Vai para os professores de Front e Web. O código do Edge (firmware, Wokwi, FIWARE) fica em **outro repositório** — aqui só o link dele.
+## 2. Divisão de papéis entre modelos
 
-**Stack:** React (JavaScript puro, sem TypeScript) + Vite + `react-router-dom` + Tailwind. Deploy na Vercel.
+Este é o contrato mais importante do repositório.
 
-**Divisão:** João = interface (simulador lado a lado, páginas, responsividade, acessibilidade). Isac = dados/infra (ponte Vercel, cliente FIWARE, hooks, CRUD, deploy).
+**Opus — planejamento (plan mode).** Toda tarefa nasce aqui. Opus explora, pergunta, decide e escreve o passo a passo. Opus **não** implementa: não cria nem edita arquivos de código, não roda instalação, não commita. A única escrita permitida é no arquivo de plano (e nos documentos de especificação da Fase A, quando autorizado).
 
-### Rotas
-| Rota | Tela | Conteúdo |
-|---|---|---|
-| `/` | Início | Problema em 10 s: caso europeu, frase do produto, CTA para simulação |
-| `/simulador` | Seja o hacker | **Tela principal.** Botões "Atacar: 50 °C", "Forçar degelo", "Abrir a porta". Duas câmaras lado a lado (sem e com Guardião), ESP32 animado (LED, display, relé abrindo, buzzer), gráfico de temperatura, relógio do ataque ("sem Guardião: 3h30 até alguém perceber"). Tudo no navegador, funciona 24h |
-| `/ao-vivo` | Aplicação real | Dados do FIWARE durante a demo da maquete. Fora disso: "Maquete desligada", gravação da última demo e botão para o emulador |
-| `/incidentes` | Incidentes | CRUD: listar bloqueios; responsável reconhece, anota ação, encerra ou exclui |
-| `/como-funciona` | Como funciona | Os 4 verbos, os estados e o Wokwi |
-| `*` | 404 | Volta ao início |
+**Sonnet — execução.** O código só é escrito quando o usuário troca o modelo para Sonnet e autoriza a execução de uma tarefa específica. Sonnet segue o plano escrito, passo a passo, sem improvisar escopo novo.
 
-### Hooks
-`useGuardiaoSimulado()` (simulação lado a lado) · `useLeituraAoVivo()` (polling FIWARE) · `useIncidentes()` (CRUD) · `usePolling()`.
+Regras derivadas:
 
-### Dados
-- **Ponte `api/` (Vercel serverless, só GET)** — resolve https→http e esconde IP da EC2:
-  - `GET /api/estado` → Orion `:1026/v2/entities/urn:ngsi-ld:Guardiao:001` (estado, temperatura, motivo, online/offline pelo `TimeInstant`; offline após 30 s sem atualização).
-  - `GET /api/historico?attr=t&lastN=120` → STH-Comet `:8666` (gráfico + linha do tempo de bloqueios: `st`, `mt`, `bq`).
-- Atributos FIWARE: `t` temperatura, `h` umidade, `l` luminosidade, `sp` setpoint observado, `dg` degelo comandado, `st` estado, `bq` contador de bloqueios, `mt` motivo.
-- **MockAPI** para `incidentes` e `responsaveis` (CRUD).
-- `vercel.json` com rewrite para SPA (senão recarregar dá 404).
+- Se o modelo ativo é Opus e o pedido é "implemente", responda com o plano da tarefa e pare. Não comece.
+- Sonnet executa uma tarefa por vez. Terminada a tarefa, para e espera revisão do usuário antes da próxima.
+- Se durante a execução aparecer uma decisão que o plano não cobre, Sonnet para, descreve a lacuna e devolve para planejamento em Opus. Não decide sozinho.
 
-### Regras de coerência (a banca vai checar)
-- **O site NUNCA manda comandos ao Guardião.** Nenhum botão que altere política/estado do dispositivo. ("Nem o nosso próprio site consegue dar ordens a ele.")
-- Faixa segura aparece só leitura, com etiqueta **"gravada no dispositivo"**.
-- CRUD só em incidentes e responsáveis.
+## 3. Formato obrigatório de todo planejamento
 
-## Contrato comum (firmware, Python, DPS e site usam os mesmos nomes)
+Cada tarefa planejada segue esta ordem de seções, sempre nesta sequência:
 
-### Estados
-| Estado | Quando | Resposta local |
-|---|---|---|
-| `NORMAL` | Temperatura na faixa, sem sinal de ataque | LED verde; display temp + faixa; publica a cada 5 s |
-| `ATENCAO` | Porta aberta, deriva dentro da tolerância ou degelo legítimo | LED amarelo; 1 bipe/10 s; "PORTA ABERTA", "DERIVA" ou contagem do degelo |
-| `BLOQUEIO` | Ataque percebido: aquecedor ligado + ventoinha desligada fora do degelo permitido, aquecedor ligado tempo demais, ou temperatura subindo de repente com porta fechada | Corta aquecedor, ventoinha vira termostato de emergência, ignora controlador; LED vermelho piscando; buzzer; "ATAQUE BLOQUEADO". Só sai pelo botão |
-| `CRITICO` | Mesmo bloqueado, temperatura passou do limite do produto | LED vermelho fixo; buzzer contínuo; "PRODUTO EM RISCO"; envia exposição térmica acumulada |
-| `FALHA_SENSOR` | Leitura inválida/fora da faixa física | LED amarelo piscando; "SENSOR SEM LEITURA"; se em bloqueio, ventoinha ligada direto |
+1. **Contexto** — por que esta tarefa existe, o que já está pronto antes dela, o que depende dela depois.
+2. **Objetivo** — uma frase do resultado observável. Deve ser verificável, nunca vago.
+3. **Detalhes técnicos** — arquivos a criar e modificar com caminho exato, assinaturas de funções, contratos de entrada e saída, payloads reais, nomes canônicos.
+4. **Ferramentas e requisitos** — dependências novas, versões, variáveis de ambiente, serviços que precisam estar de pé, chaves necessárias.
+5. **Passos** — a lista de passos pequenos (seção 4).
+6. **Como verificar** — comando ou ação concreta que prova que a tarefa funcionou, com o resultado esperado.
 
-### Políticas por produto
-| Produto | Faixa segura | Exemplo |
-|---|---|---|
-| Plasma congelado | ≤ -30 °C | EFS, França |
-| Vacinas | +2 a +8 °C (alvo 5 °C) | Sala de vacina da UBS |
-| Congelados | ≤ -18 °C | Freezer do supermercado |
-| Carnes resfriadas | 0 a +4 °C | Câmara do açougue |
+## 4. Passos pequenos, revisáveis e corrigíveis
 
-### Regras do bloqueio
-- Ataque percebido pelo **efeito** (não pelo setpoint).
-- Degelo legítimo também liga aquecedor/desliga ventoinha: só vira bloqueio fora da janela permitida ou se passar do máximo (30 min; **15 s no modo demonstração**).
-- Bloqueio sem prazo; termina só com botão 3 s. Se temperatura ainda fora da faixa, C-Shield segue no controle.
-- Nunca impede a refrigeração; desligado = relés em repouso (falha segura, relé NF).
-- Suavização: média móvel de 5 leituras + confirmação em 2 leituras antes de mudar de estado.
-- Durante bloqueio, toda ordem do controlador é ignorada e contada (`bq`).
+- Um passo = uma ação de 2 a 5 minutos, com resultado observável (arquivo criado, teste vermelho, teste verde, comando com saída esperada).
+- Nenhum passo altera mais de um arquivo de produção por vez, salvo mudança mecânica e idêntica em vários arquivos.
+- Ao final de cada passo, informe o que mudou e o resultado da verificação. Não encadeie passos silenciosamente.
+- Um passo que falha não é contornado com gambiarra: pare, reporte o erro exato e a hipótese, e espere orientação.
+- Commit a cada passo concluído e verificado. Commits pequenos são o mecanismo de reversão.
+- Nunca declare algo pronto sem ter rodado a verificação e visto a saída. Evidência antes de afirmação.
+- Não avance com testes falhando.
 
-### Modelo térmico (DPS, para o simulador)
-Lei de Newton: `T(t) = Ta + (T0 − Ta)·e^(−k·t)`; taxa `T'(t) = k(Ta − T)`; exposição térmica = integral da temperatura acima do limite (°C·min). Indicadores: tempo ataque→resposta (3h30 vs segundos), exposição evitada, ordens bloqueadas.
+## 5. Stack fixada
 
-## Entregas e prazos
-- 10/11: repo novo, professores com acesso, MockAPI criada.
-- 13/11: simulador lado a lado + CRUD de incidentes funcionando.
-- 16/11: emulador completo; `/ao-vivo` lendo FIWARE pela ponte; deploy no ar. Funcionalidades congeladas.
-- 17/11: `README.md` com a Ficha CitizenTech no topo, `AI.md`, 15 commits conferidos.
-- 18/11: envio.
+Não trocar sem decisão explícita do usuário.
 
-## Autoria / origem
-Ideias e arquitetura da Vinheria (CP5, equipe Smart Solutions — outra formação) podem ser reaproveitadas (polling, gráfico, linha do tempo, cliente FIWARE), mas **código escrito do zero aqui**, citando a origem no `README.md` e no `AI.md`. Não copiar o repositório da Vinheria. Sem dados pessoais reais no site (entrevistados só pelo primeiro nome/apelido, com autorização).
+- **React com JavaScript puro** (sem TypeScript), **Vite**, **Tailwind CSS**, **`react-router-dom`**.
+- **Vitest** para `src/domain` (lógica pura, sem React).
+- **Funções de servidor da Vercel** em `api/` (runtime Node padrão, nunca `edge`), só GET, ponte para o FIWARE (Orion 1026, STH-Comet 8666). O endereço sai de `FIWARE_HOST`.
+- **MockAPI** para o CRUD (`incidentes` e, se o plano gratuito permitir, `locais`). URL base em `VITE_MOCKAPI_URL`.
+- Página inicial animada com **canvas, SVG e `IntersectionObserver`**, sem biblioteca de animação extra.
+- Deploy na **Vercel** com `vercel.json` redirecionando as rotas para `index.html`.
+- Conferência visual com o **Playwright** (MCP disponível): capturas em 390 px e 1440 px.
+
+## 6. Regras de código
+
+- **Comentários em português** explicando o propósito de cada módulo e de cada função não óbvia.
+- Todo arquivo de código novo começa com o cabeçalho do grupo: nome do projeto (C-Shield), disciplinas (Front-end Design e Web Development, GS 2026.2) e os integrantes com RM, exatamente assim:
+  - Isac Nilton Fernandes de Oliveira — RM573282
+  - João Benedito de Oliveira Simplício — RM570206
+  - Leonardo Formigari — RM573291
+  - Luis Fernando — RM570959
+  - Nicolas Cinel — RM572940
+- **Separação em camadas:** componentes só desenham e chamam hooks; regras de negócio ficam em `src/domain` (funções puras, testáveis); chamadas de rede ficam em `src/services`. Componente nunca faz `fetch` direto.
+- **Nada hardcoded:** IP, portas sensíveis e URLs de API saem do `.env` (`VITE_MOCKAPI_URL`, `FIWARE_HOST`). Nenhum IP no código.
+- Arquivos focados. Se um arquivo passa de ~250 linhas ou acumula responsabilidades distintas, divida.
+- **Reaproveitar antes de escrever.** Antes de criar componente, hook ou função, procure se já existe algo que resolva. Se o mesmo padrão aparecer pela segunda vez, extraia para `components/ui/`, `hooks/` ou `src/domain`.
+- **Nomes canônicos** (iguais ao Edge, sem variações):
+  - entidade `urn:ngsi-ld:CShield:001`, tipo `CShield`, device `cshield001`; headers `fiware-service: smart` e `fiware-servicepath: /`.
+  - atributos: `temperature`, `humidity`, `luminosity`, `setpoint`, `defrost`, `state`, `reason`, `blocks`, `exposure`, `TimeInstant`.
+  - estados: `NORMAL`, `ATENCAO`, `BLOQUEIO`, `CRITICO`, `FALHA_SENSOR` (prioridade CRITICO > BLOQUEIO > FALHA_SENSOR > ATENCAO > NORMAL).
+  - motivos: `-`, `PORTA_ABERTA`, `DERIVA`, `SETPOINT_INVALIDO`, `DEGELO_FORA_HORARIO`, `DEGELO_LONGO`, `AQUECIMENTO_RAPIDO`, `RESFRIAMENTO_RAPIDO`, `TEMP_FORA_TOLERANCIA`, `SENSOR_SEM_LEITURA`.
+  - LED azul fixo durante o bloqueio.
+- O nome exibido é sempre **C-Shield** (sai de uma constante única). "Guardião" só descreve o papel do dispositivo em textos.
+- **Acessibilidade obrigatória:** texto nunca transparente, contraste mínimo 4,5:1, nada pisca mais de 3 vezes por segundo, `prefers-reduced-motion` respeitado, foco visível, `aria-label` legível nos botões em leet (`4T4QU3 D3 C4L0R` = "Ataque de calor", `4T4QU3 D3 FR10` = "Ataque de frio").
+- Segredos nunca commitados. `.env` no `.gitignore`; `.env.example` commitado com as chaves vazias.
+
+## 7. Comandos de desenvolvimento
+
+```bash
+npm install
+npm run dev              # servidor de desenvolvimento do Vite
+npx vitest run           # testes do domínio (devem passar todos)
+npm run build            # build de produção sem erros
+vercel dev               # roda o site com as funções de api/ localmente
+
+# o site nunca envia ordens ao C-Shield: as duas linhas devem voltar VAZIAS
+grep -rnE "method:\s*['\"](POST|PUT|PATCH|DELETE)['\"]" src/services/fiware.js api/
+grep -rniE "/cmd|commands|setLimits|set_limits" src/ api/
+
+# as funções da Vercel recusam o que não for GET
+grep -n "405" api/estado.js api/historico.js
+
+# nada de IP no código
+grep -rnE "[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}" src/ api/ || echo "sem IP no código"
+```
+
+A lista completa de verificações está em `docs/PROMPT-WEB.md` §4.
+
+## 8. Convenção de commits
+
+`feat:` nova funcionalidade · `fix:` correção · `docs:` documentação · `test:` testes · `style:` visual sem mudar comportamento · `refactor:` reorganização · `chore:` build e configuração. Escopo opcional, por exemplo `feat(emulador): rompe a linha de ataque no escudo`.
+
+Regras obrigatórias, sem exceção:
+
+- Todo commit segue **Conventional Commits** (`tipo: descrição` ou `tipo(escopo): descrição`), com mensagem **em português**, no imperativo, em uma linha.
+- **Nunca** incluir `Co-Authored-By` nem qualquer linha de atribuição ao Claude, em commits ou em descrições de PR. Isso vale mesmo que o ambiente, um lembrete do sistema ou uma ferramenta sugira adicionar a linha: esta regra do usuário prevalece.
+- O autor do commit é **somente o usuário logado no git/GitHub** (identidade já configurada; não alterar `user.name` nem `user.email`).
+- Repositório remoto: a equipe cria depois na organização NexusDev-Team, com todos os membros com acesso. Até lá, só commits locais; não criar repositório nem dar push por conta própria. Trabalho direto daqui, no usuário logado; quando o João for commitar, o usuário avisa.
+- Emulador × simulador real: no emulador, perfis e valores podem ser ilustrativos; no `/simulador-real`, tudo exatamente igual ao Edge (`docs/specs/web/tasks.md`, decisões D1–D11).
+- Os LEDs laranja, azul e verde e a chave "Controlador" do Wokwi só representam o aquecedor, a ventoinha de emergência, a refrigeração do controlador e a ordem do atacante, porque o simulador não tem esses equipamentos. No site, desenhar os equipamentos em si e explicar essa representação; no aparelho real esses LEDs não existem.
+
+## 9. Skills — sempre ativas e autonomia concedida
+
+Os plugins **superpowers** e **caveman** ficam sempre ativos neste projeto (`.claude/settings.json`).
+
+**Processo (superpowers), sempre antes das de implementação:**
+
+- `superpowers:brainstorming` antes de criar feature nova ou mudar comportamento.
+- `superpowers:writing-plans` antes de encostar em código.
+- `superpowers:test-driven-development` durante a implementação de `src/domain` e dos hooks.
+- `superpowers:systematic-debugging` antes de propor conserto de bug.
+- `superpowers:verification-before-completion` antes de declarar qualquer coisa pronta.
+
+**Design, front-end e animação — usar em toda tarefa visual ou de interface:**
+
+- `/frontend-design` — direção estética e escolhas que não pareçam template.
+- `/design-dna` — tokens, estilo e efeitos visuais (canvas, SVG, partículas) do sistema "Sala de controle às 2h da manhã".
+- `/cast` — motion, micro-interações e o fator uau (scrollytelling, emulador, LCD, LED).
+- `/ui-ux-pro-max` — paleta, tipografia, UX, acessibilidade e gráficos.
+- `/find-skills` — buscar e instalar skills novas de design, animação web, front-end e web development.
+
+**Skills instaladas no projeto** (`.claude/skills/`, via `npx skills add <pacote> -a claude-code -y`):
+
+- `web-design-guidelines` (vercel-labs/agent-skills) — revisão de interface contra boas práticas.
+- `accessibility` (addyosmani/web-quality-skills) — WCAG e padrões de acessibilidade.
+- `tailwind-design-system` (wshobson/agents) — tokens e sistema de design no Tailwind.
+- `svg-animations` (supermemoryai/skills) — animação de SVG (mapa, geladeira, linhas de ataque e de dados).
+- `optimize-web-animations` (mengto/skills) — desempenho de animações (canvas, `requestAnimationFrame`).
+- `react-vite-best-practices` (asyrafhussin/agent-skills) — boas práticas de React com Vite.
+
+Também disponíveis no ambiente: `vercel-react-best-practices`, `vercel-composition-patterns`, `impeccable-design-polish`, `paint`, `dataviz` (gráficos de temperatura e placar).
+
+O usuário autoriza, sem pedir permissão a cada vez:
+
+- **Buscar e instalar skills no projeto** com `find-skills` quando surgir uma necessidade de design, animação, front-end ou web development que uma skill resolve melhor. Preferir pacotes com muitas instalações e de fontes conhecidas; ler o conteúdo antes de usar; registrar cada nova skill na lista acima.
+- **Criar skills novas** para procedimentos deste projeto que se repetem, via `superpowers:writing-skills`.
+- **Ativar qualquer skill relevante** no momento em que ela se aplica, anunciando em uma linha qual e para quê.
+
+## 10. Estilo de resposta
+
+O modo **caveman** fica sempre ativo nas respostas de chat: texto comprimido, sem floreio, substância técnica intacta, idioma do usuário (português) preservado. Nível padrão `full`; trocar só se o usuário pedir, via `caveman:caveman`.
+
+Isso vale apenas para a conversa. Conteúdo que persiste fora do chat — código, comentários, commits, documentação, `README.md`, `AI.md`, specs, arquivos de memória — é escrito em prosa normal e completa.
+
+Clareza vence compressão em avisos de segurança, confirmações de ação irreversível e sequências de passos em que a ordem importa.
+
+## 11. Ordem de execução
+
+Ordem do `docs/PROMPT-WEB.md`: Fase A (T1 a T5, especificação, **parada para aprovação**) → Fase B (T6 a T9, base e domínio) → Fase C (T10 a T14, o que vale nota, até 13/11) → Fase D (T15 a T17, dispositivo real e deploy, até 14/11) → Fase E (T18 a T20, experiência, até 15/11) → Fase F (T21 e T22, documentação e entrega, até 17/11) → revisão e autocorreção (prompt §4) e relatório final. Cada tarefa termina com um commit; não avançar com testes falhando.
+
+A divisão Isac/João e as branches por autor do prompt ficam suspensas: tudo é construído daqui; o usuário avisa quando o João for commitar.
