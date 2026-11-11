@@ -67,8 +67,3 @@ export function sincronizarProtecao(cidade, idsInstalados) {
   }
   return nova
 }
-
-// Apelido temporário do botão antigo "Ativar C-Shield" (protege tudo). Sai quando o hook migrar.
-export function ativarCShield(cidade) {
-  return LOCAIS.reduce((c, def) => instalarCShield(c, def.id), cidade)
-}
