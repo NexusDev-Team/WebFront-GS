@@ -39,4 +39,34 @@
   --font-texto: "IBM Plex Sans", system-ui, sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, monospace;
   --font-lcd: "VT323", ui-monospace, monospace;
+}/*
+ * Tokens do visual "Glacial industrial" (docs/specs/web/design.md §1 e §2, decisão de 12/11).
+ * Os NOMES dos tokens vêm da primeira versão e foram mantidos para não mexer em todos os
+ * componentes; só os valores mudaram. Tailwind v4: o @theme gera as utilidades
+ * (bg-noite-950, text-gelo-50...).
+ * Regras de contraste: led-fraco NUNCA em texto; verde e vermelho só para estado real.
+ */
+@theme {
+  --color-noite-950: #060b18;
+  --color-noite-900: #0f172a;
+  --color-painel: rgba(15, 23, 42, 0.72);
+  --color-borda: rgba(226, 232, 240, 0.1);
+  --color-gelo-50: #f8fafc;
+  --color-gelo-100: #e2e8f0;
+  --color-gelo-300: #cbd5e1;
+  --color-led-fraco: #1e6fa3;
+  --color-led-forte: #38bdf8;
+  --color-ciano: #06b6d4;
+  --color-ok: #22c55e;
+  --color-atencao: #eab308;
+  --color-critico: #ef4444;
+  --color-ataque: #ef4444;
+  /* Display de vidro do C-Shield: fundo azul-noite, texto azul-gelo (contraste acima de 7:1). */
+  --color-lcd-fundo: #0b1a2e;
+  --color-lcd-texto: #7dd3fc;
+
+  --font-titulo: "Plus Jakarta Sans", system-ui, sans-serif;
+  --font-texto: "Inter", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --font-lcd: "JetBrains Mono", ui-monospace, monospace;
 }

@@ -21,11 +21,13 @@
 
   body {
     @apply bg-noite-950 font-texto text-base leading-normal text-gelo-50 antialiased;
-    /* Grade de sala de controle: linhas finas a cada 32 px, estática. */
-    background-image:
-      linear-gradient(var(--color-grade) 1px, transparent 1px),
-      linear-gradient(90deg, var(--color-grade) 1px, transparent 1px);
-    background-size: 32px 32px;
+    /* Um único gradiente fraco de azul-glacial no topo da página, sem padrão repetido. */
+    background-image: radial-gradient(
+      ellipse 80% 40% at 50% 0%,
+      rgba(56, 189, 248, 0.06),
+      transparent 70%
+    );
+    background-repeat: no-repeat;
   }
 
   h1, h2, h3, h4 {
