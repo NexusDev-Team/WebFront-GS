@@ -17,7 +17,9 @@ const TEXTOS = JSON.stringify({ BANNER, PROBLEMA, SOLUCAO })
 
 describe('BANNER', () => {
   it('tem título, texto, duas ações e a imagem com texto alternativo', () => {
+    expect(BANNER.rotulo).toBe('Cadeia do frio e gestão térmica')
     expect(BANNER.titulo).toBe('Proteção inteligente para a cadeia de frio')
+    expect(BANNER.texto).toBe('Às 2h da manhã, o C-Shield atua onde ninguém mais consegue.')
     expect(BANNER.texto.length).toBeGreaterThan(40)
     expect(BANNER.acaoPrincipal.para).toBe('/emulador')
     expect(BANNER.acaoSecundaria.para).toBe('/como-funciona')
