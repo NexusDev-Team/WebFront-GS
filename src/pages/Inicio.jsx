@@ -16,7 +16,7 @@ import Carregando from '../components/ui/Carregando.jsx'
 import ErroMensagem from '../components/ui/ErroMensagem.jsx'
 import Logo from '../components/ui/Logo.jsx'
 import PainelVidro from '../components/ui/PainelVidro.jsx'
-import PromptTerminal from '../components/ui/PromptTerminal.jsx'
+import Rotulo from '../components/ui/Rotulo.jsx'
 import StatusBadge from '../components/ui/StatusBadge.jsx'
 import TituloLed from '../components/ui/TituloLed.jsx'
 
@@ -26,7 +26,7 @@ export default function Inicio() {
   return (
     <div className="flex flex-col gap-10">
       <section className="flex flex-col gap-4">
-        <PromptTerminal cursor>cshield --vitrine</PromptTerminal>
+        <Rotulo>Cadeia do frio</Rotulo>
         <TituloLed nivel={1}>C-Shield</TituloLed>
         <p className="max-w-prose text-gelo-300">Vê de longe. Só obedece de perto.</p>
         <Logo variante="completa" />

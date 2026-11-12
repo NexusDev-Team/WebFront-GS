@@ -14,7 +14,7 @@
 // equipe revisar).
 import CartaoIntegrante from '../components/equipe/CartaoIntegrante.jsx'
 import PainelVidro from '../components/ui/PainelVidro.jsx'
-import PromptTerminal from '../components/ui/PromptTerminal.jsx'
+import Rotulo from '../components/ui/Rotulo.jsx'
 import TituloLed from '../components/ui/TituloLed.jsx'
 import { EQUIPE } from '../content/equipe.js'
 import { CULTURA, SOBRE_GS, VISAO } from '../content/nexusDev.js'
@@ -23,7 +23,7 @@ export default function NexusDev() {
   return (
     <div className="flex flex-col gap-12">
       <header className="flex flex-col gap-3">
-        <PromptTerminal>cshield --equipe</PromptTerminal>
+        <Rotulo>A equipe</Rotulo>
         <TituloLed nivel={1} variante="assumiu">
           Nexus Dev
         </TituloLed>

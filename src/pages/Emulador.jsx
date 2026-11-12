@@ -26,7 +26,7 @@ import PlacarComparativo from '../components/emulador/PlacarComparativo.jsx'
 import SecaoDispositivoReal from '../components/emulador/SecaoDispositivoReal.jsx'
 import BotaoLed from '../components/ui/BotaoLed.jsx'
 import PainelVidro from '../components/ui/PainelVidro.jsx'
-import PromptTerminal from '../components/ui/PromptTerminal.jsx'
+import Rotulo from '../components/ui/Rotulo.jsx'
 import TituloLed from '../components/ui/TituloLed.jsx'
 import { useCidadeSimulada } from '../hooks/useCidadeSimulada.js'
 import { useInstalacoes } from '../hooks/useInstalacoes.js'
@@ -58,7 +58,7 @@ export default function Emulador() {
   return (
     <div className="flex flex-col gap-8">
       <header className="flex flex-col gap-3">
-        <PromptTerminal>cshield --emulador</PromptTerminal>
+        <Rotulo>Simulador</Rotulo>
         <TituloLed nivel={1} variante="ataque">
           Seja o hacker
         </TituloLed>

@@ -18,7 +18,7 @@ import LinhaDoTempo from '../components/noticias/LinhaDoTempo.jsx'
 import ManchetePrincipal from '../components/noticias/ManchetePrincipal.jsx'
 import BotaoLed from '../components/ui/BotaoLed.jsx'
 import PainelVidro from '../components/ui/PainelVidro.jsx'
-import PromptTerminal from '../components/ui/PromptTerminal.jsx'
+import Rotulo from '../components/ui/Rotulo.jsx'
 import TituloLed from '../components/ui/TituloLed.jsx'
 import { LINHA_DO_TEMPO } from '../content/linhaDoTempo.js'
 import { noticiaDestaque, noticiasOrdenadas } from '../content/noticias.js'
@@ -27,7 +27,7 @@ export default function Noticias() {
   return (
     <div className="flex flex-col gap-12">
       <header className="flex flex-col gap-3">
-        <PromptTerminal>cshield --porque</PromptTerminal>
+        <Rotulo>Por que o C-Shield existe</Rotulo>
         <TituloLed nivel={1} variante="ataque">
           Por que o C-Shield existe
         </TituloLed>
