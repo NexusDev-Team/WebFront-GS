@@ -13,7 +13,8 @@ Princípios:
 1. **Menos, em seções simples.** Cada página é uma sequência de blocos com um assunto só e respiro generoso (`py-20 sm:py-28` nas seções da página inicial). Sem grade de fundo, scanlines, glitch nem prompt de terminal.
 2. **A cor é estado.** Verde e vermelho só para estado real ("estabilizado", "alerta"). O azul-glacial é a cor da marca e do C-Shield ativo, e só ele ganha glow, sóbrio.
 3. **Vidro com borda fina.** Cartões `#0F172A` translúcidos, borda de 1 px a 10% de branco e cantos de 16 px.
-4. **Números de instrumento.** Temperaturas e métricas em fonte monoespaçada com `tabular-nums`; o resto em fonte neutra.
+4. **Números de instrumento.** As leituras grandes (o `-19,0 °C` do widget, os três números do problema, a variação) usam a fonte dos títulos com `tabular-nums`, para a vírgula não abrir buraco; a fonte monoespaçada fica nos dados pequenos (eixos do gráfico, tooltip, nomes de estado como `FALHA_SENSOR`). O resto vai em fonte neutra.
+5. **Fiel ao mockup (decisão do João, 12/11, segunda rodada).** A primeira versão do visual glacial ficou minimalista demais, então a página inicial passou a seguir de perto o mockup "C-Shield · Sistema de preservação térmica": banner com profundidade, monitoramento com widget e gráfico, painel do C-Shield em blocos, títulos de seção em caixa alta e cartões com degradê sutil no topo.
 
 Tokens (valores atuais de `src/styles/tokens.css`):
 
@@ -31,18 +32,40 @@ Tokens (valores atuais de `src/styles/tokens.css`):
 | `ataque` | `#EF4444` | Linhas de ataque do mapa e título do emulador sob ataque |
 | `lcd-fundo` / `lcd-texto` | `#0B1A2E` / `#7DD3FC` | Display de vidro do C-Shield |
 
+Tokens novos da segunda rodada: `menta` (`#BBF7D0`) e `menta-texto` (`#052E16`, 12,3:1) para a pílula "Estado: estabilizado", e `alerta-fundo` (`rgba(239, 68, 68, 0.12)`) para o cartão de alertas.
+
+Classes de `src/styles/efeitos.css`: `.cartao` (o cartão padrão: degradê sutil no topo, borda clara fina, sombra funda e realce de 1 px; o `PainelVidro` usa essa classe), `.luz-azul` (luz difusa atrás da imagem do banner), `.malha-hex` (malha hexagonal que some para dentro), `.vidro-fosco` (o display do C-Shield) e `.desenha` (a linha do gráfico entra desenhada uma vez; com movimento reduzido já aparece inteira).
+
 Tipografia (Google Fonts): títulos em **Plus Jakarta Sans** (600 a 800), texto em **Inter** (400 a 600) e números em **JetBrains Mono** (400 e 500, `tabular-nums`). O display do C-Shield usa a mesma fonte monoespaçada, com 16 colunas fixas.
 
-Esboço da `/` (decisão do João: banner, problema e solução, sem scrollytelling):
+Esboço da `/` (decisões do João: banner, problema e solução, sem scrollytelling; segunda rodada: seguir o mockup):
 
 ```
 [Navbar: logo · Início · Notícias · Como funciona · Nexus Dev · (Simular ataque)]
- Banner     rótulo "Cadeia do frio" · h1 "Proteção inteligente para a cadeia de frio"
-            frase · [Simular um ataque] [Como funciona]            [imagem da câmara fria]
- Problema   h2 "Invadiram o frio pela internet" · parágrafo
-            [3h30]  [12.976]  [110 °C]   cada um com a explicação e a fonte linkada
- Solução    h2 "Vê de longe. Só obedece de perto." · [01 Medir] [02 Decidir] [03 Assumir] [04 Alertar]
+ Banner         rótulo "Cadeia do frio e gestão térmica" · h1 em 2 linhas · frase das 2h · 2 botões
+                [imagem da câmara fria]  + luz azul, malha hexagonal e flocos de neve de enfeite
+ Monitoramento  "MONITORAMENTO DE TEMPERATURA" · "dados simulados no navegador"
+                [widget: -19,0 °C · Estado: estabilizado]  [gráfico de área com degradê e limite]
+ Problema       "INVADIRAM O FRIO PELA INTERNET" · [3h30] [12.976] [110 °C] com fonte linkada
+ Painel         "PAINEL DO C-SHIELD" · "Nada aqui manda ordens a ele"
+                [Display C-Shield (vidro fosco)] [Alertas · Variação · Faixa segura ›] [Histórico + relés só de leitura]
+ Solução        "VÊ DE LONGE. SÓ OBEDECE DE PERTO." · [01 Medir] [02 Decidir] [03 Assumir] [04 Alertar]
+ Chamada final  "Na Europa, foram 3h30 até alguém perceber. Com o C-Shield, segundos." [Simular um ataque]
 [Rodapé: marca e frase · links do site · links do projeto]
+```
+
+Regras da página inicial: os dados do monitoramento e do painel são uma **demonstração simulada no navegador** (a série vem de `domain/serieDemo.js` e a página diz isso na tela); os "interruptores" do mockup viram **indicadores só de leitura** (sem botão, sem foco); "Controle térmico" virou "Faixa segura · gravada no dispositivo"; a palavra "automação" não aparece, porque o site nunca dá ordens ao C-Shield.
+
+Esboço da `/como-funciona`:
+
+```
+ Cabeçalho   "O dispositivo" · h1 "Como o C-Shield funciona" · "Vê de longe. Só obedece de perto."
+ Ciclo       [01 Medir] [02 Decidir] [03 Assumir] [04 Alertar]   (texto completo)
+ Direção     diagrama SVG (desktop) / duas colunas (celular) + lista das 6 etapas em texto
+ Estados     5 cartões: LED (cor e texto) · quando acontece · o que o aparelho faz
+ Faixas      vacina · congelado · resfriado · plasma  ("gravada no dispositivo", #faixas)
+ Wokwi       LED laranja, azul, verde e a chave "Controlador" são representações; no aparelho real não existem
+ Origem      IEC 61511 · diodos de dados · o limite do protótipo · "Conheça a equipe"
 ```
 
 A imagem do banner é fornecida pela equipe em `public/imagens/hero-camara.webp`; sem o arquivo, o banner mostra um espaço reservado com o escudo da logo.
