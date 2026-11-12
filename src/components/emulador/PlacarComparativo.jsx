@@ -61,7 +61,7 @@ export default function PlacarComparativo({ placar }) {
       <TituloLed nivel={2}>
         <span id="titulo-placar">Placar</span>
       </TituloLed>
-      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
+      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
         {placar.map((item) => (
           <Coluna key={item.id} item={item} />
         ))}

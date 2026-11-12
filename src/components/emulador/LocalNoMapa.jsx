@@ -54,13 +54,18 @@ export default function LocalNoMapa({ def, local, situacaoLocal, selecionado, ao
       transform={`translate(${def.x} ${def.y})`}
       onClick={() => aoSelecionar(def.id)}
       onKeyDown={aoTeclar}
-      className="cursor-pointer"
+      className="group cursor-pointer outline-none"
     >
       {/* Área de toque grande e invisível */}
       <circle r={RAIO_ESCUDO + 12} fill="transparent" />
-      {selecionado ? (
-        <circle r={RAIO_ESCUDO + 10} fill="none" stroke="var(--color-gelo-50)" strokeWidth={2} strokeDasharray="6 6" />
-      ) : null}
+      {/* Anel redondo só para quem navega pelo teclado (no lugar do quadrado de foco do navegador) */}
+      <circle
+        r={RAIO_ESCUDO + 10}
+        fill="none"
+        stroke="var(--color-gelo-50)"
+        strokeWidth={3}
+        className="opacity-0 group-focus-visible:opacity-100"
+      />
       {local.protegido ? (
         <circle
           r={RAIO_ESCUDO}
@@ -78,7 +83,14 @@ export default function LocalNoMapa({ def, local, situacaoLocal, selecionado, ao
       </g>
       {/* No celular os rótulos ficariam pequenos demais: quem mostra o texto é a ListaLocais */}
       <g textAnchor="middle" style={{ pointerEvents: 'none' }} className="max-sm:hidden">
-        <text y={RAIO_ESCUDO + 30} fontSize={28} fontWeight={600} fill="var(--color-gelo-50)" style={HALO}>
+        <text
+          y={RAIO_ESCUDO + 30}
+          fontSize={28}
+          fontWeight={600}
+          fill="var(--color-gelo-50)"
+          textDecoration={selecionado ? 'underline' : undefined}
+          style={HALO}
+        >
           {def.bairro}
         </text>
         <text y={RAIO_ESCUDO + 60} fontSize={28} fill="var(--color-gelo-50)" fontFamily="var(--font-mono)" style={HALO}>

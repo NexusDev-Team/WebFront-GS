@@ -10,12 +10,12 @@
  */
 
 // Os controles do jogo (W12, W15, W18): atacar o local escolhido (calor ou frio), o ataque em
-// massa e recomeçar. Os botões de ataque ficam em leet, com aria-label legível. Proteger um local
-// NÃO está aqui: isso é o painel de instalações (o C-Shield só entra onde foi instalado).
+// massa, parar o ataque (só desfaz as ordens) e recomeçar (zera o jogo). Os botões de ataque ficam em leet, com aria-label legível. Proteger um local
+// NÃO está aqui: isso é o painel do local escolhido (o C-Shield só entra onde foi ativado).
 import BotaoLed from '../ui/BotaoLed.jsx'
 import PainelVidro from '../ui/PainelVidro.jsx'
 
-export default function ControlesAtaque({ selecionado, aoAtacar, aoAtaqueEmMassa, aoRecomecar }) {
+export default function ControlesAtaque({ selecionado, haAtaque, aoAtacar, aoAtaqueEmMassa, aoPararAtaque, aoRecomecar }) {
   return (
     <PainelVidro as="section" aria-label="Controles do ataque" className="flex flex-col gap-4 p-4 sm:p-6">
       <p className="text-gelo-50" aria-live="polite">
@@ -39,12 +39,15 @@ export default function ControlesAtaque({ selecionado, aoAtacar, aoAtaqueEmMassa
         <BotaoLed variante="ataque" ariaLabel="Ataque em massa: esquentar os cinco locais de uma vez" onClick={aoAtaqueEmMassa}>
           Ataque em massa
         </BotaoLed>
-        <BotaoLed variante="fantasma" onClick={aoRecomecar}>
+        <BotaoLed variante="fantasma" ariaLabel="Parar ataque: desfaz as ordens sem recomeçar o jogo" disabled={!haAtaque} onClick={aoPararAtaque}>
+          Parar ataque
+        </BotaoLed>
+        <BotaoLed variante="fantasma" ariaLabel="Recomeçar o jogo do zero" onClick={aoRecomecar}>
           Recomeçar
         </BotaoLed>
       </div>
       <p className="text-sm text-gelo-300">
-        Quer ver o C-Shield barrar o ataque? Instale-o num local no painel ao lado.
+        Quer ver o C-Shield barrar o ataque? Clique num local e ative o C-Shield nele.
       </p>
     </PainelVidro>
   )

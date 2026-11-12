@@ -10,7 +10,7 @@
  */
 
 // Página Emulador: "Seja o hacker". O mapa da cidade com 5 locais, os controles de ataque, o
-// painel de instalações (o CRUD que decide quem tem o C-Shield) e, no fim, a seção do dispositivo
+// painel do local escolhido (ativar ou desativar o C-Shield: o CRUD das instalações) e, no fim, a seção do dispositivo
 // real. A página só liga as peças: o jogo vem de useCidadeSimulada e as instalações de
 // useInstalacoes.
 import { useEffect, useState } from 'react'
@@ -21,7 +21,7 @@ import PainelCamara from '../components/camara/PainelCamara.jsx'
 import AvisoAoVivo from '../components/emulador/AvisoAoVivo.jsx'
 import ControlesAtaque from '../components/emulador/ControlesAtaque.jsx'
 import MapaCidade from '../components/emulador/MapaCidade.jsx'
-import PainelInstalacoes from '../components/emulador/PainelInstalacoes.jsx'
+import PainelLocal from '../components/emulador/PainelLocal.jsx'
 import PlacarComparativo from '../components/emulador/PlacarComparativo.jsx'
 import SecaoDispositivoReal from '../components/emulador/SecaoDispositivoReal.jsx'
 import BotaoLed from '../components/ui/BotaoLed.jsx'
@@ -63,7 +63,7 @@ export default function Emulador() {
           Seja o hacker
         </TituloLed>
         <p className="max-w-2xl text-lg text-gelo-300">
-          Escolha um local no mapa e mande uma ordem perigosa para a câmara fria dele. Depois instale
+          Escolha um local no mapa e mande uma ordem perigosa para a câmara fria dele. Depois ative
           o C-Shield e veja a diferença.
         </p>
         <div className="flex flex-wrap items-center gap-3">
@@ -92,11 +92,20 @@ export default function Emulador() {
       <div className="grid items-start gap-6 lg:grid-cols-2">
         <ControlesAtaque
           selecionado={selecionado}
+          haAtaque={Object.values(jogo.cidade.locais).some((l) => l.ordem !== 'NORMAL')}
           aoAtacar={(tipo) => jogo.atacar(selecionadoId, tipo)}
           aoAtaqueEmMassa={() => jogo.ataqueEmMassa('CALOR')}
+          aoPararAtaque={jogo.pararAtaques}
           aoRecomecar={jogo.recomecar}
         />
-        <PainelInstalacoes cidade={jogo.cidade} instalacoes={instalacoes} />
+        <PainelLocal
+          key={selecionadoId}
+          def={selecionado}
+          local={jogo.cidade.locais[selecionadoId]}
+          instalacao={itens.find((i) => i.localId === selecionadoId)}
+          piloto={selecionadoId === ID_PILOTO}
+          instalacoes={instalacoes}
+        />
       </div>
 
       <PainelCamara key={selecionadoId} cidade={jogo.cidade} localId={selecionadoId} aoLiberar={jogo.liberar} />
