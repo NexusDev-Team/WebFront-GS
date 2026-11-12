@@ -50,42 +50,45 @@ export default function PainelCamara({ cidade, localId, aoLiberar }) {
         <span id="titulo-camara">Câmara por dentro · {def.nome}</span>
       </TituloLed>
 
-      {vista.temCShield ? (
+      <div className="grid gap-6 lg:grid-cols-2">
         <div className="flex flex-col items-start gap-4">
-          <Lcd16x2 linhas={vista.lcd} />
-          <LedEstado cor={vista.corLed} />
-          <BotaoSegurar segurar={segurar} />
+          {vista.temCShield ? (
+            <>
+              <Lcd16x2 linhas={vista.lcd} />
+              <LedEstado cor={vista.corLed} />
+              <BotaoSegurar segurar={segurar} />
+            </>
+          ) : (
+            <p className="rounded-lg border border-ataque bg-noite-900 p-3 text-gelo-50">
+              Sem C-Shield aqui: ninguém vê, ninguém reage. Veja o que o ataque faz com a câmara.
+            </p>
+          )}
+          <p className="text-gelo-50">
+            <span className="font-mono text-sm text-gelo-300">Controlador: </span>
+            {vista.controlador === 'ATAQUE' ? 'ordem de ataque' : 'ordem normal'} ({vista.setpointMandado} °C)
+          </p>
+          {vista.temCShield ? (
+            <p className="text-gelo-300">
+              Faixa segura: {vista.faixa.tMin} °C a {vista.faixa.tMax} °C · gravada no dispositivo
+            </p>
+          ) : null}
         </div>
-      ) : (
-        <p className="rounded-lg border border-ataque bg-noite-900 p-3 text-gelo-50">
-          Sem C-Shield aqui: ninguém vê, ninguém reage. Veja o que o ataque faz com a câmara.
-        </p>
-      )}
 
-      <div className="flex flex-wrap gap-4" aria-label="Equipamentos da câmara" role="group">
-        <Equipamento tipo="aquecedor" estado={eq.aquecedor} />
-        <Equipamento tipo="ventoinha" estado={eq.ventoinhaEmergencia} />
-        <Equipamento tipo="refrigeracao" estado={eq.refrigeracao} />
+        <div className="flex flex-col gap-4">
+          <div className="flex flex-wrap gap-4" aria-label="Equipamentos da câmara" role="group">
+            <Equipamento tipo="aquecedor" estado={eq.aquecedor} />
+            <Equipamento tipo="ventoinha" estado={eq.ventoinhaEmergencia} />
+            <Equipamento tipo="refrigeracao" estado={eq.refrigeracao} />
+          </div>
+          {vista.temCShield ? (
+            <div className="flex flex-wrap gap-2">
+              <Rele numero={1} comanda="aquecedor" agindo={eq.aquecedor === 'cortado'} acao="cortado" repouso="em repouso" />
+              <Rele numero={2} comanda="ventoinha" agindo={eq.ventoinhaEmergencia} acao="ligada" repouso="em repouso" />
+            </div>
+          ) : null}
+          <GraficoTemperatura pontos={local.historico} tMin={vista.faixa.tMin} tMax={vista.faixa.tMax} />
+        </div>
       </div>
-
-      {vista.temCShield ? (
-        <div className="flex flex-wrap gap-2">
-          <Rele numero={1} comanda="aquecedor" agindo={eq.aquecedor === 'cortado'} acao="cortado" repouso="em repouso" />
-          <Rele numero={2} comanda="ventoinha" agindo={eq.ventoinhaEmergencia} acao="ligada" repouso="em repouso" />
-        </div>
-      ) : null}
-
-      <p className="text-gelo-50">
-        <span className="font-mono text-sm text-gelo-300">Controlador: </span>
-        {vista.controlador === 'ATAQUE' ? 'ordem de ataque' : 'ordem normal'} ({vista.setpointMandado} °C)
-      </p>
-      {vista.temCShield ? (
-        <p className="text-gelo-300">
-          Faixa segura: {vista.faixa.tMin} °C a {vista.faixa.tMax} °C · gravada no dispositivo
-        </p>
-      ) : null}
-
-      <GraficoTemperatura pontos={local.historico} tMin={vista.faixa.tMin} tMax={vista.faixa.tMax} />
     </PainelVidro>
   )
 }

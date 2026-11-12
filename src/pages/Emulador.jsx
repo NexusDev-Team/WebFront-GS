@@ -17,10 +17,12 @@ import { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { ID_PILOTO, LOCAIS } from '../domain/cidade.js'
 import { idsInstalados } from '../domain/instalacoes.js'
+import PainelCamara from '../components/camara/PainelCamara.jsx'
 import AvisoAoVivo from '../components/emulador/AvisoAoVivo.jsx'
 import ControlesAtaque from '../components/emulador/ControlesAtaque.jsx'
 import MapaCidade from '../components/emulador/MapaCidade.jsx'
 import PainelInstalacoes from '../components/emulador/PainelInstalacoes.jsx'
+import PlacarComparativo from '../components/emulador/PlacarComparativo.jsx'
 import SecaoDispositivoReal from '../components/emulador/SecaoDispositivoReal.jsx'
 import BotaoLed from '../components/ui/BotaoLed.jsx'
 import PainelVidro from '../components/ui/PainelVidro.jsx'
@@ -74,14 +76,17 @@ export default function Emulador() {
         </div>
       </header>
 
-      <PainelVidro as="section" aria-label="Mapa da cidade" className="p-2 sm:p-4">
-        <MapaCidade
-          cidade={jogo.cidade}
-          selecionadoId={selecionadoId}
-          aoSelecionar={setSelecionadoId}
-          reduzirMovimento={reduzirMovimento}
-        />
-      </PainelVidro>
+      <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
+        <PainelVidro as="section" aria-label="Mapa da cidade" className="p-2 sm:p-4">
+          <MapaCidade
+            cidade={jogo.cidade}
+            selecionadoId={selecionadoId}
+            aoSelecionar={setSelecionadoId}
+            reduzirMovimento={reduzirMovimento}
+          />
+        </PainelVidro>
+        <PlacarComparativo placar={jogo.placar} />
+      </div>
       <AvisoAoVivo cidade={jogo.cidade} />
 
       <div className="grid items-start gap-6 lg:grid-cols-2">
@@ -93,6 +98,8 @@ export default function Emulador() {
         />
         <PainelInstalacoes cidade={jogo.cidade} instalacoes={instalacoes} />
       </div>
+
+      <PainelCamara key={selecionadoId} cidade={jogo.cidade} localId={selecionadoId} aoLiberar={jogo.liberar} />
 
       <SecaoDispositivoReal />
     </div>

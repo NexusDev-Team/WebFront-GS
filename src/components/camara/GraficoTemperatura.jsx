@@ -23,7 +23,7 @@ export default function GraficoTemperatura({ pontos, tMin, tMax }) {
   const fora = ultima !== null && (ultima < tMin || ultima > tMax)
 
   return (
-    <figure className="flex flex-col gap-2">
+    <figure className="flex w-full max-w-xl flex-col gap-2">
       <svg
         viewBox={`0 0 ${GEO.largura} ${GEO.altura}`}
         role="img"
