@@ -34,6 +34,12 @@ export function situacao(local) {
   return local.exposicao > EXPOSICAO_MAX_SEGURA ? 'SEGURO_LOTE_EM_ANALISE' : 'SEGURO'
 }
 
+// Há algum local sob ataque, sem C-Shield para barrar? É o que faz o título do emulador ficar
+// vermelho: o vermelho vale só enquanto um ataque está de fato acontecendo.
+export function algumSobAtaque(cidade) {
+  return Object.values(cidade.locais).some((local) => situacao(local) === 'SOB_ATAQUE')
+}
+
 // Quanto tempo uma câmara sem C-Shield leva para alguém perceber o problema: 3 h 30 min, do caso
 // real que inspirou o projeto (ICA). É um dado do caso, não uma simulação.
 export const PERCEPCAO_SEM_CSHIELD_MIN = 210
