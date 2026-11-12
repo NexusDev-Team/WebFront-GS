@@ -9,16 +9,18 @@
  *   Nicolas Cinel — RM572940
  */
 
+import Pagina from '../components/ui/Pagina.jsx'
+
 // Página 404: rota inexistente.
 import { Link } from 'react-router-dom'
 
 export default function NaoEncontrada() {
   return (
-    <section>
+    <Pagina as="section">
       <h1>Esta câmara não existe.</h1>
       <p>
         <Link to="/">Voltar ao início</Link>
       </p>
-    </section>
+    </Pagina>
   )
 }

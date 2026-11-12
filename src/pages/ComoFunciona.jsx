@@ -9,12 +9,14 @@
  *   Nicolas Cinel — RM572940
  */
 
+import Pagina from '../components/ui/Pagina.jsx'
+
 // Página ComoFunciona (provisória, T6).
 export default function ComoFunciona() {
   return (
-    <section>
+    <Pagina as="section">
       <h1>Como funciona</h1>
       <p>Medir, decidir, assumir, alertar (em construção).</p>
-    </section>
+    </Pagina>
   )
 }

@@ -30,7 +30,7 @@ export default function App() {
         Pular para o conteúdo
       </a>
       <Navbar />
-      <main id="conteudo" tabIndex={-1} className="mx-auto max-w-6xl px-4 py-10 outline-none">
+      <main id="conteudo" tabIndex={-1} className="outline-none">
         <Routes>
           <Route path="/" element={<Inicio />} />
           <Route path="/emulador" element={<Emulador />} />

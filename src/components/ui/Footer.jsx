@@ -9,20 +9,21 @@
  *   Nicolas Cinel — RM572940
  */
 
+import { Link } from 'react-router-dom'
 import { NOME_PRODUTO } from '../../domain/produto.js'
+import Logo from './Logo.jsx'
 
-// Rodapé com a frase do produto e os links do Edge e do Wokwi (fonte de verdade do dispositivo).
+// Rodapé em duas colunas: a marca com a frase do produto e os links do site e do projeto.
+// O repositório do Edge e o Wokwi são a fonte de verdade do dispositivo.
 const REPOSITORIO_EDGE = 'https://github.com/NexusDev-Team/C-Shield-Edge'
 const WOKWI = 'https://wokwi.com/projects/480328417992209409'
 
+const CLASSE_LINK =
+  'inline-flex min-h-11 items-center text-gelo-300 underline-offset-4 transition-colors hover:text-gelo-50 hover:underline'
+
 function LinkExterno({ href, children }) {
   return (
-    <a
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="inline-flex min-h-11 items-center text-gelo-300 underline underline-offset-4 hover:text-led-forte"
-    >
+    <a href={href} target="_blank" rel="noopener noreferrer" className={CLASSE_LINK}>
       {children}
       <span className="sr-only"> (abre em nova aba)</span>
     </a>
@@ -31,24 +32,33 @@ function LinkExterno({ href, children }) {
 
 export default function Footer() {
   return (
-    <footer className="mt-16 border-t border-borda bg-noite-900">
-      <div className="mx-auto flex max-w-6xl flex-col gap-4 px-4 py-8 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <p className="font-titulo text-xl font-semibold text-gelo-50">
-            Vê de longe. Só obedece de perto.
-          </p>
-          <p className="mt-1 font-mono text-sm text-gelo-300">
+    <footer className="border-t border-borda bg-noite-900">
+      <div className="mx-auto grid max-w-6xl gap-10 px-4 py-12 md:grid-cols-2">
+        <div className="flex flex-col gap-4">
+          <Logo variante="compacta" />
+          <p className="max-w-sm text-gelo-300">Vê de longe. Só obedece de perto.</p>
+          <p className="text-sm text-gelo-300">
             {NOME_PRODUTO} · Nexus Dev · GS 2026.2
           </p>
         </div>
-        <ul className="flex flex-wrap gap-x-6">
-          <li>
-            <LinkExterno href={REPOSITORIO_EDGE}>Repositório do Edge</LinkExterno>
-          </li>
-          <li>
-            <LinkExterno href={WOKWI}>Simulação no Wokwi</LinkExterno>
-          </li>
-        </ul>
+        <div className="grid grid-cols-2 gap-6">
+          <nav aria-label="Páginas do site">
+            <p className="mb-2 font-semibold text-gelo-50">Site</p>
+            <ul>
+              <li><Link to="/emulador" className={CLASSE_LINK}>Emulador</Link></li>
+              <li><Link to="/noticias" className={CLASSE_LINK}>Notícias</Link></li>
+              <li><Link to="/como-funciona" className={CLASSE_LINK}>Como funciona</Link></li>
+              <li><Link to="/nexus-dev" className={CLASSE_LINK}>Nexus Dev</Link></li>
+            </ul>
+          </nav>
+          <div>
+            <p className="mb-2 font-semibold text-gelo-50">Projeto</p>
+            <ul>
+              <li><LinkExterno href={REPOSITORIO_EDGE}>Repositório do Edge</LinkExterno></li>
+              <li><LinkExterno href={WOKWI}>Simulação no Wokwi</LinkExterno></li>
+            </ul>
+          </div>
+        </div>
       </div>
     </footer>
   )

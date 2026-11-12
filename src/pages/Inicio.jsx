@@ -9,6 +9,8 @@
  *   Nicolas Cinel — RM572940
  */
 
+import Pagina from '../components/ui/Pagina.jsx'
+
 // Página inicial PROVISÓRIA (T7): vitrine dos componentes de ui/ com os tokens.
 // O scrollytelling de verdade entra no T18.
 import BotaoLed from '../components/ui/BotaoLed.jsx'
@@ -24,7 +26,7 @@ const ESTADOS = ['NORMAL', 'ATENCAO', 'BLOQUEIO', 'CRITICO', 'FALHA_SENSOR']
 
 export default function Inicio() {
   return (
-    <div className="flex flex-col gap-10">
+    <Pagina className="flex flex-col gap-10">
       <section className="flex flex-col gap-4">
         <Rotulo>Cadeia do frio</Rotulo>
         <TituloLed nivel={1}>C-Shield</TituloLed>
@@ -69,6 +71,6 @@ export default function Inicio() {
           aoTentarDeNovo={() => {}}
         />
       </section>
-    </div>
+    </Pagina>
   )
 }

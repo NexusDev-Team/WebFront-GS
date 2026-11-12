@@ -9,6 +9,8 @@
  *   Nicolas Cinel — RM572940
  */
 
+import Pagina from '../components/ui/Pagina.jsx'
+
 // Página Notícias: POR QUE o C-Shield existe. Uma capa no estilo de portal, a grade das outras
 // matérias, a linha do tempo do caso e a chamada para o emulador. O conteúdo é fixo (src/content)
 // e cada cartão leva à matéria original.
@@ -25,10 +27,10 @@ import { noticiaDestaque, noticiasOrdenadas } from '../content/noticias.js'
 
 export default function Noticias() {
   return (
-    <div className="flex flex-col gap-12">
+    <Pagina className="flex flex-col gap-12">
       <header className="flex flex-col gap-3">
         <Rotulo>Por que o C-Shield existe</Rotulo>
-        <TituloLed nivel={1} variante="ataque">
+        <TituloLed nivel={1}>
           Por que o C-Shield existe
         </TituloLed>
         <p className="max-w-2xl text-lg text-gelo-300">
@@ -83,6 +85,6 @@ export default function Noticias() {
           Ataque uma cidade
         </BotaoLed>
       </PainelVidro>
-    </div>
+    </Pagina>
   )
 }

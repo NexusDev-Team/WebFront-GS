@@ -9,6 +9,8 @@
  *   Nicolas Cinel — RM572940
  */
 
+import Pagina from '../components/ui/Pagina.jsx'
+
 // Página Emulador: "Seja o hacker". O mapa da cidade com 5 locais, os controles de ataque, o
 // painel de instalações (o CRUD que decide quem tem o C-Shield) e, no fim, a seção do dispositivo
 // real. A página só liga as peças: o jogo vem de useCidadeSimulada e as instalações de
@@ -56,7 +58,7 @@ export default function Emulador() {
   const selecionado = LOCAIS.find((l) => l.id === selecionadoId) ?? null
 
   return (
-    <div className="flex flex-col gap-8">
+    <Pagina className="flex flex-col gap-8">
       <header className="flex flex-col gap-3">
         <Rotulo>Simulador</Rotulo>
         <TituloLed nivel={1} variante="ataque">
@@ -102,6 +104,6 @@ export default function Emulador() {
       <PainelCamara key={selecionadoId} cidade={jogo.cidade} localId={selecionadoId} aoLiberar={jogo.liberar} />
 
       <SecaoDispositivoReal />
-    </div>
+    </Pagina>
   )
 }

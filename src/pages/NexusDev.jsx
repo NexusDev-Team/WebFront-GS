@@ -9,6 +9,8 @@
  *   Nicolas Cinel — RM572940
  */
 
+import Pagina from '../components/ui/Pagina.jsx'
+
 // Página Nexus Dev: quem fez o C-Shield. Os cinco integrantes (foto, nome, função e RM), a visão
 // e a cultura da equipe e um resumo da GS 2026.2. Textos em src/content (rascunho para a
 // equipe revisar).
@@ -21,7 +23,7 @@ import { CULTURA, SOBRE_GS, VISAO } from '../content/nexusDev.js'
 
 export default function NexusDev() {
   return (
-    <div className="flex flex-col gap-12">
+    <Pagina className="flex flex-col gap-12">
       <header className="flex flex-col gap-3">
         <Rotulo>A equipe</Rotulo>
         <TituloLed nivel={1} variante="assumiu">
@@ -83,6 +85,6 @@ export default function NexusDev() {
           ))}
         </div>
       </section>
-    </div>
+    </Pagina>
   )
 }
