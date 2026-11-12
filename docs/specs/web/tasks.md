@@ -13,6 +13,14 @@ Fase A, T4 do `docs/PROMPT-WEB.md`. Cada tarefa: requisitos cobertos (W..), veri
 - **D11 — LEDs e chave do Wokwi (11/11):** os LEDs laranja (aquecedor liberado), azul (ventoinha de emergência) e verde (refrigeração do controlador) e a chave "Controlador" só existem porque o Wokwi não tem os equipamentos reais. No emulador, desenhar os equipamentos (W26a) e tratar os botões de ataque como a chave (W26b); no `/simulador-real`, derivar os relés pela regra do `decisao.h` e mostrar a posição da chave pelo setpoint (W41a); explicar a representação no `/como-funciona` e na seção do Wokwi (W26c). Afeta T8 (`cshield.js` + função pura `ventoinhaRefrigeracao`, portando `teste_ventoinha_refrigeracao_no_bloqueio`), T13, T16 e T19.
 - **D10 — repositório:** a equipe cria o repositório depois, na organização, com todos os membros já com acesso. Nada de `gh repo create` nem push por aqui; o repositório local segue só com commits até lá.
 
+### Mudanças de escopo de 11/11 (tarde), pedidas pelo usuário
+
+- **D12 — Notícias no lugar dos incidentes.** A página `/incidentes` virou `/noticias`: mostra POR QUE o C-Shield existe, com manchetes reais dos ataques aos refrigeradores na Europa, no formato de portal (capa, grade, linha do tempo). Conteúdo fixo em `src/content`; cada cartão leva à matéria original. Onde a página da fonte não abriu na conferência, o título é da equipe e a tela avisa "Título da equipe". `/incidentes` redireciona para `/noticias`.
+- **D13 — CRUD de instalações no emulador.** O CRUD exigido pela rubrica passa a ser o das **instalações do C-Shield** (recurso `instalacoes` da MockAPI: `localId`, `apelido`, `observacao`, `instaladoEm`). Instalar protege um local; editar muda apelido e observação; remover tira a proteção, mas só depois de liberar o bloqueio. Substitui o botão "Ativar C-Shield". A UBS Vila Mariana é a unidade piloto, fixa e fora da API. A faixa segura nunca é cadastro.
+- **D14 — Dispositivo real dentro do emulador.** A página `/simulador-real` saiu: virou a seção `#dispositivo-real` no fim do emulador, com um botão no topo que leva até ela. `/simulador-real` redireciona para `/emulador#dispositivo-real`. O painel ao vivo (FIWARE) entra na Fase D como parte dessa seção.
+- **D15 — Página Nexus Dev e novo nome da equipe.** Nova página `/nexus-dev`, última do menu, com foto, nome, função e RM de cada integrante, visão, cultura e "Sobre a GS". A equipe passa a se chamar **Nexus Dev** (antes, Nexus Vision) no site, nos cabeçalhos dos arquivos e nos specs. Funções, fotos e a revisão dos textos ficam com a equipe.
+- **D16 — T14 cortada.** Sem a página de incidentes, não há mais incidente automático a cada bloqueio. **W28 a W35 ficam substituídos** pelos requisitos W53 a W58 (ver `requirements.md`).
+
 ### Tabela original (referência)
 
 | # | Item | Prompt | Edge (fonte de verdade) | Recomendação |
@@ -37,11 +45,11 @@ Fase A, T4 do `docs/PROMPT-WEB.md`. Cada tarefa: requisitos cobertos (W..), veri
 
 ## Fase C — O que vale nota (até 13/11)
 
-- **T10** `services/mockapi.js` (listar com filtros, criar, atualizar, excluir; erros normalizados) + `useIncidentes()` + página `/incidentes` com IncidenteForm, IncidenteItem, FiltrosIncidentes, confirmação inline. Cobre W30–W34 (W35 se D9). Verificar: criar, filtrar, editar e excluir no navegador contra a MockAPI real; lista vazia e erro simulados.
+- **T10 (replanejada, ver D12 e D13)** `services/mockapi.js` (cliente por recurso: listar, criar, atualizar, excluir; erros normalizados) + `useInstalacoes()` + painel de instalações no emulador; a página `/noticias` no lugar de `/incidentes`. Antes: `useIncidentes()` + página `/incidentes` com IncidenteForm, IncidenteItem, FiltrosIncidentes, confirmação inline. Cobre W30–W34 (W35 se D9). Verificar: criar, filtrar, editar e excluir no navegador contra a MockAPI real; lista vazia e erro simulados.
 - **T11** `useCShield(perfil)` (ciclo com `useEffect` + intervalo, limpeza) e `useCidadeSimulada()` (usa `cidade.js`, relógio acelerado, `usePrefereMenosMovimento`). Cobre W13–W19.
 - **T12** Mapa: MapaCidade, LocalNoMapa, LinhaAtaque (rompe no escudo), LinhaDados (pulsos só para a central), Central, ControlesAtaque. Cobre W10–W18, W50.
 - **T13** PlacarComparativo e câmara por dentro: PainelCamara, Lcd16x2, LedEstado, Rele, GraficoTemperatura, BotaoSegurar + `useSegurar(ms, aoCompletar)` (mouse, toque, teclado). Cobre W19–W26, W23.
-- **T14** Incidente automático a cada novo bloqueio (`novoBloqueio` → `criar`), uma vez por bloqueio, falha silenciosa com aviso. Cobre W28, W29.
+- **T14 (cortada, ver D16)** Incidente automático a cada novo bloqueio (`novoBloqueio` → `criar`), uma vez por bloqueio, falha silenciosa com aviso. Cobre W28, W29.
 
 ## Fase D — Dispositivo real e deploy (até 14/11)
 

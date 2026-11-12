@@ -73,12 +73,12 @@ Num equipamento real esses LEDs não existem: o relé corta ou libera o aquecedo
 
 - **W27.** QUANDO a pessoa rolar até o fim do emulador, O SITE DEVE mostrar o Wokwi embutido (`https://wokwi.com/projects/480328417992209409`) ou, se o embed não funcionar, um cartão com o link em nova aba; e o botão "Abrir simulador real", que leva a `/simulador-real`.
 
-## Integração emulador → incidentes
+## Integração emulador → incidentes (SUBSTITUÍDA, ver W53 a W58)
 
 - **W28.** QUANDO um bloqueio começar no emulador, O SITE DEVE criar um incidente na API com `origem: "emulador"`, `localId`, `localNome`, `bairro`, `tipo` (`CALOR` ou `FRIO`), `motivo`, `inicio`, `tempoReacaoS`, `exposicao` e `status: "ABERTO"`, uma única vez por bloqueio.
 - **W29.** QUANDO a criação do incidente falhar, O SITE DEVE continuar o emulador normalmente e avisar de forma discreta, sem travar a tela.
 
-## Incidentes (CRUD)
+## Incidentes (CRUD) (SUBSTITUÍDO por Notícias e Instalações, ver W53 a W58)
 
 - **W30.** QUANDO a pessoa abrir `/incidentes`, O SITE DEVE listar os incidentes da API, com estados de carregando, erro (com tentar de novo) e lista vazia.
 - **W31.** QUANDO a pessoa usar os filtros, O SITE DEVE filtrar por status (`ABERTO`, `EM_ANALISE`, `RESOLVIDO`) e por tipo (`CALOR`, `FRIO`).
@@ -87,7 +87,7 @@ Num equipamento real esses LEDs não existem: o relé corta ou libera o aquecedo
 - **W34.** QUANDO a pessoa pedir para excluir, O SITE DEVE pedir confirmação na própria página (sem `confirm()`) e só então excluir na API.
 - **W35.** QUANDO o recurso `locais` existir na API, O SITE DEVE permitir cadastrar "a câmara fria do seu bairro" (nome, bairro, perfil entre os fixos) e mostrá-la no mapa.
 
-## Dispositivo real (`/simulador-real`)
+## Dispositivo real (agora a seção `#dispositivo-real` do emulador, ver W57)
 
 - **W36.** QUANDO o navegador pedir `GET /api/estado`, a função de servidor DEVE consultar o Orion (`/v2/entities/urn:ngsi-ld:CShield:001?options=keyValues`, headers `fiware-service: smart` e `fiware-servicepath: /`) usando `FIWARE_HOST` e devolver o JSON.
 - **W37.** QUANDO o navegador pedir `GET /api/historico?attr=<a>&lastN=<n>`, a função DEVE consultar o STH-Comet (porta 8666) e aceitar só `temperature`, `humidity`, `luminosity`, `state`, `blocks` e `exposure`, com `lastN` limitado; outro atributo DEVE responder 400.
@@ -118,3 +118,12 @@ Num equipamento real esses LEDs não existem: o relé corta ou libera o aquecedo
 
 - **W51.** O código DEVE separar regra (`src/domain`, testada no Vitest com os casos de `test_decisao.cpp`), acesso a dados (`src/services`) e apresentação (`src/components`), com pelo menos 8 componentes e 2 hooks personalizados.
 - **W52.** O repositório DEVE ter `README.md` (Ficha CitizenTech igual à do Edge), `AI.md` com os 5 itens, `.env.example` sem valores e nenhum segredo ou IP no código.
+
+## Mudanças de 11/11 (tarde): notícias, instalações, dispositivo real e Nexus Dev
+
+- **W53.** QUANDO a pessoa abrir `/noticias`, O SITE DEVE mostrar as manchetes reais dos ataques aos refrigeradores na Europa (capa, grade e linha do tempo), cada uma com o veículo, a data, a manchete, um resumo da equipe e o link "Ler na fonte" em nova aba; QUANDO o título não foi conferido na página da fonte, DEVE dizer "Título da equipe". `/incidentes` DEVE redirecionar para `/noticias`.
+- **W54.** QUANDO a pessoa abrir o emulador, O SITE DEVE mostrar o painel "Instalações do C-Shield" com os 5 locais, e QUANDO a pessoa instalar, editar ou remover, DEVE gravar na API externa (recurso `instalacoes`) e o mapa DEVE refletir a proteção na hora; sem a API, o jogo DEVE seguir só com a unidade piloto e mostrar o erro com "Tentar de novo".
+- **W55.** QUANDO um local estiver com o ataque bloqueado, O SITE NÃO DEVE permitir remover o C-Shield dele, e DEVE dizer "Libere o bloqueio no local primeiro."; a unidade piloto NUNCA DEVE sair.
+- **W56.** QUANDO a pessoa remover, DEVE confirmar na própria página (sem `confirm()`); a faixa segura NUNCA DEVE ser editável pela rede.
+- **W57.** QUANDO a pessoa clicar em "Ver o dispositivo real" (ou abrir `/emulador#dispositivo-real` ou o antigo `/simulador-real`), O SITE DEVE rolar até a seção "Dispositivo real" no fim do emulador, com o link do Wokwi e a frase "Nem este site consegue dar ordens ao C-Shield."
+- **W58.** QUANDO a pessoa abrir `/nexus-dev`, O SITE DEVE mostrar os 5 integrantes com foto (ou avatar com as iniciais), nome, função e RM, além da visão, da cultura e de "Sobre a GS 2026.2"; o item "Nexus Dev" DEVE ser o último do menu.
