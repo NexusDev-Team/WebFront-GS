@@ -10,11 +10,9 @@
  */
 
 /*
- * Efeitos de LED e da camada hacker + gelo (design.md §2).
- * Regra de significado: repouso = azul fraco e estável; ataque = vermelho com
- * falha; C-Shield no controle = azul forte firme.
- * Nada pisca mais de 3 vezes por segundo (W46) e tudo para com
- * prefers-reduced-motion (W47).
+ * Efeitos do visual "Glacial industrial" (design.md §1 e §2).
+ * Brilho azul só quando o C-Shield está ativo; vermelho só em ataque e alerta real.
+ * Nada pisca mais de 3 vezes por segundo (W46) e tudo para com prefers-reduced-motion (W47).
  */
 
 @layer components {
@@ -45,88 +43,26 @@
     text-shadow: 0 0 10px color-mix(in srgb, var(--color-led-forte) 45%, transparent);
   }
 
-  /* O mesmo brilho, bem fraco, para decoração. */
-  .led-fraco {
-    text-shadow: 0 0 10px color-mix(in srgb, var(--color-led-fraco) 55%, transparent);
-    opacity: 0.85;
-  }
-
-  /* O C-Shield assumiu: brilho firme, sem oscilar. */
+  /* O C-Shield assumiu: glow sóbrio e firme, sem oscilar. */
   .led-forte {
     color: var(--color-led-forte);
-    text-shadow: 0 0 12px color-mix(in srgb, var(--color-led-forte) 70%, transparent);
+    text-shadow: 0 0 24px rgba(56, 189, 248, 0.35);
   }
 
-  /* Bateria fraca. Só durante ataque. Ciclo de 1,5 s com 2 quedas = 1,33 por segundo. */
+  /* Falha de energia: só no título do emulador durante um ataque. Ciclo de 1,5 s com 2 quedas = 1,33 por segundo. */
   .led-falha {
     animation: led-falha 1.5s steps(1, end) infinite;
   }
 
-  /* Glitch de ataque: deslocamento RGB do texto, junto com led-falha. */
-  .glitch-ataque {
-    animation: glitch-ataque 1.5s steps(1, end) infinite;
-  }
-
-  /* Cursor do prompt de terminal: 1 Hz. */
-  .cursor-terminal::after {
-    content: "▌";
-    margin-left: 0.15em;
-    color: var(--color-led-forte);
-    animation: cursor-terminal 1s steps(1, end) infinite;
-  }
-
-  /* Painel de vidro com geada nos cantos e cantoneiras de HUD. Texto sempre opaco. */
+  /* Painel de vidro: fundo translúcido, borda fina e um realce interno sutil. Texto sempre opaco. */
   .painel-vidro {
     position: relative;
     background-color: var(--color-painel);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border: 1px solid var(--color-borda);
-    border-radius: 0.75rem;
-    background-image:
-      radial-gradient(circle at 0% 0%, var(--color-geada), transparent 45%),
-      radial-gradient(circle at 100% 100%, var(--color-geada), transparent 45%);
-  }
-
-  .painel-vidro::before,
-  .painel-vidro::after {
-    content: "";
-    position: absolute;
-    width: 14px;
-    height: 14px;
-    border-color: var(--color-led-fraco);
-    border-style: solid;
-    pointer-events: none;
-  }
-
-  .painel-vidro::before {
-    top: -1px;
-    left: -1px;
-    border-width: 2px 0 0 2px;
-    border-top-left-radius: 0.75rem;
-  }
-
-  .painel-vidro::after {
-    right: -1px;
-    bottom: -1px;
-    border-width: 0 2px 2px 0;
-    border-bottom-right-radius: 0.75rem;
-  }
-
-  /* Scanlines por cima do conteúdo do painel (no máximo 4%). Nunca no LCD. */
-  .scanlines {
-    background-image: repeating-linear-gradient(
-      to bottom,
-      rgba(234, 246, 255, 0.04) 0,
-      rgba(234, 246, 255, 0.04) 1px,
-      transparent 1px,
-      transparent 3px
-    );
-  }
-
-  /* Padrão hexagonal (geometria do floco de neve) a 3-4%, só em fundos grandes. */
-  .cristais {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='98' viewBox='0 0 56 98' fill='none' stroke='%237dd3fc' stroke-opacity='0.04' stroke-width='1'%3E%3Cpath d='M28 2l26 15v30L28 62 2 47V17z'/%3E%3Cpath d='M28 62v34M2 47l-0 0M54 47l0 0'/%3E%3C/svg%3E");
+    border-radius: 1rem;
+    box-shadow: inset 0 1px 0 rgba(248, 250, 252, 0.04);
   }
 }
 
@@ -136,13 +72,6 @@
   46% { opacity: 1; }
   70% { opacity: 0.5; }
   76% { opacity: 1; }
-}
-
-@keyframes glitch-ataque {
-  0%, 100% { text-shadow: 2px 0 var(--color-ataque), -2px 0 var(--color-led-forte); }
-  40% { text-shadow: none; }
-  46% { text-shadow: -2px 0 var(--color-ataque), 2px 0 var(--color-led-forte); }
-  70% { text-shadow: none; }
 }
 
 /* Faíscas da ilustração: pulso suave de opacidade, 0,8 Hz (nunca perto de 3 por segundo). */
@@ -164,12 +93,7 @@
   to { stroke-dashoffset: -24; }
 }
 
-@keyframes cursor-terminal {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
-}
-
-/* Sem movimento: nada anima, o glitch vira uma troca estática de cor (W47). */
+/* Sem movimento: nada anima (W47). */
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -179,14 +103,8 @@
   .faisca-pulsa,
   .led-pisca,
   .gira,
-  .linha-fluxo,
-  .glitch-ataque,
-  .cursor-terminal::after {
+  .linha-fluxo {
     animation: none;
   }
 
-  .glitch-ataque {
-    color: var(--color-ataque);
-    text-shadow: none;
-  }
 }

@@ -17,7 +17,7 @@ import IlustracaoGeladeira from './IlustracaoGeladeira.jsx'
 
 export default function ManchetePrincipal({ noticia: n }) {
   return (
-    <PainelVidro as="article" scanlines className="grid gap-6 p-5 sm:p-8 md:grid-cols-[1.4fr_1fr] md:items-center">
+    <PainelVidro as="article" className="grid gap-6 p-5 sm:p-8 md:grid-cols-[1.4fr_1fr] md:items-center">
       <div className="flex flex-col gap-4">
         <p className="font-mono text-sm text-gelo-300">
           <span className="font-semibold text-ataque">MANCHETE</span>

@@ -34,7 +34,7 @@ export default function Inicio() {
 
       <section className="flex flex-col gap-4">
         <TituloLed nivel={2}>Títulos</TituloLed>
-        <PainelVidro scanlines className="flex flex-col gap-3 p-5">
+        <PainelVidro className="flex flex-col gap-3 p-5">
           <TituloLed nivel={3} variante="repouso">Repouso: azul suave e estável</TituloLed>
           <TituloLed nivel={3} variante="ataque">Ataque: falha e glitch</TituloLed>
           <TituloLed nivel={3} variante="assumiu">O C-Shield assumiu</TituloLed>

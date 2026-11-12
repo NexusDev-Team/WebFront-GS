@@ -50,7 +50,7 @@ export default function NexusDev() {
         <TituloLed nivel={2}>
           <span id="visao">Nossa visão</span>
         </TituloLed>
-        <PainelVidro scanlines className="p-6 sm:p-8">
+        <PainelVidro className="p-6 sm:p-8">
           <p className="max-w-3xl text-xl leading-relaxed text-gelo-50">{VISAO}</p>
         </PainelVidro>
       </section>

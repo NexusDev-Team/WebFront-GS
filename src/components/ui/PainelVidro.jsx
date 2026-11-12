@@ -9,15 +9,14 @@
  *   Nicolas Cinel — RM572940
  */
 
-// Painel translúcido com geada nos cantos. Só o fundo é translúcido: o texto é opaco (W45).
+// Painel de vidro: fundo translúcido com borda fina. Só o fundo é translúcido: o texto é opaco (W45).
 export default function PainelVidro({
   as: Tag = 'div',
-  scanlines = false,
   className = '',
   children,
   ...resto
 }) {
-  const classes = ['painel-vidro', scanlines ? 'scanlines' : '', className].filter(Boolean).join(' ')
+  const classes = ['painel-vidro', className].filter(Boolean).join(' ')
   return (
     <Tag className={classes} {...resto}>
       {children}
