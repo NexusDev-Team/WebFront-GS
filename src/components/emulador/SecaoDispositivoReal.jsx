@@ -12,11 +12,10 @@
 // Seção "Dispositivo real", no fim do emulador (antes era a página /simulador-real). Por enquanto
 // traz o cartão do Wokwi (o aparelho de verdade rodando) e a frase do produto; o painel ao vivo,
 // que lê o FIWARE, entra na etapa do dispositivo real. Aqui nada envia ordem ao C-Shield.
+import { URL_WOKWI } from '../../content/links.js'
 import BotaoLed from '../ui/BotaoLed.jsx'
 import PainelVidro from '../ui/PainelVidro.jsx'
 import TituloLed from '../ui/TituloLed.jsx'
-
-export const URL_WOKWI = 'https://wokwi.com/projects/480328417992209409'
 
 export default function SecaoDispositivoReal() {
   return (

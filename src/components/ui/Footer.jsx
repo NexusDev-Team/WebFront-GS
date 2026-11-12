@@ -10,14 +10,12 @@
  */
 
 import { Link } from 'react-router-dom'
+import { URL_REPOSITORIO_EDGE, URL_WOKWI } from '../../content/links.js'
 import { NOME_PRODUTO } from '../../domain/produto.js'
 import Logo from './Logo.jsx'
 
 // Rodapé em duas colunas: a marca com a frase do produto e os links do site e do projeto.
 // O repositório do Edge e o Wokwi são a fonte de verdade do dispositivo.
-const REPOSITORIO_EDGE = 'https://github.com/NexusDev-Team/C-Shield-Edge'
-const WOKWI = 'https://wokwi.com/projects/480328417992209409'
-
 const CLASSE_LINK =
   'inline-flex min-h-11 items-center text-gelo-300 underline-offset-4 transition-colors hover:text-gelo-50 hover:underline'
 
@@ -54,8 +52,8 @@ export default function Footer() {
           <div>
             <p className="mb-2 font-semibold text-gelo-50">Projeto</p>
             <ul>
-              <li><LinkExterno href={REPOSITORIO_EDGE}>Repositório do Edge</LinkExterno></li>
-              <li><LinkExterno href={WOKWI}>Simulação no Wokwi</LinkExterno></li>
+              <li><LinkExterno href={URL_REPOSITORIO_EDGE}>Repositório do Edge</LinkExterno></li>
+              <li><LinkExterno href={URL_WOKWI}>Simulação no Wokwi</LinkExterno></li>
             </ul>
           </div>
         </div>
