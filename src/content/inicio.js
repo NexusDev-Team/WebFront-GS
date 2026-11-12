@@ -30,6 +30,18 @@ export const BANNER = {
   },
 }
 
+// A câmara simulada da demonstração (monitoramento e painel da página inicial): uma câmara de
+// congelados perto de -19,2 °C, variando até 1,2 °C. São dados fictícios, gerados no navegador
+// (domain/serieDemo.js); a página diz isso na tela.
+export const DEMO = {
+  perfil: 'CONGELADO',
+  titulo: 'Câmara de congelados',
+  base: -19.2,
+  amplitude: 1.2,
+  semente: 7,
+  n: 24,
+}
+
 export const PROBLEMA = {
   titulo: 'Invadiram o frio pela internet',
   texto:
