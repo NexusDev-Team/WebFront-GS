@@ -9,14 +9,21 @@
  *   Nicolas Cinel — RM572940
  */
 
-import Pagina from '../components/ui/Pagina.jsx'
 
-// Página ComoFunciona (provisória, T6).
+// Página Como funciona. Ainda é provisória: o conteúdo (os 4 verbos, os 5 estados, a arquitetura
+// em uma direção e a explicação dos LEDs do Wokwi) entra na tarefa T19.
+import Pagina from '../components/ui/Pagina.jsx'
+import Rotulo from '../components/ui/Rotulo.jsx'
+import TituloLed from '../components/ui/TituloLed.jsx'
+
 export default function ComoFunciona() {
   return (
-    <Pagina as="section">
-      <h1>Como funciona</h1>
-      <p>Medir, decidir, assumir, alertar (em construção).</p>
+    <Pagina as="section" className="flex flex-col gap-4">
+      <Rotulo>O dispositivo</Rotulo>
+      <TituloLed nivel={1}>Como funciona</TituloLed>
+      <p className="max-w-prose text-lg text-gelo-300">
+        Medir, decidir, assumir e alertar. Esta página está em construção.
+      </p>
     </Pagina>
   )
 }
