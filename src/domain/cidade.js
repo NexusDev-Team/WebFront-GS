@@ -108,6 +108,17 @@ export function atacar(cidade, localId, tipo, agoraRealMs) {
   return nova
 }
 
+// Para o ataque: desfaz a ordem do atacante em todos os locais. A câmara volta aos poucos para a
+// faixa e o aviso de ataque coordenado some. NÃO solta o bloqueio de quem tem C-Shield (isso só
+// acontece presencialmente, no botão de segurar) e não apaga a exposição já acumulada.
+export function pararAtaques(cidade) {
+  const nova = structuredClone(cidade)
+  for (const local of Object.values(nova.locais)) local.ordem = 'NORMAL'
+  nova.ataquesRecentes = []
+  nova.coordenado = null
+  return nova
+}
+
 // ---------------------------------------------------------------------------
 // Passo do tempo
 // ---------------------------------------------------------------------------
