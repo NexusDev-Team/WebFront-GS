@@ -17,11 +17,14 @@
  */
 
 // Erro com mensagem pronta para mostrar. status 0 = não chegou a falar com a API.
+// `codigo` diz de onde veio o erro sem depender do texto da mensagem: SEM_URL (a API não está
+// configurada neste ambiente), REDE (sem conexão) ou HTTP (a API respondeu com erro).
 export class ErroApi extends Error {
-  constructor(mensagem, status = 0) {
+  constructor(mensagem, status = 0, codigo = 'HTTP') {
     super(mensagem)
     this.name = 'ErroApi'
     this.status = status
+    this.codigo = codigo
   }
 }
 
@@ -37,7 +40,7 @@ export function criarCliente(baseUrl, recurso, { fetchImpl = (...args) => fetch(
   // Faz a chamada e normaliza os erros. Devolve a resposta HTTP já conferida (ok) ou a de 404
   // quando `aceita404` (a MockAPI responde 404 a uma busca sem resultado).
   async function chamar(caminho, opcoes = {}, { aceita404 = false } = {}) {
-    if (!base) throw new ErroApi(MSG_SEM_URL)
+    if (!base) throw new ErroApi(MSG_SEM_URL, 0, 'SEM_URL')
     let resp
     try {
       resp = await fetchImpl(`${base}/${recurso}${caminho}`, {
@@ -46,7 +49,7 @@ export function criarCliente(baseUrl, recurso, { fetchImpl = (...args) => fetch(
         headers: { 'Content-Type': 'application/json', ...opcoes.headers },
       })
     } catch {
-      throw new ErroApi(MSG_REDE)
+      throw new ErroApi(MSG_REDE, 0, 'REDE')
     }
     if (!resp.ok && !(aceita404 && resp.status === 404)) {
       throw new ErroApi(`A API respondeu com erro (${resp.status}).`, resp.status)
