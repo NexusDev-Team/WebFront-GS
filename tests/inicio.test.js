@@ -11,7 +11,8 @@
 
 // Conteúdo da página inicial: banner, problema (três números com fonte) e solução (quatro passos).
 import { describe, expect, it } from 'vitest'
-import { BANNER, PROBLEMA, SOLUCAO, fonteDoFato } from '../src/content/inicio.js'
+import { BANNER, DEMO, PROBLEMA, SOLUCAO, fonteDoFato } from '../src/content/inicio.js'
+import { PERFIS_FIRMWARE } from '../src/domain/perfis.js'
 
 const TEXTOS = JSON.stringify({ BANNER, PROBLEMA, SOLUCAO })
 
@@ -74,5 +75,21 @@ describe('textos da página inicial', () => {
   it('nunca dizem que o C-Shield recebe comandos pela rede (W43)', () => {
     expect(TEXTOS).not.toMatch(/recebe (comandos|ordens) pela rede(?!\.)/i)
     expect(SOLUCAO.texto).toMatch(/nenhum comando pela rede/i)
+  })
+})
+
+describe('DEMO (a câmara simulada da demonstração)', () => {
+  it('usa um perfil que existe no firmware e uma série curta o bastante para o gráfico', () => {
+    expect(PERFIS_FIRMWARE[DEMO.perfil]).toBeDefined()
+    expect(DEMO.n).toBeGreaterThanOrEqual(12)
+    expect(DEMO.n).toBeLessThanOrEqual(40)
+  })
+  it('a variação cabe inteira na faixa segura do perfil, para o estado "estabilizado" ser verdadeiro', () => {
+    const { tMin, tMax } = PERFIS_FIRMWARE[DEMO.perfil]
+    expect(DEMO.base + DEMO.amplitude).toBeLessThanOrEqual(tMax)
+    expect(DEMO.base - DEMO.amplitude).toBeGreaterThanOrEqual(tMin)
+  })
+  it('tem um título para o cartão de leitura', () => {
+    expect(DEMO.titulo.length).toBeGreaterThan(5)
   })
 })
