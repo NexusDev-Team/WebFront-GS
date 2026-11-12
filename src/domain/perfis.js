@@ -26,6 +26,14 @@ export const PERFIS_FIRMWARE = {
   PLASMA: { id: 'PLASMA', nome: 'Plasma', tMin: -40, tMax: -25, tAlvo: -30, tolerancia: 1 },
 }
 
+// A faixa como aparece na tela. Nos produtos congelados (máximo abaixo de zero) o mínimo do perfil
+// é só o piso prático do sensor, e frio extra não estraga: a regra real é "no máximo tMax". Por
+// isso o mínimo vem nulo ali, e quem desenha mostra "até X °C". Em vacina e resfriado vale a faixa
+// inteira.
+export function faixaParaMostrar({ tMin, tMax }) {
+  return { minimo: tMax < 0 ? null : tMin, maximo: tMax }
+}
+
 // Perfil ativo do firmware (PERFIL_ATIVO em config.h): vacina.
 export const PERFIL_ATIVO = 'VACINA'
 
