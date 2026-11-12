@@ -93,3 +93,51 @@ export function caminhoArea(pontosXY, baseY) {
   const primeiro = pontosXY[0]
   return `${curva} L ${f(ultimo.x)} ${f(baseY)} L ${f(primeiro.x)} ${f(baseY)} Z`
 }
+
+const MARGEM_SERIE = { esq: 44, dir: 12, topo: 12, base: 28 }
+const PASSOS_REDONDOS = [0.5, 1, 2, 5, 10, 20, 50]
+
+// O menor passo "redondo" (0,5 · 1 · 2 · 5 · 10...) que deixa a escala com no máximo 4 intervalos.
+function passoRedondo(amplitude) {
+  return PASSOS_REDONDOS.find((passo) => amplitude / passo <= 4) ?? 100
+}
+
+// Escala do gráfico de área da página inicial: leituras viram pontos do SVG, e o eixo vertical
+// ganha marcas redondas que cobrem a série (e a linha de limite, se houver). Função pura; quem
+// desenha é components/graficos/GraficoArea.jsx.
+//   temperaturas  [número]  as leituras, da mais antiga à mais nova;
+//   geo           { largura, altura } do SVG, em pixels;
+//   opcoes.limite número opcional (uma linha de referência que precisa caber no gráfico).
+// Devolve { pontos: [{x, y}], marcas: [{valor, y}], yDe(valor), area, baseY }.
+export function escalarSerie(temperaturas, { largura, altura }, { limite = null } = {}) {
+  const area = {
+    x: MARGEM_SERIE.esq,
+    y: MARGEM_SERIE.topo,
+    largura: largura - MARGEM_SERIE.esq - MARGEM_SERIE.dir,
+    altura: altura - MARGEM_SERIE.topo - MARGEM_SERIE.base,
+  }
+
+  const valores = limite === null ? temperaturas : [...temperaturas, limite]
+  const menor = Math.min(...valores)
+  const maior = Math.max(...valores)
+  const passo = passoRedondo(maior - menor || 1)
+  const baixo = Math.floor(menor / passo) * passo
+  let alto = Math.ceil(maior / passo) * passo
+  if (alto === baixo) alto = baixo + passo
+
+  const yDe = (valor) => area.y + ((alto - valor) / (alto - baixo)) * area.altura
+
+  const marcas = []
+  for (let v = baixo; v <= alto + 1e-9; v += passo) {
+    const valor = Number(v.toFixed(6))
+    marcas.push({ valor, y: yDe(valor) })
+  }
+
+  const n = temperaturas.length
+  const pontos = temperaturas.map((temperatura, i) => ({
+    x: n === 1 ? area.x + area.largura / 2 : area.x + (i / (n - 1)) * area.largura,
+    y: yDe(temperatura),
+  }))
+
+  return { pontos, marcas, yDe, area, baseY: area.y + area.altura }
+}
