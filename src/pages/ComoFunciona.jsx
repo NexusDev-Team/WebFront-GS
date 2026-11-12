@@ -9,21 +9,41 @@
  *   Nicolas Cinel — RM572940
  */
 
-
-// Página Como funciona. Ainda é provisória: o conteúdo (os 4 verbos, os 5 estados, a arquitetura
-// em uma direção e a explicação dos LEDs do Wokwi) entra na tarefa T19.
-import Pagina from '../components/ui/Pagina.jsx'
+// Página Como funciona (W44, W26c): o ciclo de proteção, a arquitetura em uma direção, os cinco
+// estados, as faixas seguras, a explicação dos LEDs do Wokwi e de onde vem a ideia. O texto fica
+// em content/comoFunciona.js; a página só liga as seções.
+import SecaoArquitetura from '../components/comoFunciona/SecaoArquitetura.jsx'
+import SecaoCiclo from '../components/comoFunciona/SecaoCiclo.jsx'
+import SecaoEstados from '../components/comoFunciona/SecaoEstados.jsx'
+import SecaoFaixas from '../components/comoFunciona/SecaoFaixas.jsx'
+import SecaoOrigem from '../components/comoFunciona/SecaoOrigem.jsx'
+import SecaoWokwi from '../components/comoFunciona/SecaoWokwi.jsx'
 import Rotulo from '../components/ui/Rotulo.jsx'
 import TituloLed from '../components/ui/TituloLed.jsx'
+import {
+  ARQUITETURA,
+  CABECALHO,
+  CICLO,
+  ESTADOS_DA_PAGINA,
+  FAIXAS,
+  ORIGEM,
+  WOKWI,
+} from '../content/comoFunciona.js'
 
 export default function ComoFunciona() {
   return (
-    <Pagina as="section" className="flex flex-col gap-4">
-      <Rotulo>O dispositivo</Rotulo>
-      <TituloLed nivel={1}>Como funciona</TituloLed>
-      <p className="max-w-prose text-lg text-gelo-300">
-        Medir, decidir, assumir e alertar. Esta página está em construção.
-      </p>
-    </Pagina>
+    <>
+      <header className="mx-auto flex max-w-6xl flex-col gap-4 px-4 pt-16 pb-6 sm:pt-20">
+        <Rotulo>{CABECALHO.rotulo}</Rotulo>
+        <TituloLed nivel={1}>{CABECALHO.titulo}</TituloLed>
+        <p className="max-w-2xl text-lg text-gelo-300 sm:text-xl">{CABECALHO.subtitulo}</p>
+      </header>
+      <SecaoCiclo conteudo={CICLO} />
+      <SecaoArquitetura conteudo={ARQUITETURA} />
+      <SecaoEstados estados={ESTADOS_DA_PAGINA} />
+      <SecaoFaixas conteudo={FAIXAS} />
+      <SecaoWokwi conteudo={WOKWI} />
+      <SecaoOrigem conteudo={ORIGEM} />
+    </>
   )
 }
