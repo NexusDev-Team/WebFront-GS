@@ -66,6 +66,30 @@ export const PROBLEMA = {
   link: { rotulo: 'Ver as notícias', para: '/noticias' },
 }
 
+// O painel do C-Shield: o que o aparelho mostra no local e envia à central. Tudo aqui é leitura. Os
+// relés aparecem como indicadores (nome e estado em texto), e nada na página manda ordem ao
+// aparelho (W43). Os números de alerta são da demonstração, e o texto diz isso.
+export const PAINEL = {
+  titulo: 'Painel do C-Shield',
+  subtitulo: 'O que o aparelho mostra no local e envia à central. Nada aqui manda ordens a ele.',
+  display: { titulo: 'Display C-Shield', modo: 'Ativo', legendaAlvo: 'Temp. alvo' },
+  alertas: {
+    titulo: 'Alertas',
+    texto: 'Ordens perigosas barradas hoje: 0. Último bloqueio: nenhum.',
+    aviso: 'Valores da demonstração.',
+  },
+  variacao: { titulo: 'Variação no período mostrado' },
+  faixa: { rotulo: 'Faixa segura · gravada no dispositivo', para: '/como-funciona#faixas' },
+  historico: {
+    titulo: 'Histórico térmico',
+    reles: [
+      { nome: 'Ventoinha de emergência', estado: 'desligada', ligado: false },
+      { nome: 'Aquecedor', estado: 'liberado', ligado: true },
+    ],
+    nota: 'Os relés só mudam pelo próprio C-Shield.',
+  },
+}
+
 export const SOLUCAO = {
   titulo: 'Vê de longe. Só obedece de perto.',
   texto:
