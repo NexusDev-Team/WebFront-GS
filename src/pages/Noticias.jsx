@@ -10,9 +10,11 @@
  */
 
 // Página Notícias: POR QUE o C-Shield existe. Uma capa no estilo de portal, a grade das outras
-// matérias, a linha do tempo do caso e a chamada para o emulador. O conteúdo é fixo (src/content)
+// matérias, a linha do tempo do caso, a seção "E na sua cidade?" (cadastro de câmaras do bairro,
+// o CRUD em API externa) e a chamada para o emulador. O conteúdo é fixo (src/content)
 // e cada cartão leva à matéria original.
 import { Link } from 'react-router-dom'
+import SecaoSuaCidade from '../components/camaras/SecaoSuaCidade.jsx'
 import CartaoNoticia from '../components/noticias/CartaoNoticia.jsx'
 import LinhaDoTempo from '../components/noticias/LinhaDoTempo.jsx'
 import ManchetePrincipal from '../components/noticias/ManchetePrincipal.jsx'
@@ -69,6 +71,8 @@ export default function Noticias() {
         </TituloLed>
         <LinhaDoTempo eventos={LINHA_DO_TEMPO} />
       </section>
+
+      <SecaoSuaCidade />
 
       <PainelVidro as="section" aria-labelledby="chamada" className="flex flex-col items-start gap-4 p-6 sm:p-8">
         <TituloLed nivel={2} variante="assumiu">
