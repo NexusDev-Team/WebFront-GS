@@ -35,6 +35,11 @@
   --color-lcd-fundo: #0b1a2e;
   --color-lcd-texto: #7dd3fc;
 
+  /* Pílula de estado "estabilizado" (verde-menta) e fundo dos alertas, como no mockup. */
+  --color-menta: #bbf7d0;
+  --color-menta-texto: #052e16;
+  --color-alerta-fundo: rgba(239, 68, 68, 0.12);
+
   --font-titulo: "Plus Jakarta Sans", system-ui, sans-serif;
   --font-texto: "Inter", system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, monospace;

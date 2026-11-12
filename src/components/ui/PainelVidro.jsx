@@ -9,14 +9,15 @@
  *   Nicolas Cinel — RM572940
  */
 
-// Painel de vidro: fundo translúcido com borda fina. Só o fundo é translúcido: o texto é opaco (W45).
+// Cartão padrão do site (classe .cartao): degradê sutil, borda fina e sombra funda, como no mockup.
+// O nome ficou PainelVidro por compatibilidade; o texto é sempre opaco (W45).
 export default function PainelVidro({
   as: Tag = 'div',
   className = '',
   children,
   ...resto
 }) {
-  const classes = ['painel-vidro', className].filter(Boolean).join(' ')
+  const classes = ['cartao', className].filter(Boolean).join(' ')
   return (
     <Tag className={classes} {...resto}>
       {children}
