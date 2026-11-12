@@ -119,23 +119,15 @@ describe('ações', () => {
     act(() => result.current.remover('ubs-brasilandia'))
     expect(result.current.cidade.locais['ubs-brasilandia'].protegido).toBe(false)
   })
-  it('sincronizar põe a proteção de acordo com as instalações cadastradas', () => {
+  it('recomeçar zera o jogo inteiro, inclusive o C-Shield ativado nos locais', () => {
     const { result } = renderHook(() => useCidadeSimulada())
-    act(() => result.current.sincronizar(['farmacia-mooca']))
-    expect(result.current.cidade.locais['farmacia-mooca'].protegido).toBe(true)
-    expect(result.current.cidade.locais['ubs-vila-mariana'].protegido).toBe(true)
-    act(() => result.current.sincronizar([]))
-    expect(result.current.cidade.locais['farmacia-mooca'].protegido).toBe(false)
-    expect(result.current.cidade.locais['ubs-vila-mariana'].protegido).toBe(true)
-  })
-  it('recomeçar zera o jogo, mas mantém a proteção das instalações cadastradas', () => {
-    const { result } = renderHook(() => useCidadeSimulada())
-    act(() => result.current.sincronizar(['farmacia-mooca']))
+    act(() => result.current.instalar('farmacia-mooca'))
     act(() => result.current.atacar('farmacia-mooca', 'CALOR'))
     avancar(1000)
     act(() => result.current.recomecar())
     expect(result.current.cidade.relogioSimMs).toBe(0)
-    expect(result.current.cidade.locais['farmacia-mooca'].protegido).toBe(true)
+    expect(result.current.cidade.locais['farmacia-mooca'].protegido).toBe(false)
+    expect(result.current.cidade.locais['ubs-vila-mariana'].protegido).toBe(true)
     expect(sit(result, 'farmacia-mooca')).toBe('NORMAL')
   })
   it('parar o ataque desfaz as ordens, mas o jogo continua e o bloqueio fica', () => {
