@@ -22,7 +22,7 @@ import {
   recomecar,
 } from '../src/domain/cidade.js'
 import { instalarCShield, removerCShield, sincronizarProtecao } from '../src/domain/cidade-protecao.js'
-import { PERCEPCAO_SEM_CSHIELD_MIN, formatarReacao, placar, situacao } from '../src/domain/cidade-placar.js'
+import { PERCEPCAO_SEM_CSHIELD_MIN, algumSobAtaque, formatarReacao, placar, situacao } from '../src/domain/cidade-placar.js'
 import { PERFIS_EMULADOR } from '../src/domain/perfis.js'
 
 describe('LOCAIS', () => {
@@ -286,6 +286,26 @@ describe('situacao (W17)', () => {
   it('local atacado com C-Shield está com o ATAQUE_BLOQUEADO', () => {
     const c = avancar(atacar(criarCidade(), 'ubs-vila-mariana', 'CALOR', 0), 1)
     expect(sit(c, 'ubs-vila-mariana')).toBe('ATAQUE_BLOQUEADO')
+  })
+})
+
+describe('algumSobAtaque (título do emulador em vermelho só durante um ataque)', () => {
+  it('cidade sem ataque: nenhum local sob ataque', () => {
+    expect(algumSobAtaque(criarCidade())).toBe(false)
+    expect(algumSobAtaque(avancar(criarCidade(), 2))).toBe(false)
+  })
+  it('um local desprotegido atacado: há local sob ataque', () => {
+    const c = avancar(atacar(criarCidade(), 'ubs-brasilandia', 'CALOR', 0), 2)
+    expect(algumSobAtaque(c)).toBe(true)
+  })
+  it('atacado mas com C-Shield (ataque bloqueado): não conta como sob ataque', () => {
+    const c = avancar(atacar(criarCidade(), 'ubs-vila-mariana', 'CALOR', 0), 1)
+    expect(algumSobAtaque(c)).toBe(false)
+  })
+  it('depois de recomeçar, volta a falso', () => {
+    const c = avancar(atacar(criarCidade(), 'farmacia-mooca', 'FRIO', 0), 2)
+    expect(algumSobAtaque(c)).toBe(true)
+    expect(algumSobAtaque(recomecar())).toBe(false)
   })
 })
 
