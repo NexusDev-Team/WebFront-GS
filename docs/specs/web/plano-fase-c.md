@@ -1,3 +1,13 @@
+> **Atualização de 12/11 (fim do dia): estado real da Fase C.** O plano abaixo foi escrito em 11/11 e mudou duas vezes depois, por pedido do usuário. Vale o que está aqui.
+>
+> - **Notícias no lugar dos incidentes** (D12): `/noticias`, com as manchetes reais dos ataques na Europa.
+> - **O CRUD em API externa não é mais o de incidentes nem o de instalações** (D13 foi substituída pela D17). Ele é o cadastro **"E na sua cidade?"**, no fim de `/noticias`: câmaras do bairro (`nome`, `bairro`, `tipo`, `observacao`, `cadastradoEm`), com cadastrar, listar com filtro por tipo, editar e excluir.
+> - **O emulador não usa nenhuma API.** Ativar e desativar o C-Shield num local é uma ação do jogo (sem apelido); "Recomeçar" zera tudo. A T14 (incidente automático) foi cortada.
+> - **Dispositivo real** virou a seção `#dispositivo-real` do emulador; **Nexus Dev** é a última página do menu.
+> - **MockAPI criada e testada** (12/11): recurso `camaras` no projeto `cshield`; a URL base fica no `.env` local (`VITE_MOCKAPI_URL`, ignorado pelo Git) e deve ser repetida nas variáveis de ambiente da Vercel no deploy (T17). Cadastro, edição, filtro e exclusão foram conferidos pelo site contra a API real.
+> - **Pendências da equipe:** a função e a foto de cada integrante (`public/equipe/`), a revisão dos textos de visão e cultura (`src/content/nexusDev.js`) e a conferência dos títulos marcados "Título da equipe" (g1, The Guardian e Food Safety Magazine, cujas páginas bloquearam a leitura automática).
+> - **Próximo passo:** Fase D (T15 a T17): `api/estado.js` e `api/historico.js` (só GET), `services/fiware.js`, o painel ao vivo dentro de `#dispositivo-real` e o deploy na Vercel. Precisa de plano próprio em Opus.
+
 # Plano — Fase C revisada (11/11, tarde): notícias, CRUD de instalações, emulador e Nexus Dev
 
 ## Contexto
