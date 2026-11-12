@@ -17,3 +17,8 @@ export function formatarDataHora(texto) {
   if (Number.isNaN(data.getTime())) return String(texto ?? '')
   return data.toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' })
 }
+
+// Temperatura com uma casa decimal e vírgula, como se escreve em pt-BR: -19,2.
+export function formatarGraus(n) {
+  return n.toLocaleString('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 1 })
+}

@@ -15,8 +15,7 @@
 import { formatarReacao } from '../../domain/cidade-placar.js'
 import TituloLed from '../ui/TituloLed.jsx'
 import { COR_SITUACAO, ROTULO_SITUACAO } from './rotulos.js'
-
-const num = (n) => n.toLocaleString('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 1 })
+import { formatarGraus as num } from '../ui/formato.js'
 
 // Uma métrica: o rótulo pequeno em cima e o valor embaixo.
 function Metrica({ rotulo, children }) {

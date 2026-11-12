@@ -14,6 +14,7 @@
 // e a cor sempre vem acompanhada de texto (W49).
 import { RAIO_ESCUDO, RAIO_LOCAL } from './geometria.js'
 import { COR_SITUACAO, ROTULO_SITUACAO } from './rotulos.js'
+import { formatarGraus as graus } from '../ui/formato.js'
 
 // Ícone de cada tipo de local, desenhado em torno de (0, 0), com cerca de 30 de largura.
 const ICONES = {
@@ -24,8 +25,6 @@ const ICONES = {
     <path d="M-15 -12 H-9 L-5 8 H11 L14 -6 H-7 M-3 14 A3 3 0 1 0 -3 14.01 M9 14 A3 3 0 1 0 9 14.01" />
   ),
 }
-
-const graus = (n) => n.toLocaleString('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 1 })
 
 const HALO = { paintOrder: 'stroke', stroke: 'var(--color-noite-950)', strokeWidth: 6, strokeLinejoin: 'round' }
 

@@ -15,8 +15,7 @@
 import { LOCAIS } from '../../domain/cidade.js'
 import { situacao } from '../../domain/cidade-placar.js'
 import { COR_SITUACAO, ROTULO_SITUACAO } from './rotulos.js'
-
-const graus = (n) => n.toLocaleString('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 1 })
+import { formatarGraus as graus } from '../ui/formato.js'
 
 export default function ListaLocais({ cidade, selecionadoId, aoSelecionar }) {
   return (
