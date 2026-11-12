@@ -11,7 +11,7 @@
 
 // Conteúdo da página inicial: banner, problema (três números com fonte) e solução (quatro passos).
 import { describe, expect, it } from 'vitest'
-import { BANNER, DEMO, PROBLEMA, SOLUCAO, fonteDoFato } from '../src/content/inicio.js'
+import { BANNER, DEMO, PAINEL, PROBLEMA, SOLUCAO, fonteDoFato } from '../src/content/inicio.js'
 import { PERFIS_FIRMWARE } from '../src/domain/perfis.js'
 
 const TEXTOS = JSON.stringify({ BANNER, PROBLEMA, SOLUCAO })
@@ -91,5 +91,38 @@ describe('DEMO (a câmara simulada da demonstração)', () => {
   })
   it('tem um título para o cartão de leitura', () => {
     expect(DEMO.titulo.length).toBeGreaterThan(5)
+  })
+})
+
+describe('PAINEL (o painel do C-Shield da página inicial)', () => {
+  it('tem título, subtítulo e as partes: display, alertas, variação, link da faixa e histórico', () => {
+    expect(PAINEL.titulo).toBe('Painel do C-Shield')
+    for (const parte of ['display', 'alertas', 'variacao', 'faixa', 'historico']) {
+      expect(PAINEL[parte], parte).toBeDefined()
+    }
+    expect(PAINEL.display.titulo).toBe('Display C-Shield')
+    expect(PAINEL.display.modo).toBe('Ativo')
+  })
+  it('o subtítulo diz que nada ali manda ordens ao aparelho', () => {
+    expect(PAINEL.subtitulo).toMatch(/Nada aqui manda ordens/)
+  })
+  it('o link da faixa leva à âncora das faixas seguras do Como funciona', () => {
+    expect(PAINEL.faixa.para).toBe('/como-funciona#faixas')
+    expect(PAINEL.faixa.rotulo).toMatch(/gravada no dispositivo/)
+  })
+  it('os relés são só indicadores: cada um tem nome e estado em texto, e a nota diz quem os muda', () => {
+    expect(PAINEL.historico.reles).toHaveLength(2)
+    for (const rele of PAINEL.historico.reles) {
+      expect(rele.nome.length, rele.nome).toBeGreaterThan(5)
+      expect(rele.estado.length, rele.nome).toBeGreaterThan(3)
+      expect(typeof rele.ligado, rele.nome).toBe('boolean')
+    }
+    expect(PAINEL.historico.nota).toMatch(/só mudam pelo próprio C-Shield/)
+  })
+  it('nenhum texto sugere controle remoto, automação ou comandos pela rede (W43)', () => {
+    expect(JSON.stringify(PAINEL)).not.toMatch(/automa[cç]|controle t[eé]rmico|comando|liga(r)? o|desliga(r)? o/i)
+  })
+  it('os valores de alerta são identificados como da demonstração', () => {
+    expect(PAINEL.alertas.aviso).toMatch(/demonstra/i)
   })
 })
