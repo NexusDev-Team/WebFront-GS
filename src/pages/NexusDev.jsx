@@ -79,7 +79,7 @@ export default function NexusDev() {
         </TituloLed>
         <div className="flex max-w-3xl flex-col gap-4">
           {SOBRE_GS.map((paragrafo) => (
-            <p key={paragrafo.slice(0, 24)} className="text-lg text-gelo-50">
+            <p key={paragrafo.slice(0, 24)} className="max-w-prose text-lg text-gelo-50">
               {paragrafo}
             </p>
           ))}

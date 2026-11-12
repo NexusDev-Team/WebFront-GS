@@ -34,6 +34,11 @@
     @apply font-titulo;
   }
 
+  /* Evita a última linha de um parágrafo com uma palavra só. */
+  p {
+    text-wrap: pretty;
+  }
+
   /* Foco visível em todos os controles (W4). */
   :focus-visible {
     outline: 2px solid var(--color-led-forte);

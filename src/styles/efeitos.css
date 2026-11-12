@@ -38,10 +38,10 @@
     animation: linha-fluxo 0.7s linear infinite;
   }
 
-  /* O C-Shield assumiu: glow sóbrio e firme, sem oscilar. */
+  /* O C-Shield assumiu: o texto fica na cor da marca, firme e sem oscilar. Sem brilho no texto
+     (o detector de design aponta o brilho colorido como marca de interface genérica). */
   .led-forte {
     color: var(--color-led-forte);
-    text-shadow: 0 0 24px rgba(56, 189, 248, 0.35);
   }
 
   /* Falha de energia: só no título do emulador durante um ataque. Ciclo de 1,5 s com 2 quedas = 1,33 por segundo. */
