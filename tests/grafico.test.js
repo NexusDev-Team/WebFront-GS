@@ -11,7 +11,7 @@
 
 // Escala do gráfico de temperatura: pontos viram coordenadas, e a faixa segura vira uma região.
 import { describe, expect, it } from 'vitest'
-import { caminhoArea, caminhoSuave, escalarGrafico } from '../src/domain/grafico.js'
+import { caminhoArea, caminhoSuave, escalarGrafico, escalarSerie } from '../src/domain/grafico.js'
 
 const GEO = { largura: 400, altura: 160 }
 const FAIXA = { tMin: 2, tMax: 8 }
@@ -120,5 +120,55 @@ describe('caminhoArea (preenchimento sob a curva)', () => {
     expect(d).toContain('L 100.0 120.0')
     expect(d).toContain('L 0.0 120.0')
     expect(d.endsWith('Z')).toBe(true)
+  })
+})
+
+describe('escalarSerie (gráfico de área da página inicial)', () => {
+  const GEO = { largura: 400, altura: 200 }
+  const TEMPS = [-19.4, -18.8, -19.9, -18.3, -19.1, -20.0]
+
+  it('devolve um ponto por leitura, do começo ao fim da área', () => {
+    const g = escalarSerie(TEMPS, GEO)
+    expect(g.pontos).toHaveLength(TEMPS.length)
+    expect(g.pontos[0].x).toBeCloseTo(g.area.x, 5)
+    expect(g.pontos[TEMPS.length - 1].x).toBeCloseTo(g.area.x + g.area.largura, 5)
+  })
+  it('temperatura maior fica mais acima (y menor) e tudo cabe na área', () => {
+    const g = escalarSerie(TEMPS, GEO)
+    const maior = TEMPS.indexOf(Math.max(...TEMPS))
+    const menor = TEMPS.indexOf(Math.min(...TEMPS))
+    expect(g.pontos[maior].y).toBeLessThan(g.pontos[menor].y)
+    for (const { y } of g.pontos) {
+      expect(y).toBeGreaterThanOrEqual(g.area.y)
+      expect(y).toBeLessThanOrEqual(g.area.y + g.area.altura)
+    }
+  })
+  it('as marcas do eixo cobrem a série, em passos iguais e redondos', () => {
+    const g = escalarSerie(TEMPS, GEO)
+    const valores = g.marcas.map((m) => m.valor)
+    expect(Math.min(...valores)).toBeLessThanOrEqual(Math.min(...TEMPS))
+    expect(Math.max(...valores)).toBeGreaterThanOrEqual(Math.max(...TEMPS))
+    const passos = valores.slice(1).map((v, i) => +(v - valores[i]).toFixed(6))
+    expect(new Set(passos).size).toBe(1)
+    expect([0.5, 1, 2, 5, 10]).toContain(passos[0])
+    expect(g.marcas.length).toBeGreaterThanOrEqual(3)
+    expect(g.marcas.length).toBeLessThanOrEqual(6)
+  })
+  it('a linha de limite entra na escala', () => {
+    const g = escalarSerie(TEMPS, GEO, { limite: -15 })
+    expect(Math.max(...g.marcas.map((m) => m.valor))).toBeGreaterThanOrEqual(-15)
+    expect(g.yDe(-15)).toBeGreaterThanOrEqual(g.area.y)
+    expect(g.yDe(-15)).toBeLessThan(g.pontos[0].y)
+  })
+  it('a base do gráfico fica embaixo da área', () => {
+    const g = escalarSerie(TEMPS, GEO)
+    expect(g.baseY).toBeCloseTo(g.area.y + g.area.altura, 5)
+  })
+  it('série constante e série de um ponto só não geram NaN', () => {
+    for (const temps of [[-19, -19, -19], [-19]]) {
+      const g = escalarSerie(temps, GEO)
+      expect(JSON.stringify(g)).not.toMatch(/NaN|Infinity|null/)
+      expect(g.marcas.length).toBeGreaterThanOrEqual(2)
+    }
   })
 })
