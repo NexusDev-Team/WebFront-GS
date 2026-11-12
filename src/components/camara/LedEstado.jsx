@@ -27,7 +27,7 @@ export default function LedEstado({ cor }) {
       <span
         aria-hidden="true"
         className={`size-6 shrink-0 rounded-full ${cor === 'amarelo-pisca' ? 'led-pisca' : ''}`}
-        style={{ backgroundColor: led.cor, boxShadow: `0 0 14px ${led.cor}` }}
+        style={{ backgroundColor: led.cor, boxShadow: '0 0 0 3px rgba(248, 250, 252, 0.1), inset 0 1px 1px rgba(248, 250, 252, 0.4)' }}
       />
       <span>
         <span className="font-mono text-sm text-gelo-300">LED </span>

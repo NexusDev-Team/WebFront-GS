@@ -120,6 +120,15 @@ function DiagramaLargo() {
   )
 }
 
+// Seta para baixo entre duas caixas do desenho de celular (traço fino, como os demais ícones).
+function SetaBaixo({ className }) {
+  return (
+    <svg aria-hidden="true" viewBox="0 0 16 16" className={`size-4 ${className}`} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M8 2v11M3.5 8.5 8 13l4.5-4.5" />
+    </svg>
+  )
+}
+
 // Uma coluna do desenho para o celular: caixas empilhadas e ligadas por setas para baixo.
 function Cadeia({ titulo, nos }) {
   return (
@@ -127,7 +136,7 @@ function Cadeia({ titulo, nos }) {
       <p className="text-sm font-semibold text-gelo-300">{titulo}</p>
       {nos.map((no, indice) => (
         <div key={no.nome} className="flex flex-col items-center gap-2">
-          {indice > 0 ? <span className={no.seta ?? 'text-gelo-300'}>↓</span> : null}
+          {indice > 0 ? <SetaBaixo className={no.seta ?? 'text-gelo-300'} /> : null}
           <div
             className={`w-full rounded-xl border px-4 py-3 text-center ${
               no.destaque ? 'border-led-forte bg-led-forte/10' : 'border-borda bg-noite-900'
@@ -164,7 +173,12 @@ function DiagramaEmColunas() {
         ]}
       />
       <p className="rounded-xl border border-ataque/40 px-4 py-3 text-center text-gelo-50">
-        <span className="font-semibold text-ataque">✗ Não escuta a rede.</span> Só o botão do aparelho, segurado por
+        <span className="inline-flex items-center gap-1.5 font-semibold text-ataque">
+          <svg aria-hidden="true" viewBox="0 0 16 16" className="size-4" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round">
+            <path d="M3 3l10 10M13 3 3 13" />
+          </svg>
+          Não escuta a rede.
+        </span> Só o botão do aparelho, segurado por
         3 segundos, libera o bloqueio.
       </p>
     </div>

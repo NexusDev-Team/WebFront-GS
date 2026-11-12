@@ -35,7 +35,7 @@ export default function SecaoWokwi({ conteudo }) {
           ))}
         </ul>
 
-        <p className="max-w-3xl rounded-xl border border-borda bg-noite-900 px-5 py-4 text-gelo-50">{conteudo.nota}</p>
+        <p className="max-w-prose rounded-xl border border-borda bg-noite-900 px-5 py-4 text-gelo-50">{conteudo.nota}</p>
 
         <div className="flex flex-wrap gap-3">
           {conteudo.links.map((link, indice) => (

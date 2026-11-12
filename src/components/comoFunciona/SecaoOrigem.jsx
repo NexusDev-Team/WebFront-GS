@@ -33,7 +33,7 @@ export default function SecaoOrigem({ conteudo }) {
 
         <article className="flex flex-col gap-2 rounded-2xl border border-atencao/40 bg-atencao/5 p-6">
           <h3 className="text-lg font-bold text-gelo-50">{conteudo.limite.titulo}</h3>
-          <p className="max-w-3xl text-gelo-50">{conteudo.limite.texto}</p>
+          <p className="max-w-prose text-gelo-50">{conteudo.limite.texto}</p>
         </article>
 
         <Link

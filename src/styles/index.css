@@ -34,8 +34,9 @@
     @apply font-titulo;
   }
 
-  /* Evita a última linha de um parágrafo com uma palavra só. */
-  p {
+  /* Evita a última linha de um parágrafo ou item de lista com uma palavra só. */
+  p,
+  li {
     text-wrap: pretty;
   }
 
