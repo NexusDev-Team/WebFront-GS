@@ -44,6 +44,12 @@
     color: var(--color-led-forte);
   }
 
+  /* Linha do gráfico de área: entra desenhada uma vez, ao aparecer. Só o traço anima; depois do fim
+     a linha volta ao normal (sem tracejado), então com movimento reduzido ela já aparece inteira. */
+  .desenha {
+    animation: desenha 0.9s ease-out;
+  }
+
   /* Falha de energia: só no título do emulador durante um ataque. Ciclo de 1,5 s com 2 quedas = 1,33 por segundo. */
   .led-falha {
     animation: led-falha 1.5s steps(1, end) infinite;
@@ -90,6 +96,17 @@
   }
 }
 
+@keyframes desenha {
+  from {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 0;
+  }
+}
+
 @keyframes led-falha {
   0%, 100% { opacity: 1; }
   40% { opacity: 0.35; }
@@ -123,6 +140,7 @@
     scroll-behavior: auto;
   }
 
+  .desenha,
   .led-falha,
   .faisca-pulsa,
   .led-pisca,
