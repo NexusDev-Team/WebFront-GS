@@ -97,6 +97,7 @@ describe('erros normalizados', () => {
       await expect(chamada()).rejects.toMatchObject({
         name: 'ErroApi',
         status: 0,
+        codigo: 'SEM_URL',
         message: 'A API do C-Shield não está configurada (VITE_MOCKAPI_URL).',
       })
     }
@@ -106,12 +107,13 @@ describe('erros normalizados', () => {
     const { api } = clienteCom([new TypeError('Failed to fetch')])
     await expect(api.listar()).rejects.toMatchObject({
       status: 0,
+      codigo: 'REDE',
       message: 'Sem conexão com a API. Confira a internet e tente de novo.',
     })
   })
   it('HTTP de erro vira mensagem com o código', async () => {
     const { api } = clienteCom([resposta(500, { x: 1 }), resposta(404, 'Not found'), resposta(400, null)])
-    await expect(api.criar({})).rejects.toMatchObject({ status: 500, message: 'A API respondeu com erro (500).' })
+    await expect(api.criar({})).rejects.toMatchObject({ status: 500, codigo: 'HTTP', message: 'A API respondeu com erro (500).' })
     await expect(api.atualizar('1', {})).rejects.toMatchObject({ status: 404, message: 'A API respondeu com erro (404).' })
     await expect(api.excluir('1')).rejects.toMatchObject({ status: 400, message: 'A API respondeu com erro (400).' })
   })
@@ -120,5 +122,9 @@ describe('erros normalizados', () => {
     expect(e).toBeInstanceOf(Error)
     expect(e.status).toBe(418)
     expect(e.name).toBe('ErroApi')
+    expect(e.codigo).toBe('HTTP')
+  })
+  it('ErroApi guarda o código informado', () => {
+    expect(new ErroApi('x', 0, 'SEM_URL').codigo).toBe('SEM_URL')
   })
 })
