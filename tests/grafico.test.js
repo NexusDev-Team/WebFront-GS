@@ -11,7 +11,7 @@
 
 // Escala do gráfico de temperatura: pontos viram coordenadas, e a faixa segura vira uma região.
 import { describe, expect, it } from 'vitest'
-import { escalarGrafico } from '../src/domain/grafico.js'
+import { caminhoArea, caminhoSuave, escalarGrafico } from '../src/domain/grafico.js'
 
 const GEO = { largura: 400, altura: 160 }
 const FAIXA = { tMin: 2, tMax: 8 }
@@ -70,5 +70,55 @@ describe('escalarGrafico', () => {
   it('todos os pontos no mesmo instante não quebram a escala', () => {
     const g = escalarGrafico([pt(3, 5), pt(3, 6)], FAIXA, GEO)
     expect(g.caminho).not.toMatch(/NaN|Infinity/)
+  })
+})
+
+describe('caminhoSuave (curva do gráfico de área)', () => {
+  const P = [
+    { x: 0, y: 50 },
+    { x: 40, y: 30 },
+    { x: 80, y: 60 },
+    { x: 100, y: 20 },
+  ]
+  it('com menos de 2 pontos devolve texto vazio', () => {
+    expect(caminhoSuave([])).toBe('')
+    expect(caminhoSuave([{ x: 1, y: 2 }])).toBe('')
+  })
+  it('com 2 pontos vira uma linha reta', () => {
+    expect(caminhoSuave([{ x: 0, y: 0 }, { x: 10, y: 10 }])).toBe('M 0.0 0.0 L 10.0 10.0')
+  })
+  it('começa no primeiro ponto e termina no último', () => {
+    const d = caminhoSuave(P)
+    expect(d.startsWith('M 0.0 50.0')).toBe(true)
+    expect(d.endsWith(' 100.0 20.0')).toBe(true)
+  })
+  it('usa uma curva cúbica por trecho', () => {
+    expect(caminhoSuave(P).match(/C/g)).toHaveLength(P.length - 1)
+  })
+  it('nunca gera NaN nem Infinity, mesmo com pontos repetidos', () => {
+    const repetidos = [{ x: 0, y: 5 }, { x: 0, y: 5 }, { x: 0, y: 5 }]
+    for (const pontos of [P, repetidos]) {
+      expect(caminhoSuave(pontos)).not.toMatch(/NaN|Infinity/)
+    }
+  })
+  it('a curva passa pelos pontos (cada trecho termina num ponto)', () => {
+    const d = caminhoSuave(P)
+    for (const ponto of P.slice(1)) {
+      expect(d).toContain(` ${ponto.x.toFixed(1)} ${ponto.y.toFixed(1)}`)
+    }
+  })
+})
+
+describe('caminhoArea (preenchimento sob a curva)', () => {
+  const P = [{ x: 0, y: 50 }, { x: 50, y: 30 }, { x: 100, y: 40 }]
+  it('com menos de 2 pontos devolve texto vazio', () => {
+    expect(caminhoArea([], 100)).toBe('')
+  })
+  it('acompanha a curva e fecha pela base, do último ponto de volta ao primeiro', () => {
+    const d = caminhoArea(P, 120)
+    expect(d.startsWith(caminhoSuave(P))).toBe(true)
+    expect(d).toContain('L 100.0 120.0')
+    expect(d).toContain('L 0.0 120.0')
+    expect(d.endsWith('Z')).toBe(true)
   })
 })
