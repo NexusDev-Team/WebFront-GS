@@ -14,9 +14,11 @@ import IconePasso from './IconePasso.jsx'
 // Um passo de como o C-Shield protege. O número existe porque os passos são uma sequência real.
 export default function PassoSolucao({ numero, verbo, texto, icone }) {
   return (
-    <li className="flex flex-col gap-4 rounded-2xl border border-borda bg-noite-950 p-6">
+    <li className="cartao flex flex-col gap-4 p-6">
       <div className="flex items-center justify-between">
-        <IconePasso nome={icone} className="size-8 text-led-forte" />
+        <span className="grid size-12 place-items-center rounded-xl border border-led-forte/30 bg-linear-to-br from-led-forte/25 to-led-forte/5">
+          <IconePasso nome={icone} className="size-6 text-led-forte" />
+        </span>
         <span className="font-mono text-sm text-gelo-300" aria-hidden="true">
           {numero}
         </span>

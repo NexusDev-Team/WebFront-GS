@@ -37,7 +37,7 @@ export default function SecaoPainel({ conteudo, serie }) {
   const temperaturas = serie.map((leitura) => leitura.temperatura)
 
   return (
-    <section aria-labelledby="titulo-painel" className="border-t border-borda bg-noite-900/50 py-20 sm:py-28">
+    <section aria-labelledby="titulo-painel" className="border-t border-borda py-20 sm:py-28">
       <div className="mx-auto flex max-w-6xl flex-col gap-10 px-4">
         <TituloSecao id="titulo-painel" subtitulo={conteudo.subtitulo}>
           {conteudo.titulo}

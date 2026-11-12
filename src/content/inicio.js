@@ -127,6 +127,12 @@ export const SOLUCAO = {
   link: { rotulo: 'Entender o funcionamento', para: '/como-funciona' },
 }
 
+// A faixa final da página: o contraste que resume o projeto, e o caminho para o emulador.
+export const CHAMADA = {
+  texto: 'Na Europa, foram 3h30 até alguém perceber. Com o C-Shield, segundos.',
+  acao: { rotulo: 'Simular um ataque', para: '/emulador' },
+}
+
 // A notícia que serve de fonte a um fato do problema (veículo, data e link).
 export function fonteDoFato(fato) {
   return NOTICIAS.find((noticia) => noticia.id === fato.fonteId)

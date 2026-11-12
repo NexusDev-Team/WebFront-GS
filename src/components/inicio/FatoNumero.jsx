@@ -11,12 +11,12 @@
 
 import PainelVidro from '../ui/PainelVidro.jsx'
 
-// Um número do problema: o valor grande em fonte monoespaçada, o que ele significa e a fonte
+// Um número do problema: o valor grande (algarismos de largura fixa), o que ele significa e a fonte
 // (a notícia de onde vem, com link). `fonte` é a notícia de content/noticias.js.
 export default function FatoNumero({ valor, rotulo, fonte }) {
   return (
     <PainelVidro as="article" className="flex flex-col gap-4 p-6 sm:p-8">
-      <p className="font-mono text-5xl font-medium tracking-tight text-gelo-50 tabular-nums">{valor}</p>
+      <p className="font-titulo text-5xl font-bold tracking-tight text-gelo-50 tabular-nums">{valor}</p>
       <p className="text-gelo-300">{rotulo}</p>
       {fonte && (
         <a

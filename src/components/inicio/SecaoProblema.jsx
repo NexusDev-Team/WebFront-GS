@@ -11,20 +11,17 @@
 
 import { Link } from 'react-router-dom'
 import { fonteDoFato } from '../../content/inicio.js'
-import TituloLed from '../ui/TituloLed.jsx'
+import TituloSecao from '../ui/TituloSecao.jsx'
 import FatoNumero from './FatoNumero.jsx'
 
 // Seção "o problema": o que aconteceu na Europa, em um parágrafo e três números com fonte.
 export default function SecaoProblema({ conteudo }) {
   return (
-    <section aria-labelledby="titulo-problema" className="border-t border-borda py-20 sm:py-28">
+    <section aria-labelledby="titulo-problema" className="border-t border-borda bg-noite-900/50 py-20 sm:py-28">
       <div className="mx-auto flex max-w-6xl flex-col gap-10 px-4">
-        <div className="flex max-w-2xl flex-col gap-4">
-          <TituloLed nivel={2}>
-            <span id="titulo-problema">{conteudo.titulo}</span>
-          </TituloLed>
-          <p className="text-lg text-gelo-300">{conteudo.texto}</p>
-        </div>
+        <TituloSecao id="titulo-problema" subtitulo={conteudo.texto}>
+          {conteudo.titulo}
+        </TituloSecao>
 
         <div className="grid gap-6 md:grid-cols-3">
           {conteudo.fatos.map((fato) => (
