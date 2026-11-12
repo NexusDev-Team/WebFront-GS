@@ -17,7 +17,9 @@ import { formatarGraus } from '../ui/formato.js'
 // Gráfico de área da página inicial: a temperatura de uma câmara ao longo do tempo. SVG próprio,
 // sem biblioteca. Uma série só (o título do cartão já a nomeia, por isso sem legenda), linha fina
 // de 2 px, grade discreta e o último ponto marcado com um anel da cor do fundo. Ao passar o mouse
-// aparece a guia vertical com o valor. Quem usa leitor de tela encontra uma tabela com as mesmas
+// aparece a guia vertical com o valor. O SVG fica posicionado de forma absoluta dentro de uma caixa
+// de altura fixa: assim a largura medida vem do cartão e o desenho nunca empurra o layout. Quem usa
+// leitor de tela encontra uma tabela com as mesmas
 // leituras. A conta das coordenadas está em domain/grafico.js.
 //   temperaturas  as leituras, da mais antiga à mais nova;
 //   titulo        o que o gráfico mostra (vai no texto alternativo e na tabela);
@@ -51,7 +53,7 @@ export default function GraficoArea({ temperaturas, titulo, passoSeg = 2, limite
   const pontoAtivo = ativo === null ? null : g.pontos[ativo]
 
   return (
-    <figure ref={ref} className="relative w-full">
+    <figure ref={ref} className="relative w-full min-w-0" style={{ height: altura }}>
       <svg
         width={largura}
         height={altura}
@@ -60,7 +62,7 @@ export default function GraficoArea({ temperaturas, titulo, passoSeg = 2, limite
         aria-label={`${titulo}. Última leitura ${formatarGraus(temperaturas[n - 1])} graus, entre ${formatarGraus(menor)} e ${formatarGraus(maior)}.`}
         onPointerMove={aoMover}
         onPointerLeave={() => setAtivo(null)}
-        className="block"
+        className="absolute top-0 left-0 block"
       >
         <defs>
           <linearGradient id={idGradiente} x1="0" y1="0" x2="0" y2="1">
@@ -153,23 +155,25 @@ export default function GraficoArea({ temperaturas, titulo, passoSeg = 2, limite
         </div>
       ) : null}
 
-      <table className="sr-only">
-        <caption>{titulo}: leituras simuladas, da mais antiga à mais nova</caption>
-        <thead>
-          <tr>
-            <th scope="col">Quando</th>
-            <th scope="col">Temperatura (°C)</th>
-          </tr>
-        </thead>
-        <tbody>
-          {temperaturas.map((temperatura, indice) => (
-            <tr key={indice}>
-              <td>{quando(indice, n, passoSeg)}</td>
-              <td>{formatarGraus(temperatura)}</td>
+      <div className="sr-only">
+        <table>
+          <caption>{titulo}: leituras simuladas, da mais antiga à mais nova</caption>
+          <thead>
+            <tr>
+              <th scope="col">Quando</th>
+              <th scope="col">Temperatura (°C)</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {temperaturas.map((temperatura, indice) => (
+              <tr key={indice}>
+                <td>{quando(indice, n, passoSeg)}</td>
+                <td>{formatarGraus(temperatura)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </figure>
   )
 }

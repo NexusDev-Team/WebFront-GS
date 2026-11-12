@@ -9,14 +9,15 @@
  *   Nicolas Cinel — RM572940
  */
 
-// Página inicial: banner, monitoramento (demonstração), o problema e a solução (decisão de 12/11:
-// seguir o mockup). A leitura simulada fica aqui para as seções que a usam compartilharem os
-// mesmos números.
+// Página inicial: banner, monitoramento (demonstração), o problema, o painel do C-Shield e a
+// solução (decisão de 12/11: seguir o mockup). A leitura simulada fica aqui para as seções que
+// a usam compartilharem os mesmos números.
 import Banner from '../components/inicio/Banner.jsx'
 import SecaoMonitoramento from '../components/inicio/SecaoMonitoramento.jsx'
+import SecaoPainel from '../components/inicio/SecaoPainel.jsx'
 import SecaoProblema from '../components/inicio/SecaoProblema.jsx'
 import SecaoSolucao from '../components/inicio/SecaoSolucao.jsx'
-import { BANNER, DEMO, PROBLEMA, SOLUCAO } from '../content/inicio.js'
+import { BANNER, DEMO, PAINEL, PROBLEMA, SOLUCAO } from '../content/inicio.js'
 import { useLeituraDemo } from '../hooks/useLeituraDemo.js'
 
 export default function Inicio() {
@@ -28,6 +29,7 @@ export default function Inicio() {
       <Banner conteudo={BANNER} />
       <SecaoMonitoramento temperaturas={temperaturas} />
       <SecaoProblema conteudo={PROBLEMA} />
+      <SecaoPainel conteudo={PAINEL} serie={serie} />
       <SecaoSolucao conteudo={SOLUCAO} />
     </>
   )
