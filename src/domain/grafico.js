@@ -94,7 +94,7 @@ export function caminhoArea(pontosXY, baseY) {
   return `${curva} L ${f(ultimo.x)} ${f(baseY)} L ${f(primeiro.x)} ${f(baseY)} Z`
 }
 
-const MARGEM_SERIE = { esq: 44, dir: 12, topo: 12, base: 28 }
+const MARGEM_SERIE = { esq: 44, dir: 12, topo: 26, base: 28 }
 const PASSOS_REDONDOS = [0.5, 1, 2, 5, 10, 20, 50]
 
 // O menor passo "redondo" (0,5 · 1 · 2 · 5 · 10...) que deixa a escala com no máximo 4 intervalos.
