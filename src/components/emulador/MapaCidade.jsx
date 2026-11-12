@@ -9,12 +9,11 @@
  *   Nicolas Cinel — RM572940
  */
 
-// O mapa SVG da cidade (W10 a W14): o atacante fora, a central no meio e os 5 locais. As linhas
+// O mapa SVG da cidade (W10 a W14): a central no meio e os 5 locais (o atacante fica na zona de cima do card). As linhas
 // de ataque saem do atacante; as de dados vão só dos locais com C-Shield até a central. Nunca há
 // linha entre locais. O aviso de ataque coordenado aparece em cima do mapa, na central.
 import { LOCAIS } from '../../domain/cidade.js'
 import { situacao } from '../../domain/cidade-placar.js'
-import Atacante from './Atacante.jsx'
 import Central from './Central.jsx'
 import { VIEWBOX } from './geometria.js'
 import LinhaAtaque from './LinhaAtaque.jsx'
@@ -27,7 +26,7 @@ export default function MapaCidade({ cidade, selecionadoId, aoSelecionar, reduzi
   return (
     <div className="relative">
       <svg
-        viewBox={`0 0 ${VIEWBOX.largura} ${VIEWBOX.altura}`}
+        viewBox={`${VIEWBOX.x} ${VIEWBOX.y} ${VIEWBOX.largura} ${VIEWBOX.altura}`}
         role="group"
         aria-label="Mapa da cidade com cinco locais"
         className="h-auto w-full"
@@ -35,9 +34,9 @@ export default function MapaCidade({ cidade, selecionadoId, aoSelecionar, reduzi
         {/* A cidade: um contorno tracejado, com o atacante do lado de fora */}
         <rect
           x={30}
-          y={90}
+          y={96}
           width={940}
-          height={500}
+          height={484}
           rx={28}
           fill="none"
           stroke="var(--color-borda)"
@@ -57,7 +56,6 @@ export default function MapaCidade({ cidade, selecionadoId, aoSelecionar, reduzi
           />
         ))}
 
-        <Atacante />
         <Central />
         {LOCAIS.map((def) => (
           <LocalNoMapa

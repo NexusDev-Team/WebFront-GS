@@ -58,6 +58,9 @@ export default function LocalNoMapa({ def, local, situacaoLocal, selecionado, ao
     >
       {/* Área de toque grande e invisível */}
       <circle r={RAIO_ESCUDO + 12} fill="transparent" />
+      {selecionado ? (
+        <circle r={RAIO_ESCUDO + 10} fill="none" stroke="var(--color-gelo-50)" strokeWidth={2} strokeDasharray="6 6" />
+      ) : null}
       {/* Anel redondo só para quem navega pelo teclado (no lugar do quadrado de foco do navegador) */}
       <circle
         r={RAIO_ESCUDO + 10}
