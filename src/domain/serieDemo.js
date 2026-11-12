@@ -57,3 +57,9 @@ export function amplitudeDaSerie(serie) {
   const temps = serie.map((p) => p.temperatura)
   return (Math.max(...temps) - Math.min(...temps)) / 2
 }
+
+// A leitura está dentro da faixa segura do perfil (limites incluídos)? É o que decide se o cartão
+// de leitura mostra "estabilizado".
+export function dentroDaFaixa(temperatura, { tMin, tMax }) {
+  return temperatura >= tMin && temperatura <= tMax
+}
