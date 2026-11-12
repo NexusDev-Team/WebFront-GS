@@ -18,10 +18,9 @@
 import { NOTICIAS } from './noticias.js'
 
 export const BANNER = {
-  rotulo: 'Cadeia do frio',
+  rotulo: 'Cadeia do frio e gestão térmica',
   titulo: 'Proteção inteligente para a cadeia de frio',
-  texto:
-    'Às 2h da manhã, o C-Shield age onde ninguém mais consegue. Vê de longe. Só obedece de perto.',
+  texto: 'Às 2h da manhã, o C-Shield atua onde ninguém mais consegue.',
   acaoPrincipal: { rotulo: 'Simular um ataque', para: '/emulador' },
   acaoSecundaria: { rotulo: 'Como funciona', para: '/como-funciona' },
   // A imagem é fornecida pela equipe; se o arquivo não existir, o banner mostra um espaço reservado.
