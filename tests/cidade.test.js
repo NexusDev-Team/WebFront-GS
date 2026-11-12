@@ -19,6 +19,7 @@ import {
   criarCidade,
   liberar,
   passo,
+  pararAtaques,
   recomecar,
 } from '../src/domain/cidade.js'
 import { instalarCShield, removerCShield, sincronizarProtecao } from '../src/domain/cidade-protecao.js'
@@ -543,5 +544,40 @@ describe('sincronizarProtecao', () => {
     c = avancar(atacar(c, 'ubs-brasilandia', 'CALOR', 0), 1)
     c = sincronizarProtecao(c, [])
     expect(c.locais['ubs-brasilandia'].protegido).toBe(true)
+  })
+})
+
+describe('pararAtaques', () => {
+  it('desfaz a ordem do atacante em todos os locais e limpa o aviso de coordenado', () => {
+    const c = pararAtaques(ataqueEmMassa(criarCidade(), 'CALOR', 0))
+    for (const def of LOCAIS) expect(c.locais[def.id].ordem).toBe('NORMAL')
+    expect(c.coordenado).toBeNull()
+    expect(c.ataquesRecentes).toEqual([])
+  })
+  it('a câmara atacada volta para a faixa e o local vira seguro (lote em análise se houve exposição)', () => {
+    let c = avancar(atacar(criarCidade(), 'ubs-brasilandia', 'CALOR', 0), 3)
+    expect(c.locais['ubs-brasilandia'].temperatura).toBeGreaterThan(PERFIS_EMULADOR.VACINA.tMax)
+    c = avancar(pararAtaques(c), 10)
+    expect(c.locais['ubs-brasilandia'].temperatura).toBeLessThanOrEqual(PERFIS_EMULADOR.VACINA.tMax)
+    expect(sit(c, 'ubs-brasilandia')).toBe('SEGURO_LOTE_EM_ANALISE')
+  })
+  it('parar não solta o bloqueio: o C-Shield segue bloqueado até alguém liberar no local', () => {
+    let c = avancar(atacar(criarCidade(), ID_PILOTO, 'CALOR', 0), 1)
+    c = avancar(pararAtaques(c), 2)
+    expect(sit(c, ID_PILOTO)).toBe('ATAQUE_BLOQUEADO')
+    expect(c.locais[ID_PILOTO].contexto.bloqueado).toBe(true)
+  })
+  it('não muda os locais que não estavam sob ataque e não muta a cidade recebida', () => {
+    const antes = atacar(criarCidade(), 'ubs-brasilandia', 'CALOR', 0)
+    const copia = structuredClone(antes)
+    const depois = pararAtaques(antes)
+    expect(antes).toEqual(copia)
+    expect(depois.locais['farmacia-mooca']).toEqual(antes.locais['farmacia-mooca'])
+    expect(sit(depois, 'farmacia-mooca')).toBe('NORMAL')
+  })
+  it('depois de parar dá para atacar de novo', () => {
+    let c = pararAtaques(atacar(criarCidade(), 'ubs-brasilandia', 'CALOR', 0))
+    c = avancar(atacar(c, 'ubs-brasilandia', 'CALOR', 1000), 2)
+    expect(sit(c, 'ubs-brasilandia')).toBe('SOB_ATAQUE')
   })
 })
