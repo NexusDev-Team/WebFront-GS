@@ -13,7 +13,7 @@
 // e os perfis ilustrativos do emulador.
 import { describe, expect, it } from 'vitest'
 import * as cfg from '../src/domain/config.js'
-import { PERFIL_ATIVO, PERFIS_EMULADOR, PERFIS_FIRMWARE, perfilAtivo } from '../src/domain/perfis.js'
+import { PERFIL_ATIVO, PERFIS_EMULADOR, PERFIS_FIRMWARE, faixaParaMostrar, perfilAtivo } from '../src/domain/perfis.js'
 
 describe('teste_perfis (R41)', () => {
   it('vacina vai de 2 a 8 °C', () => {
@@ -78,5 +78,21 @@ describe('constantes do config.h', () => {
   it('separa as constantes do emulador (demonstração)', () => {
     expect(cfg.EMULADOR_TRAVA_MS_REAL).toBe(10000)
     expect(cfg.EMULADOR_MINUTOS_POR_SEGUNDO).toBe(1)
+  })
+})
+
+describe('faixaParaMostrar (como a faixa aparece nas cartas do Como funciona)', () => {
+  it('vacina e resfriado têm mínimo e máximo de verdade', () => {
+    expect(faixaParaMostrar(PERFIS_FIRMWARE.VACINA)).toEqual({ minimo: 2, maximo: 8 })
+    expect(faixaParaMostrar(PERFIS_FIRMWARE.RESFRIADO)).toEqual({ minimo: 0, maximo: 4 })
+  })
+  it('congelado e plasma só têm máximo: o mínimo do perfil é o piso do sensor, não uma regra', () => {
+    expect(faixaParaMostrar(PERFIS_FIRMWARE.CONGELADO)).toEqual({ minimo: null, maximo: -18 })
+    expect(faixaParaMostrar(PERFIS_FIRMWARE.PLASMA)).toEqual({ minimo: null, maximo: -25 })
+  })
+  it('o máximo mostrado é sempre o tMax do perfil', () => {
+    for (const perfil of Object.values(PERFIS_FIRMWARE)) {
+      expect(faixaParaMostrar(perfil).maximo).toBe(perfil.tMax)
+    }
   })
 })
