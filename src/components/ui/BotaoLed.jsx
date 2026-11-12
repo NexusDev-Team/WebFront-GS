@@ -13,11 +13,11 @@
 // `ariaLabel` serve aos textos em leet (4T4QU3 D3 C4L0R = "Ataque de calor").
 const VARIANTES = {
   primario:
-    'bg-led-forte text-noite-950 border-led-forte hover:bg-gelo-50 hover:border-gelo-50',
+    'bg-led-forte text-noite-950 border-led-forte hover:brightness-110',
   ataque:
-    'bg-noite-900 text-gelo-50 border-ataque hover:bg-ataque hover:text-noite-950',
+    'bg-transparent text-gelo-50 border-critico hover:bg-critico/15',
   fantasma:
-    'bg-transparent text-gelo-50 border-borda hover:border-led-forte hover:text-led-forte',
+    'bg-transparent text-gelo-50 border-borda hover:bg-noite-900 hover:border-gelo-300',
 }
 
 export default function BotaoLed({
@@ -33,7 +33,7 @@ export default function BotaoLed({
     <Tag
       type={Tag === 'button' ? type : undefined}
       aria-label={ariaLabel}
-      className={`inline-flex min-h-11 min-w-11 cursor-pointer items-center justify-center gap-2 rounded-lg border px-4 py-2 font-titulo text-base font-semibold transition-colors duration-200 disabled:cursor-not-allowed disabled:opacity-50 ${VARIANTES[variante]} ${className}`}
+      className={`inline-flex min-h-11 min-w-11 cursor-pointer items-center justify-center gap-2 rounded-xl border px-5 py-2 text-base font-semibold transition-colors duration-200 disabled:cursor-not-allowed disabled:opacity-50 ${VARIANTES[variante]} ${className}`}
       {...resto}
     >
       {children}

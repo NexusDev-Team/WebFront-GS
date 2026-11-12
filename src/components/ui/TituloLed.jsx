@@ -9,18 +9,19 @@
  *   Nicolas Cinel — RM572940
  */
 
-// Título com efeito de LED. A variante conta o estado da história:
-//   repouso = azul suave e estável · ataque = falha + glitch · assumiu = azul forte firme.
+// Título da página ou da seção. A variante conta o estado:
+//   repouso = texto neutro · ataque = vermelho com falha de energia (só no emulador, durante
+//   um ataque) · assumiu = azul-glacial com glow (o C-Shield está no controle).
 const VARIANTES = {
-  repouso: 'led-brilho text-gelo-50',
-  ataque: 'led-falha glitch-ataque text-gelo-50',
+  repouso: 'text-gelo-50',
+  ataque: 'led-falha text-critico',
   assumiu: 'led-forte',
 }
 
 const TAMANHOS = {
-  1: 'text-4xl sm:text-5xl font-bold',
-  2: 'text-2xl sm:text-3xl font-bold',
-  3: 'text-xl font-semibold',
+  1: 'text-4xl font-extrabold tracking-tight sm:text-6xl',
+  2: 'text-3xl font-bold tracking-tight sm:text-4xl',
+  3: 'text-xl font-bold',
 }
 
 export default function TituloLed({ nivel = 2, variante = 'repouso', className = '', children }) {

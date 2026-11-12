@@ -21,7 +21,7 @@ export default function CartaoIntegrante({ integrante: m }) {
       <div className="aspect-square w-full overflow-hidden rounded-lg border border-borda bg-noite-900">
         {semFoto ? (
           <div className="flex size-full items-center justify-center bg-gradient-to-br from-noite-900 to-noite-950">
-            <span aria-hidden="true" className="font-titulo text-6xl font-bold text-led-forte led-brilho">
+            <span aria-hidden="true" className="font-titulo text-6xl font-bold text-led-forte">
               {m.iniciais}
             </span>
           </div>

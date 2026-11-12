@@ -38,11 +38,6 @@
     animation: linha-fluxo 0.7s linear infinite;
   }
 
-  /* Brilho azul suave e estável: repouso. */
-  .led-brilho {
-    text-shadow: 0 0 10px color-mix(in srgb, var(--color-led-forte) 45%, transparent);
-  }
-
   /* O C-Shield assumiu: glow sóbrio e firme, sem oscilar. */
   .led-forte {
     color: var(--color-led-forte);
