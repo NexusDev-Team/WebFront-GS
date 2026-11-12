@@ -57,3 +57,39 @@ export function escalarGrafico(pontos, { tMin, tMax }, { largura, altura }) {
 
   return { caminho, area, faixa: { y: yTMax, altura: yTMin - yTMax }, yTMin, yTMax }
 }
+
+const f = (n) => n.toFixed(1)
+
+// Curva suave que passa por todos os pontos (Catmull-Rom convertida em Bézier cúbica), para o
+// gráfico de área. pontosXY: [{ x, y }] em coordenadas do SVG. Devolve o atributo `d` de um
+// <path>: 'M x y C ...', uma curva por trecho. Com 2 pontos é uma linha reta; com menos de 2,
+// texto vazio. Nos extremos, o ponto que falta é repetido, então a curva não "passa do ponto".
+export function caminhoSuave(pontosXY) {
+  if (pontosXY.length < 2) return ''
+  const [primeiro, segundo] = pontosXY
+  if (pontosXY.length === 2) return `M ${f(primeiro.x)} ${f(primeiro.y)} L ${f(segundo.x)} ${f(segundo.y)}`
+
+  let d = `M ${f(primeiro.x)} ${f(primeiro.y)}`
+  for (let i = 0; i < pontosXY.length - 1; i++) {
+    const p0 = pontosXY[i - 1] ?? pontosXY[i]
+    const p1 = pontosXY[i]
+    const p2 = pontosXY[i + 1]
+    const p3 = pontosXY[i + 2] ?? p2
+    const c1x = p1.x + (p2.x - p0.x) / 6
+    const c1y = p1.y + (p2.y - p0.y) / 6
+    const c2x = p2.x - (p3.x - p1.x) / 6
+    const c2y = p2.y - (p3.y - p1.y) / 6
+    d += ` C ${f(c1x)} ${f(c1y)} ${f(c2x)} ${f(c2y)} ${f(p2.x)} ${f(p2.y)}`
+  }
+  return d
+}
+
+// O mesmo caminho, fechado pela base do gráfico (baseY): serve ao preenchimento em degradê
+// sob a curva. Vazio com menos de 2 pontos.
+export function caminhoArea(pontosXY, baseY) {
+  const curva = caminhoSuave(pontosXY)
+  if (!curva) return ''
+  const ultimo = pontosXY[pontosXY.length - 1]
+  const primeiro = pontosXY[0]
+  return `${curva} L ${f(ultimo.x)} ${f(baseY)} L ${f(primeiro.x)} ${f(baseY)} Z`
+}
