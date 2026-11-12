@@ -25,6 +25,7 @@ import {
   atacar as atacarNaCidade,
   criarCidade,
   liberar as liberarNaCidade,
+  pararAtaques as pararAtaquesNaCidade,
   passo,
   recomecar as recomecarCidade,
 } from '../domain/cidade.js'
@@ -81,6 +82,8 @@ export function useCidadeSimulada() {
     (tipo) => aplicar(ataqueEmMassaNaCidade(cidadeRef.current, tipo, Date.now())),
     [aplicar],
   )
+  // Desfaz as ordens do atacante em todos os locais; o jogo segue e o bloqueio fica.
+  const pararAtaques = useCallback(() => aplicar(pararAtaquesNaCidade(cidadeRef.current)), [aplicar])
   // Instalações cadastradas: o jogo só espelha o que a API diz quem tem o C-Shield.
   const instalar = useCallback((localId) => aplicar(instalarNaCidade(cidadeRef.current, localId)), [aplicar])
   const remover = useCallback((localId) => aplicar(removerNaCidade(cidadeRef.current, localId)), [aplicar])
@@ -109,5 +112,5 @@ export function useCidadeSimulada() {
 
   const placar = useMemo(() => placarDaCidade(cidade), [cidade])
 
-  return { cidade, placar, eventos, atacar, ataqueEmMassa, instalar, remover, sincronizar, liberar, recomecar }
+  return { cidade, placar, eventos, atacar, ataqueEmMassa, pararAtaques, instalar, remover, sincronizar, liberar, recomecar }
 }
