@@ -23,6 +23,8 @@ Fase A, T4 do `docs/PROMPT-WEB.md`. Cada tarefa: requisitos cobertos (W..), veri
 
 - **D17 — O CRUD sai do emulador e vira o cadastro de câmaras do bairro, em Notícias (12/11).** O usuário não gostou do ativar/desativar ligado à API dentro do emulador. Agora: (a) o emulador fica **sem nenhuma API**: ativar e desativar o C-Shield num local é uma ação do jogo, na zona de defesa do card; o apelido saiu; "Recomeçar" zera tudo; (b) o CRUD em API externa (rubrica) é o cadastro **"E na sua cidade?"**, no fim de `/noticias`: cadastrar, listar com filtro por tipo, editar e excluir câmaras do bairro (recurso `camaras` da MockAPI: `nome`, `bairro`, `tipo`, `observacao`, `cadastradoEm`). Substitui W54 a W56 pelos requisitos W59 a W61.
 
+- **D18 — Sem ponte FIWARE (12/11).** Saem `api/`, `services/fiware.js`, `useDispositivoReal()`, o painel ao vivo, `relesPublicados` e `FIWARE_HOST`. A seção `#dispositivo-real` mostra o Wokwi embutido (ou cartão com link) e a imagem do aparelho (`src/assets/dispositivo.png`). **W36 a W41a ficam obsoletos**; W42 e W43 continuam valendo. Plano em `plano-fase-d.md`.
+
 ### Tabela original (referência)
 
 | # | Item | Prompt | Edge (fonte de verdade) | Recomendação |
@@ -55,9 +57,9 @@ Fase A, T4 do `docs/PROMPT-WEB.md`. Cada tarefa: requisitos cobertos (W..), veri
 
 ## Fase D — Dispositivo real e deploy (até 14/11)
 
-- **T15** `api/estado.js` e `api/historico.js` (só GET, 405, lista de atributos, `lastN` limitado, `FIWARE_HOST`), `services/fiware.js`, `useDispositivoReal()` (polling 3 s, offline > 30 s). Proxy no `vite.config.js` ou `vercel dev` para desenvolver. Cobre W36–W41. Verificar: greps do prompt §4.1 vazios; `curl -X POST` local → 405.
-- **T16** Página `/simulador-real` (PainelReal, offline, "Nem este site consegue dar ordens ao C-Shield.") e `WokwiEmbed` no emulador (testar se o Wokwi aceita iframe). Cobre W27, W39–W43.
-- **T17** Deploy na Vercel com as variáveis; atualizar cada rota sem 404; página real com o Wokwi rodando. Cobre W3. (Ação externa: confirmar antes.)
+- **T15 (D18)** Limpeza do que era FIWARE: remover `relesPublicados` e seus testes, `FIWARE_HOST` do `.env.example`. Não há `api/`, `services/fiware.js` nem `useDispositivoReal()`. Verificar: vitest verde, grep de `fiware_host|relesPublicados` vazio.
+- **T16 (D18)** Seção `#dispositivo-real` do emulador com `WokwiEmbed` (iframe, ou cartão com link se o Wokwi bloquear) e `ImagemDispositivo` (`src/assets/dispositivo.png`). Cobre W27, W42, W43.
+- **T17** Deploy na Vercel só com `VITE_MOCKAPI_URL`; atualizar cada rota sem 404; página real com o Wokwi rodando. Cobre W3. (Ação externa: confirmar antes.)
 
 ## Fase E — Experiência (até 15/11)
 

@@ -6,7 +6,7 @@
 > - **Dispositivo real** virou a seção `#dispositivo-real` do emulador; **Nexus Dev** é a última página do menu.
 > - **MockAPI criada e testada** (12/11): recurso `camaras` no projeto `cshield`; a URL base fica no `.env` local (`VITE_MOCKAPI_URL`, ignorado pelo Git) e deve ser repetida nas variáveis de ambiente da Vercel no deploy (T17). Cadastro, edição, filtro e exclusão foram conferidos pelo site contra a API real.
 > - **Pendências da equipe:** a função e a foto de cada integrante (`public/equipe/`), a revisão dos textos de visão e cultura (`src/content/nexusDev.js`) e a conferência dos títulos marcados "Título da equipe" (g1, The Guardian e Food Safety Magazine, cujas páginas bloquearam a leitura automática).
-> - **Próximo passo:** Fase D (T15 a T17): `api/estado.js` e `api/historico.js` (só GET), `services/fiware.js`, o painel ao vivo dentro de `#dispositivo-real` e o deploy na Vercel. Precisa de plano próprio em Opus.
+> - **Próximo passo:** Fase D revisada pela D18 (sem FIWARE): ver `docs/specs/web/plano-fase-d.md`.
 
 # Plano — Fase C revisada (11/11, tarde): notícias, CRUD de instalações, emulador e Nexus Dev
 

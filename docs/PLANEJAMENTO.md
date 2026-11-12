@@ -14,6 +14,8 @@ Versão de 11/11/2026. Este documento junta, num arquivo só, o que está espalh
 
 **Situação atual:** Fase A (especificação) concluída e aprovada, com as decisões D1 a D11. Fase B (T6 a T9) planejada em detalhe, pronta para execução. Fases C a F com escopo definido; cada uma ganha plano detalhado antes de começar.
 
+> **Atualização de 12/11 — Fase D revisada (D18).** O site deixa de ler o FIWARE. Saem as funções `api/estado.js` e `api/historico.js`, o `services/fiware.js`, o `useDispositivoReal()`, o painel ao vivo e a variável `FIWARE_HOST`. A entrega de Edge já foi feita em 11/11 (link do Wokwi e vídeo) e o emulador já mostra todo o comportamento do C-Shield, então um painel ao vivo seria redundante e ainda dependeria do servidor FIWARE e do Wokwi rodando no dia da avaliação. No lugar, a seção `#dispositivo-real` do emulador mostra o circuito do Wokwi embutido (ou um cartão com link, se o Wokwi recusar o iframe) e uma imagem de como o aparelho seria, enviada pela equipe. O plano detalhado está em `docs/specs/web/plano-fase-d.md`. As mudanças da Fase C (notícias, cadastro "E na sua cidade?", emulador sem API, página Nexus Dev, decisões D12 a D17) estão em `docs/specs/web/plano-fase-c.md`. Onde este documento divergir desses dois planos, valem os planos.
+
 ---
 
 ## 1. O produto
@@ -30,9 +32,9 @@ O caso de referência é o ataque real na Europa em que se passaram cerca de **3
 
 **O site nunca dá ordens ao C-Shield.** Nenhum botão, função de servidor ou serviço envia comando ao dispositivo.
 
-- As funções em `api/` só fazem GET no FIWARE e respondem **405** a qualquer outro método.
+- O site não tem nenhuma ligação de rede com o dispositivo: não há funções de servidor nem chamadas ao FIWARE (D18).
 - A política (faixa segura) aparece só para leitura, com a etiqueta "gravada no dispositivo".
-- Em `/simulador-real` aparece o texto "Nem este site consegue dar ordens ao C-Shield."
+- Na seção "Dispositivo real" do emulador aparece o texto "Nem este site consegue dar ordens ao C-Shield."
 - Nenhum texto do site sugere que o dispositivo recebe comandos pela rede.
 
 ## 3. O que o site tem
@@ -41,7 +43,7 @@ O caso de referência é o ataque real na Europa em que se passaram cerca de **3
 | --- | --- |
 | `/` | Página inicial com scrollytelling em 4 capítulos (Madrugada, A invasão, O C-Shield, A prova) |
 | `/emulador` | "Seja o hacker": uma cidade com 5 locais para atacar, placar comparativo e a câmara por dentro |
-| `/simulador-real` | O dispositivo real (Wokwi) lido do FIWARE, ao vivo, só leitura |
+| `/simulador-real` | Redireciona para `/emulador#dispositivo-real`: circuito do Wokwi embutido e imagem de como o aparelho seria (D14 e D18) |
 | `/incidentes` | CRUD de incidentes numa API externa (MockAPI) |
 | `/como-funciona` | Os 4 verbos, os 5 estados, a arquitetura em uma direção e a equipe |
 | `*` | 404: "Esta câmara não existe." |
@@ -50,7 +52,7 @@ O caso de referência é o ataque real na Europa em que se passaram cerca de **3
 
 - **React com JavaScript puro** (sem TypeScript), **Vite**, **Tailwind CSS v4**, **react-router-dom**.
 - **Vitest** para a lógica pura em `src/domain`.
-- **Funções de servidor da Vercel** em `api/` (runtime Node), só GET, ponte para o FIWARE (Orion na porta 1026, STH-Comet na 8666). Endereço em `FIWARE_HOST`.
+- ~~Funções de servidor da Vercel em `api/`, ponte para o FIWARE.~~ Removidas na D18: o site não lê o FIWARE.
 - **MockAPI** para o CRUD (`incidentes` e, se o plano gratuito permitir, `locais`). URL em `VITE_MOCKAPI_URL`.
 - Animações com **canvas, SVG e IntersectionObserver**, sem biblioteca de animação.
 - Deploy na **Vercel**, com `vercel.json` redirecionando as rotas para `index.html`.
@@ -94,6 +96,8 @@ A lógica é portada para JavaScript a partir do firmware do Edge (`decisao.h` e
 | D9 | API externa: **MockAPI** com `incidentes` e `locais`. Se o plano gratuito não suportar, trocar por outra API (Supabase REST, crudcrud) mudando só `src/services/`. |
 | D10 | Repositório remoto criado depois pela equipe, na organização NexusDev-Team, com todos com acesso. Até lá, só commits locais. |
 | D11 | Os LEDs laranja, azul e verde e a chave "Controlador" do Wokwi **representam** o aquecedor, a ventoinha de emergência, a refrigeração do controlador e a ordem do atacante. No site, desenhar os equipamentos em si e explicar essa representação; no aparelho real esses LEDs não existem. |
+| D12–D17 | Decisões da Fase C (12/11): notícias no lugar dos incidentes, CRUD "E na sua cidade?", dispositivo real como seção do emulador, emulador sem API. Detalhes em `docs/specs/web/plano-fase-c.md` e `docs/specs/web/tasks.md`. |
+| D18 | **Sem ponte FIWARE (12/11).** Saem `api/`, `services/fiware.js`, `useDispositivoReal()`, o painel ao vivo, `relesPublicados` e `FIWARE_HOST`. A seção `#dispositivo-real` mostra o Wokwi embutido (ou cartão com link) e a imagem do aparelho enviada pela equipe (`src/assets/dispositivo.png`). Motivo: a entrega de Edge já foi feita e o emulador cobre o comportamento; o painel seria redundante e frágil no dia da avaliação. |
 
 ### Representação do circuito do Wokwi (D11)
 
@@ -112,11 +116,11 @@ Lista completa em `docs/specs/web/requirements.md` (W1 a W52), no formato "QUAND
 - **Página inicial (W5–W9):** 4 capítulos em rolagem; fundo binário, geladeira e brilho dos títulos mudam por capítulo; canvas pausa com a aba oculta; capítulo 4 com "Na Europa: 3h30 até alguém perceber. Com o C-Shield: segundos." e o botão "Ataque uma cidade"; menos colunas de binário no celular.
 - **Mapa do emulador (W10–W19):** 5 locais (UBS Vila Mariana protegida, UBS Brasilândia, Hemocentro Consolação, Farmácia Mooca, Mercado Liberdade), atacante fora da cidade, central FIWARE no centro; linhas de dados azuis só do local para a central; botões `4T4QU3 D3 C4L0R` e `4T4QU3 D3 FR10` (com `aria-label` "Ataque de calor" e "Ataque de frio"); linha de ataque vermelha que se rompe no escudo do local protegido; ataque em massa; ataque coordenado; "Ativar C-Shield"; "Recomeçar"; placar das duas UBS com "Mesma cidade, mesmo ataque, mesma hora." e "3h30 até alguém perceber" na UBS sem C-Shield.
 - **Câmara por dentro (W20–W26c):** LCD 16x2 com os textos do firmware, LED de estado, equipamentos desenhados (aquecedor, ventoinha de emergência, refrigeração), gráfico com a faixa segura, botão de liberação segurado por 3 s (mouse, toque e teclado), "Trava ativa / Aguarde Ns" antes da trava, reabertura com ordem ainda inválida, faixa segura só leitura "gravada no dispositivo".
-- **Aparelho real no emulador (W27):** Wokwi embutido (ou cartão com link) e botão "Abrir simulador real".
+- **Aparelho real no emulador (W27, revisado na D18):** Wokwi embutido (ou cartão com link em nova aba) e a imagem de como o aparelho seria, na seção `#dispositivo-real`.
 - **Emulador cria incidentes (W28–W29):** a cada novo bloqueio, cria um incidente com `origem: "emulador"`, uma vez por bloqueio; se falhar, aviso discreto sem travar.
 - **Incidentes (W30–W35):** listar com carregando, erro e lista vazia; filtros por status (`ABERTO`, `EM_ANALISE`, `RESOLVIDO`) e tipo (`CALOR`, `FRIO`); criar com validação; editar status e ação tomada; excluir com confirmação na própria página; opcionalmente cadastrar "a câmara fria do seu bairro".
-- **Dispositivo real (W36–W41a):** `GET /api/estado` (Orion) e `GET /api/historico` (STH-Comet, atributos permitidos e `lastN` limitado, 400 para outro atributo); 405 para outro método; polling a cada 3 s que para ao sair da página; offline com mais de 30 s; "sem leitura" quando o valor é -999; relés derivados do que o Edge publica, com a posição da chave pelo setpoint.
-- **Nunca dar ordens (W42–W43).**
+- **Dispositivo real (W36–W41a) — obsoletos desde a D18:** `GET /api/estado` (Orion) e `GET /api/historico` (STH-Comet, atributos permitidos e `lastN` limitado, 400 para outro atributo); 405 para outro método; polling a cada 3 s que para ao sair da página; offline com mais de 30 s; "sem leitura" quando o valor é -999; relés derivados do que o Edge publica, com a posição da chave pelo setpoint.
+- **Nunca dar ordens (W42–W43).** Continuam valendo; sem ponte FIWARE, o site não tem nenhum caminho de rede até o dispositivo.
 - **Como funciona (W44):** medir, decidir, assumir, alertar; 5 estados com as cores; arquitetura dispositivo → FIWARE → site; links do Wokwi e do Edge; equipe com RMs.
 - **Acessibilidade (W45–W50):** contraste mínimo 4,5:1 e texto nunca transparente; nada pisca mais de 3 vezes por segundo; `prefers-reduced-motion` respeitado; 360 a 1440 px sem rolagem horizontal e alvos de 44 × 44 px; estado nunca só pela cor; mudanças anunciadas com `aria-live`.
 - **Qualidade (W51–W52):** separação domínio / serviços / componentes, pelo menos 8 componentes e 2 hooks; `README.md`, `AI.md`, `.env.example` e nenhum segredo no código.
@@ -185,11 +189,12 @@ Contraste medido: todos os textos acima de 4,5:1, exceto `led-fraco` (proibido e
 │   "Controlador: NORMAL | ATAQUE" · gráfico com faixa segura · botão segurar 3 s          │
 │   faixa segura "gravada no dispositivo" (só leitura)                                     │
 ├──────────────────────────────────────────────────────────────────────────────────────────┤
-│ Wokwi embutido · [Abrir simulador real →]                                                │
+│ #dispositivo-real: imagem do aparelho │ circuito do Wokwi (iframe ou cartão com link)    │
+│   "Nem este site consegue dar ordens ao C-Shield."                                       │
 └──────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
-**Dispositivo real:** LED grande com estado e motivo, temperatura grande, bloqueios, exposição, setpoint, porta, gráfico do histórico, "Nem este site consegue dar ordens ao C-Shield.", e no modo offline a última leitura com o aviso para abrir o Wokwi.
+**Dispositivo real (D18):** seção no fim do emulador. Duas colunas no desktop e empilhado no celular: a imagem de como o C-Shield seria instalado junto da câmara (com legenda dizendo que é ilustração e que, na simulação, LEDs e chave representam aquecedor, ventoinha e a ordem do atacante) e o circuito do Wokwi. Sem painel ao vivo.
 
 **Incidentes:** filtros de status e tipo, lista com local, bairro, tipo, motivo, início, reação, exposição e status, botões editar e excluir (confirmação inline), formulário com erro junto ao campo.
 
@@ -205,16 +210,15 @@ App (router)
 │              PlacarComparativo · ControlesAtaque
 ├─ camara/     PainelCamara · Lcd16x2 · LedEstado · Rele · Equipamento · GraficoTemperatura
 ├─ incidentes/ IncidenteForm · IncidenteItem · FiltrosIncidentes
-└─ real/       PainelReal · WokwiEmbed
+└─ emulador/   SecaoDispositivoReal · WokwiEmbed · ImagemDispositivo   (D18)
 
-hooks/    useCidadeSimulada · useCShield · useIncidentes · useDispositivoReal
+hooks/    useCidadeSimulada · useCShield · useCamaras
           useCapituloAtual · usePrefereMenosMovimento · useSegurar
-domain/   config · perfis · cshield · fisica · cidade · lcd
-services/ mockapi · fiware
-api/      estado · historico   (funções da Vercel, só GET)
+domain/   config · perfis · cshield · fisica · cidade · lcd · camaras
+services/ mockapi
 ```
 
-Fluxo de dados em uma direção: **dispositivo → FIWARE → funções `api/` → `services/fiware.js` → hook → página.** Nada volta para o dispositivo.
+Sem `api/`, `services/fiware.js` nem `useDispositivoReal` (D18). A única rede do site é a MockAPI do cadastro de câmaras do bairro. A árvore acima mostra só o que mudou; a lista completa da Fase C está em `docs/specs/web/plano-fase-c.md`.
 
 ## 11. Fases, tarefas e prazos
 
@@ -223,7 +227,7 @@ Fluxo de dados em uma direção: **dispositivo → FIWARE → funções `api/` �
 | A — Especificação | T1 a T5 | 11/11 | Concluída e aprovada |
 | B — Base e domínio | T6 a T9 | antes da Fase C | Planejada em detalhe |
 | C — O que vale nota | T10 a T14 | 13/11 | Escopo definido |
-| D — Dispositivo real e deploy | T15 a T17 | 14/11 | Escopo definido |
+| D — Dispositivo real e deploy | T15 a T17 | 14/11 | Revisada na D18 (sem FIWARE); plano em `plano-fase-d.md` |
 | E — Experiência | T18 a T20 | 15/11 | Escopo definido |
 | F — Documentação e entrega | T21 e T22 | 17/11 | Escopo definido |
 
@@ -250,7 +254,7 @@ Verificação: capturas em 390 e 1440 px sem rolagem horizontal, Tab por todos o
 **T8 — Domínio: perfis, regras, física e LCD (TDD).**
 - `config.js` — as constantes do `config.h` (janelas, taxas, degelo, trava, setpoints de demonstração 5 e 45, ausente -999) e as do emulador (trava de 10 s, 1 s = 1 min).
 - `perfis.js` — `PERFIS_FIRMWARE` (VACINA 2 a 8, CONGELADO -30 a -18, RESFRIADO 0 a 4, PLASMA -40 a -25) e `PERFIS_EMULADOR` (VACINA, INSULINA, PLASMA, CONGELADO, ilustrativos).
-- `cshield.js` — `criarContexto()` e `avaliar(leitura, contexto, agoraMs, opcoes)` devolvendo `{ decisao, contexto }` sem mutar a entrada, na mesma ordem da `avaliar()` do firmware; mais `ventoinhaRefrigeracao`, `corLed` (azul sempre no bloqueio) e `relesPublicados` (para o `/simulador-real`).
+- `cshield.js` — `criarContexto()` e `avaliar(leitura, contexto, agoraMs, opcoes)` devolvendo `{ decisao, contexto }` sem mutar a entrada, na mesma ordem da `avaliar()` do firmware; mais `ventoinhaRefrigeracao`, `corLed` (azul sempre no bloqueio) e `relesPublicados` (para o `/simulador-real`; removida na D18).
 - `lcd.js` — as telas do `painel.h` (16 colunas no máximo).
 - `fisica.js` — modelo térmico ilustrativo (lei de Newton), calibrado para um ataque de calor sem proteção sair da faixa da vacina em 2 a 4 s reais.
 - Testes: os 27 casos do `test_decisao.cpp` portados com os mesmos valores, mais imutabilidade, trava de 10 s, LED, relés publicados, LCD e física.
@@ -268,11 +272,11 @@ Verificação: testes verdes para cada comportamento, incluindo os casos-limite 
 - **T13** PlacarComparativo e a câmara por dentro: PainelCamara, Lcd16x2, LedEstado, Rele, Equipamento, GraficoTemperatura (SVG próprio), BotaoSegurar com `useSegurar` (mouse, toque e teclado). Cobre W19–W26c.
 - **T14** Incidente criado automaticamente a cada novo bloqueio no emulador, uma vez por bloqueio, com falha silenciosa e aviso discreto. Cobre W28–W29.
 
-### Fase D — Dispositivo real e deploy (até 14/11)
+### Fase D — Dispositivo real e deploy (até 14/11, revisada na D18)
 
-- **T15** `api/estado.js` e `api/historico.js` (só GET, 405 nos outros métodos, lista de atributos permitidos, `lastN` limitado, `FIWARE_HOST`), `services/fiware.js` e `useDispositivoReal()` (polling de 3 s, offline com mais de 30 s). Verificar com os greps da seção 12 e um POST local respondendo 405. Cobre W36–W41.
-- **T16** Página `/simulador-real` (PainelReal, relés derivados, modo offline, "Nem este site consegue dar ordens ao C-Shield.") e WokwiEmbed no emulador (testar se o Wokwi aceita iframe; se não, cartão com link). Cobre W27, W39–W43.
-- **T17** Deploy na Vercel com as variáveis de ambiente; atualizar cada rota sem 404; página real funcionando com o Wokwi rodando. Ação externa: confirmar com a equipe antes.
+- **T15 — limpeza do que era FIWARE.** Apagar `relesPublicados` de `src/domain/cshield-saida.js` e o bloco de testes dela em `tests/cshield-saida.test.js`, com os imports que ficarem sem uso (`PERFIS_FIRMWARE` continua, porque `lcd.js` usa). Tirar `FIWARE_HOST` do `.env.example`. Atualizar `CLAUDE.md` e `tasks.md`. Verificar: `npx vitest run` verde e `grep -rni "fiware_host\|relesPublicados" src tests .env.example` vazio.
+- **T16 — seção "Dispositivo real".** Testar com o Playwright se o Wokwi (https://wokwi.com/projects/480328417992209409) aceita iframe. `WokwiEmbed.jsx` usa o iframe se aceitar e o cartão com link em nova aba se não aceitar (a escolha fica fixa no código, conforme o teste). `ImagemDispositivo.jsx` mostra `src/assets/dispositivo.png` (importada pelo Vite) com legenda. `SecaoDispositivoReal.jsx` monta os dois e perde o texto "O painel ao vivo... chega na próxima etapa". Verificar com capturas em 390 e 1440 px. Cobre W27, W42, W43.
+- **T17 — deploy na Vercel**, só com `VITE_MOCKAPI_URL`; atualizar cada rota sem 404 (incluindo `/simulador-real` caindo na seção). Ação externa: confirmar com a equipe antes.
 
 ### Fase E — Experiência (até 15/11)
 
@@ -293,15 +297,12 @@ Verificação: testes verdes para cada comportamento, incluindo os casos-limite 
 npx vitest run           # todos os testes do domínio passam
 npm run build            # build de produção sem erros
 
-# o site nunca envia ordens ao C-Shield: as duas linhas devem voltar VAZIAS
-grep -rnE "method:\s*['\"](POST|PUT|PATCH|DELETE)['\"]" src/services/fiware.js api/
-grep -rniE "/cmd|commands|setLimits|set_limits" src/ api/
-
-# as funções da Vercel recusam o que não for GET
-grep -n "405" api/estado.js api/historico.js
+# o site nunca envia ordens ao C-Shield (D18: não existe api/ nem services/fiware.js): deve voltar VAZIO
+grep -rniE "/cmd|commands|setLimits|set_limits|fiware_host" src/
+test -d api && echo "ERRO: pasta api/ voltou" || echo "sem api/"
 
 # nada de segredo nem IP no código
-grep -rnE "[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}" src/ api/ || echo "sem IP no código"
+grep -rnE "[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}" src/ || echo "sem IP no código"
 git ls-files | grep -E "^\.env$" && echo "ERRO: .env commitado" || echo ".env fora do Git"
 
 ls src/components/*/*.jsx | wc -l   # 8 ou mais componentes
@@ -336,6 +337,7 @@ O que foi feito; testes que passaram; o que não deu para verificar (por exemplo
 
 - **Plano gratuito da MockAPI:** pode não suportar os dois recursos. Plano B definido em D9 (trocar só a camada de serviço).
 - **Wokwi em iframe:** pode ser bloqueado. Plano B: cartão com link em nova aba (W27).
-- **Servidor FIWARE (EC2) fora do ar:** a página real mostra o modo offline com a última leitura e leva ao emulador (W40).
+- ~~Servidor FIWARE (EC2) fora do ar.~~ Deixou de ser risco com a D18: o site não depende mais do FIWARE.
+- **Imagem do aparelho:** já entregue pela equipe em `src/assets/dispositivo.png`.
 - **Repositório remoto:** depende da equipe criar na organização NexusDev-Team e dar acesso aos professores (D10).
 - **Prazo apertado entre 12 e 17/11:** a Fase C é a prioridade, porque concentra o que vale nota.
