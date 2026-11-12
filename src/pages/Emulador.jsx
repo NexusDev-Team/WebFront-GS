@@ -11,13 +11,12 @@
 
 // Página Emulador: "Seja o hacker". Um card só conta a história: em cima o atacante, com os botões
 // das ações dele logo abaixo; no meio o mapa da cidade com 5 locais; embaixo a defesa, com o que
-// dá para fazer no local escolhido (ativar ou desativar o C-Shield: o CRUD das instalações). Ao
-// lado, o placar; depois, a câmara por dentro e a seção do dispositivo real. A página só liga as
-// peças: o jogo vem de useCidadeSimulada e as instalações de useInstalacoes.
+// dá para fazer no local escolhido (ativar ou desativar o C-Shield). Ao lado, o placar; depois, a
+// câmara por dentro e a seção do dispositivo real. A página só liga as peças: o jogo inteiro vem
+// de useCidadeSimulada (sem API).
 import { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { ID_PILOTO, LOCAIS } from '../domain/cidade.js'
-import { idsInstalados } from '../domain/instalacoes.js'
 import PainelCamara from '../components/camara/PainelCamara.jsx'
 import AcoesAtacante from '../components/emulador/AcoesAtacante.jsx'
 import AcoesDefesa from '../components/emulador/AcoesDefesa.jsx'
@@ -30,22 +29,13 @@ import PainelVidro from '../components/ui/PainelVidro.jsx'
 import PromptTerminal from '../components/ui/PromptTerminal.jsx'
 import TituloLed from '../components/ui/TituloLed.jsx'
 import { useCidadeSimulada } from '../hooks/useCidadeSimulada.js'
-import { useInstalacoes } from '../hooks/useInstalacoes.js'
 import { usePrefereMenosMovimento } from '../hooks/usePrefereMenosMovimento.js'
 
 export default function Emulador() {
   const jogo = useCidadeSimulada()
-  const instalacoes = useInstalacoes()
   const reduzirMovimento = usePrefereMenosMovimento()
   const [selecionadoId, setSelecionadoId] = useState(ID_PILOTO)
   const { hash } = useLocation()
-  const { sincronizar } = jogo
-  const { itens, carregando, erro } = instalacoes
-
-  // O mapa espelha as instalações cadastradas: quando a lista chega ou muda, o jogo sincroniza.
-  useEffect(() => {
-    if (!carregando && !erro) sincronizar(idsInstalados(itens))
-  }, [itens, carregando, erro, sincronizar])
 
   // /emulador#dispositivo-real (e o antigo /simulador-real) rola até a seção do aparelho real.
   useEffect(() => {
@@ -101,9 +91,9 @@ export default function Emulador() {
               key={selecionadoId}
               def={selecionado}
               local={jogo.cidade.locais[selecionadoId]}
-              instalacao={itens.find((i) => i.localId === selecionadoId)}
               piloto={selecionadoId === ID_PILOTO}
-              instalacoes={instalacoes}
+              aoAtivar={() => jogo.instalar(selecionadoId)}
+              aoDesativar={() => jogo.remover(selecionadoId)}
             />
           </div>
         </PainelVidro>
