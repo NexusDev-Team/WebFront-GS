@@ -37,7 +37,12 @@ export default function PainelInstalacoes({ cidade, instalacoes }) {
       </div>
 
       {carregando ? <Carregando texto="Buscando as instalações..." /> : null}
-      {!carregando && erro ? (
+      {!carregando && erro?.codigo === 'SEM_URL' ? (
+        <p role="status" className="rounded-xl border border-borda bg-noite-950 px-4 py-3 text-sm text-gelo-300">
+          A lista de instalações está desligada neste ambiente. Só a unidade piloto fica protegida; o jogo continua.
+        </p>
+      ) : null}
+      {!carregando && erro && erro.codigo !== 'SEM_URL' ? (
         <div className="flex flex-col gap-2">
           <ErroMensagem mensagem={erro.message} aoTentarDeNovo={recarregar} />
           <p className="text-sm text-gelo-300">Sem a lista, só a unidade piloto fica protegida. O jogo continua.</p>
