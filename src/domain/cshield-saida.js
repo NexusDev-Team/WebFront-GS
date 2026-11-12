@@ -11,12 +11,10 @@
 
 /*
  * cshield-saida.js — saídas derivadas da decisão do C-Shield: cor do LED (atuadores.h), ventoinha
- * de refrigeração simulada (simulacao.h) e relés deduzidos do que o FIWARE publica.
+ * de refrigeração simulada (simulacao.h).
  * Separado do cshield.js para manter cada arquivo focado.
  */
-import { SETPOINT_DEMO_ATAQUE, SETPOINT_DEMO_NORMAL } from './config.js'
-import { ESTADOS, MOTIVOS, temperaturaValida } from './cshield.js'
-import { PERFIS_FIRMWARE } from './perfis.js'
+import { ESTADOS } from './cshield.js'
 
 // Ventoinha de refrigeração do controlador (LED verde no Wokwi; a do controlador, não a de
 // emergência). Sem bloqueio ela segue a chave NORMAL/ATAQUE: o ataque a desliga. Com o bloqueio
@@ -48,26 +46,4 @@ export function corLed(decisao) {
     default:
       return 'verde'
   }
-}
-
-// Deduz o que os relés estão fazendo a partir do que o dispositivo publica no Orion (o firmware
-// não publica os relés). Atua só em BLOQUEIO e CRITICO. Frio = RESFRIAMENTO_RAPIDO ou setpoint
-// abaixo da faixa; calor é o resto. A temperatura medida manda (acima da faixa é calor, abaixo
-// é frio); com ela dentro da faixa, ou sem leitura (-999), vale a direção do ataque — a mesma
-// regra do decisao.h. `controlador` diz que ordem o atacante está mandando.
-export function relesPublicados({ state, reason, temperature, setpoint }, perfil = PERFIS_FIRMWARE.VACINA) {
-  const atua = state === ESTADOS.BLOQUEIO || state === ESTADOS.CRITICO
-  const ataqueFrio =
-    reason === MOTIVOS.RESFRIAMENTO_RAPIDO ||
-    (reason === MOTIVOS.SETPOINT_INVALIDO && setpoint < perfil.tMin)
-  const valida = temperaturaValida(temperature)
-  const muitoQuente = valida && temperature > perfil.tMax
-  const muitoFrio = valida && temperature < perfil.tMin
-  const modoCalor = muitoQuente || (!muitoFrio && !ataqueFrio)
-
-  let controlador = 'DESCONHECIDO'
-  if (setpoint === SETPOINT_DEMO_NORMAL) controlador = 'NORMAL'
-  else if (setpoint === SETPOINT_DEMO_ATAQUE) controlador = 'ATAQUE'
-
-  return { cortaAquecedor: atua && modoCalor, ligaVentoinha: atua && modoCalor, controlador }
 }
