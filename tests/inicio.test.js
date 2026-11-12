@@ -11,7 +11,7 @@
 
 // Conteúdo da página inicial: banner, problema (três números com fonte) e solução (quatro passos).
 import { describe, expect, it } from 'vitest'
-import { BANNER, DEMO, PAINEL, PROBLEMA, SOLUCAO, fonteDoFato } from '../src/content/inicio.js'
+import { BANNER, CHAMADA, DEMO, PAINEL, PROBLEMA, SOLUCAO, fonteDoFato } from '../src/content/inicio.js'
 import { PERFIS_FIRMWARE } from '../src/domain/perfis.js'
 
 const TEXTOS = JSON.stringify({ BANNER, PROBLEMA, SOLUCAO })
@@ -124,5 +124,17 @@ describe('PAINEL (o painel do C-Shield da página inicial)', () => {
   })
   it('os valores de alerta são identificados como da demonstração', () => {
     expect(PAINEL.alertas.aviso).toMatch(/demonstra/i)
+  })
+})
+
+describe('CHAMADA (a faixa final da página inicial)', () => {
+  it('compara os 3h30 da Europa com os segundos do C-Shield', () => {
+    expect(CHAMADA.texto).toBe('Na Europa, foram 3h30 até alguém perceber. Com o C-Shield, segundos.')
+  })
+  it('leva ao emulador', () => {
+    expect(CHAMADA.acao).toEqual({ rotulo: 'Simular um ataque', para: '/emulador' })
+  })
+  it('o número da chamada é o mesmo do primeiro fato do problema', () => {
+    expect(CHAMADA.texto).toContain(PROBLEMA.fatos[0].valor)
   })
 })
