@@ -138,6 +138,18 @@ describe('ações', () => {
     expect(result.current.cidade.locais['farmacia-mooca'].protegido).toBe(true)
     expect(sit(result, 'farmacia-mooca')).toBe('NORMAL')
   })
+  it('parar o ataque desfaz as ordens, mas o jogo continua e o bloqueio fica', () => {
+    const { result } = renderHook(() => useCidadeSimulada())
+    act(() => result.current.ataqueEmMassa('CALOR'))
+    avancar(1000)
+    act(() => result.current.pararAtaques())
+    expect(Object.values(result.current.cidade.locais).every((l) => l.ordem === 'NORMAL')).toBe(true)
+    expect(result.current.cidade.coordenado).toBeNull()
+    const relogio = result.current.cidade.relogioSimMs
+    avancar(500)
+    expect(result.current.cidade.relogioSimMs).toBeGreaterThan(relogio)
+    expect(sit(result, 'ubs-vila-mariana')).toBe('ATAQUE_BLOQUEADO')
+  })
   it('liberar devolve SEM_BLOQUEIO, RECUSADA e ACEITA conforme o caso', () => {
     const { result } = renderHook(() => useCidadeSimulada())
     let r
