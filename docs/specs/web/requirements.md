@@ -19,7 +19,14 @@ Fontes: `docs/PROMPT-WEB.md`, `docs/specs/PLANO-GS.md` e, no repositório do Edg
 - **W3.** QUANDO a pessoa atualizar a página em qualquer rota no site publicado, O SITE DEVE carregar a mesma rota sem erro 404 (`vercel.json`).
 - **W4.** QUANDO a pessoa navegar pelo teclado, O SITE DEVE mostrar o foco visível em todos os links e controles e indicar a rota atual na navegação (`aria-current`).
 
-## Página inicial (scrollytelling)
+## Página inicial (scrollytelling) — W5 a W9 SUBSTITUÍDOS em 12/11 por W5'
+
+> **Decisão do João (12/11):** a página inicial não terá scrollytelling. W5 a W9 ficam como histórico e valem os requisitos abaixo.
+
+- **W5'.** QUANDO a pessoa abrir `/`, O SITE DEVE mostrar, nesta ordem, o banner (título "Proteção inteligente para a cadeia de frio", frase do produto, os botões "Simular um ataque" e "Como funciona" e a imagem da câmara fria), a seção do problema (os números 3h30, 12.976 e 110 °C, cada um com a fonte linkada) e a seção da solução (os quatro passos: medir, decidir, assumir, alertar).
+- **W5a'.** QUANDO o arquivo da imagem do banner não existir, O SITE DEVE mostrar um espaço reservado com o escudo da logo, sem imagem quebrada.
+- **W5b'.** QUANDO o texto da página inicial for escrito, O SITE NUNCA DEVE usar leet (o leet fica só no emulador) nem sugerir que o C-Shield recebe comandos pela rede (W43).
+
 
 - **W5.** QUANDO a pessoa abrir `/`, O SITE DEVE apresentar 4 capítulos em rolagem: Madrugada, A invasão, O C-Shield e A prova, com os textos da seção 2.5 do prompt.
 - **W6.** QUANDO um capítulo ocupar a maior parte da tela, O SITE DEVE ajustar o fundo binário (velocidade, direção e cor), a geladeira (porta e faíscas) e o brilho dos títulos ao capítulo atual.

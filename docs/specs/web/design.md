@@ -2,7 +2,63 @@
 
 Fase A, T3 do `docs/PROMPT-WEB.md`. Requisitos citados como W1..W52 (`requirements.md`).
 
-## 1. Direção: "Sala de controle às 2h da manhã"
+> **Atualização de 12/11 (decisão do João):** o visual foi trocado por **"Glacial industrial"**, descrito na seção 0. As seções 1 e 2 e a camada "hacker + gelo" abaixo ficam como histórico e **foram substituídas**. Os NOMES dos tokens (`noite-950`, `gelo-50`, `led-forte`...) foram mantidos; só os valores e as fontes mudaram.
+
+## 0. Direção atual: "Glacial industrial" (12/11)
+
+O primeiro visual (sala de controle com clima hacker) foi reprovado: informação demais junta, bagunçado e com cara de gerado por IA. O novo tira o "invasor" da interface e mostra o C-Shield como um produto industrial de IoT e prevenção. O clima hacker fica **só no emulador**, onde a pessoa faz o papel do atacante.
+
+Princípios:
+
+1. **Menos, em seções simples.** Cada página é uma sequência de blocos com um assunto só e respiro generoso (`py-20 sm:py-28` nas seções da página inicial). Sem grade de fundo, scanlines, glitch nem prompt de terminal.
+2. **A cor é estado.** Verde e vermelho só para estado real ("estabilizado", "alerta"). O azul-glacial é a cor da marca e do C-Shield ativo, e só ele ganha glow, sóbrio.
+3. **Vidro com borda fina.** Cartões `#0F172A` translúcidos, borda de 1 px a 10% de branco e cantos de 16 px.
+4. **Números de instrumento.** Temperaturas e métricas em fonte monoespaçada com `tabular-nums`; o resto em fonte neutra.
+
+Tokens (valores atuais de `src/styles/tokens.css`):
+
+| Token | Valor | Uso |
+| --- | --- | --- |
+| `noite-950` | `#060B18` | Fundo da página (com um gradiente azul fraco no topo) |
+| `noite-900` | `#0F172A` | Cartões, faixas de seção e rodapé |
+| `painel` | `rgba(15, 23, 42, 0.72)` + blur | Painéis de vidro |
+| `borda` | `rgba(226, 232, 240, 0.10)` | Bordas finas |
+| `gelo-50` / `gelo-100` / `gelo-300` | `#F8FAFC` / `#E2E8F0` / `#CBD5E1` | Texto principal / linhas / texto secundário |
+| `led-forte` | `#38BDF8` | Azul-glacial: marca, C-Shield ativo, botão principal |
+| `ciano` | `#06B6D4` | Feedback secundário de sensor |
+| `led-fraco` | `#1E6FA3` | Só decoração; nunca texto |
+| `ok` / `atencao` / `critico` | `#22C55E` / `#EAB308` / `#EF4444` | Só indicadores de estado |
+| `ataque` | `#EF4444` | Linhas de ataque do mapa e título do emulador sob ataque |
+| `lcd-fundo` / `lcd-texto` | `#0B1A2E` / `#7DD3FC` | Display de vidro do C-Shield |
+
+Tipografia (Google Fonts): títulos em **Plus Jakarta Sans** (600 a 800), texto em **Inter** (400 a 600) e números em **JetBrains Mono** (400 e 500, `tabular-nums`). O display do C-Shield usa a mesma fonte monoespaçada, com 16 colunas fixas.
+
+Esboço da `/` (decisão do João: banner, problema e solução, sem scrollytelling):
+
+```
+[Navbar: logo · Início · Notícias · Como funciona · Nexus Dev · (Simular ataque)]
+ Banner     rótulo "Cadeia do frio" · h1 "Proteção inteligente para a cadeia de frio"
+            frase · [Simular um ataque] [Como funciona]            [imagem da câmara fria]
+ Problema   h2 "Invadiram o frio pela internet" · parágrafo
+            [3h30]  [12.976]  [110 °C]   cada um com a explicação e a fonte linkada
+ Solução    h2 "Vê de longe. Só obedece de perto." · [01 Medir] [02 Decidir] [03 Assumir] [04 Alertar]
+[Rodapé: marca e frase · links do site · links do projeto]
+```
+
+A imagem do banner é fornecida pela equipe em `public/imagens/hero-camara.webp`; sem o arquivo, o banner mostra um espaço reservado com o escudo da logo.
+
+Esboço do `/emulador`:
+
+```
+ Cabeçalho   "Seja o hacker" (vermelho só enquanto um local sem C-Shield está sob ataque)
+             instrução · chip "Tempo acelerado: 1 s = 1 min"
+ Mapa + controles   [ mapa da cidade ]  [ alvo · 4T4QU3 D3 C4L0R · 4T4QU3 D3 FR10 · massa · recomeçar ]
+ Placar      UBS Vila Mariana (com C-Shield) | UBS Brasilândia (sem C-Shield)
+             temperatura · tempo até reagir · exposição · situação
+ Abas        [Câmara] [Instalações] [Dispositivo real]   (setas, Home e End; #dispositivo-real abre a última)
+```
+
+## 1. Direção: "Sala de controle às 2h da manhã" (SUBSTITUÍDA em 12/11, ver seção 0)
 
 A câmara fria vista de madrugada, pelo painel de quem a protege. A interface é uma sala escura com instrumentos acesos: tudo em repouso é azul fraco e estável; o ataque entra como vermelho e falha de energia; o C-Shield assumindo é azul forte e firme — o mesmo significado do LED do aparelho. **A luz conta a história antes do texto.**
 
@@ -15,7 +71,7 @@ Tese de interação (o que torna o site memorável, sem virar enfeite):
 
 Validação com `ui-ux-pro-max` (11/11): o banco recomenda o padrão "Real-Time / Operations Landing" com estilo "Dark Mode (OLED)", status em verde/âmbar/vermelho e brilho mínimo (`text-shadow: 0 0 10px`) — coerente com a direção da equipe. A tipografia sugerida pelo banco (Fira) foi descartada: a equipe já decidiu Chakra Petch + IBM Plex + VT323, que dá mais identidade.
 
-## 2. Tokens
+## 2. Tokens (SUBSTITUÍDOS em 12/11: valores e fontes novos na seção 0)
 
 Definidos uma vez em `src/styles/tokens.css` (variáveis CSS) e expostos no `tailwind.config.js`. Componentes nunca usam hex solto.
 
@@ -68,7 +124,7 @@ Movimento: transições de interface entre 150 e 300 ms; nada anima `width`/`hei
 
 Ícones: SVG próprios inline (atacante, central, escudo, frasco, gota de sangue, carrinho, cruz de farmácia). Sem emoji como ícone.
 
-### Camada "hacker + gelo" (decisão do João, 11/11)
+### Camada "hacker + gelo" (decisão do João, 11/11) — SUBSTITUÍDA em 12/11: removida do site, exceto o glitch do título do emulador
 
 O tema é ataque cibernético a refrigeradores, então a sala de controle mistura duas linguagens visuais, cada uma com um dono:
 
@@ -110,7 +166,7 @@ Nenhuma cor de texto nova, então a tabela de contraste acima não muda.
 └──────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
-### `/` — scrollytelling (W5–W9)
+### `/` — scrollytelling (W5–W9) — SUBSTITUÍDO em 12/11 por banner, problema e solução (ver seção 0)
 
 ```
 [canvas FundoBinario fixo atrás]
