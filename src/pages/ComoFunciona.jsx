@@ -17,8 +17,7 @@ import SecaoCiclo from '../components/comoFunciona/SecaoCiclo.jsx'
 import SecaoEstados from '../components/comoFunciona/SecaoEstados.jsx'
 import SecaoOrigem from '../components/comoFunciona/SecaoOrigem.jsx'
 import SecaoWokwi from '../components/comoFunciona/SecaoWokwi.jsx'
-import Rotulo from '../components/ui/Rotulo.jsx'
-import TituloLed from '../components/ui/TituloLed.jsx'
+import CabecalhoPagina from '../components/ui/CabecalhoPagina.jsx'
 import {
   ARQUITETURA,
   CABECALHO,
@@ -31,11 +30,11 @@ import {
 export default function ComoFunciona() {
   return (
     <>
-      <header className="conteudo flex flex-col gap-4 pt-16 pb-6 sm:pt-20">
-        <Rotulo>{CABECALHO.rotulo}</Rotulo>
-        <TituloLed nivel={1}>{CABECALHO.titulo}</TituloLed>
-        <p className="max-w-2xl text-lg text-gelo-300 sm:text-xl">{CABECALHO.subtitulo}</p>
-      </header>
+      <CabecalhoPagina
+        rotulo={CABECALHO.rotulo}
+        titulo={CABECALHO.titulo}
+        subtitulo={CABECALHO.subtitulo}
+      />
       <SecaoCiclo conteudo={CICLO} />
       <SecaoArquitetura conteudo={ARQUITETURA} />
       <SecaoEstados estados={ESTADOS_DA_PAGINA} />
