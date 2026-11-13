@@ -10,47 +10,34 @@
  */
 
 import LedEstado from '../camara/LedEstado.jsx'
-import FundoCyber from '../ui/FundoCyber.jsx'
 import Revelar from '../ui/Revelar.jsx'
 import Secao from '../ui/Secao.jsx'
 
-// "Os cinco estados": um cartão por estado, com a cor do LED (e o que ela quer dizer, em texto),
-// quando o estado acontece e o que o aparelho faz. O bloqueio é azul fixo, como o LED do aparelho.
-// O LED amarelo piscando pisca devagar e para com prefers-reduced-motion (LedEstado).
+// "Os cinco estados": uma lista compacta, uma linha por estado, com a cor do LED (e o que ela quer
+// dizer, em texto), o nome e quando o estado acontece. O bloqueio é azul fixo, como o LED do
+// aparelho. O LED amarelo piscando pisca devagar e para com prefers-reduced-motion (LedEstado).
 export default function SecaoEstados({ estados }) {
   return (
     <Secao
       id="titulo-estados"
       rotulo="Estados"
       titulo="Os cinco estados"
-      subtitulo="O aparelho está sempre em um destes cinco estados. A prioridade, do mais grave ao mais leve, é crítico, bloqueio, falha de sensor, atenção e normal."
-      fundo={<FundoCyber />}
+      subtitulo="O aparelho está sempre em um destes estados. O mais grave vale primeiro: crítico, bloqueio, falha de sensor, atenção e normal."
     >
-      <ul className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {estados.map((estado, indice) => (
-          <li key={estado.id}>
-            <Revelar atraso={(indice % 3) * 0.08} className="h-full">
-              <div className="cartao flex h-full flex-col gap-4 p-6">
-                <div className="flex items-baseline justify-between gap-3">
-                  <h3 className="text-xl font-bold text-gelo-50">{estado.nome}</h3>
-                  <span className="font-mono text-xs text-gelo-300">{estado.id}</span>
-                </div>
-                <LedEstado cor={estado.led} />
-                <dl className="flex flex-col gap-3 text-sm">
-                  <div>
-                    <dt className="text-gelo-300">Quando acontece</dt>
-                    <dd className="text-gelo-50">{estado.quando}</dd>
-                  </div>
-                  <div>
-                    <dt className="text-gelo-300">O que o aparelho faz</dt>
-                    <dd className="text-gelo-50">{estado.acao}</dd>
-                  </div>
-                </dl>
-              </div>
-            </Revelar>
-          </li>
-        ))}
-      </ul>
+      <Revelar>
+        <ul className="divide-y divide-borda border-y border-borda">
+          {estados.map((estado) => (
+            <li
+              key={estado.id}
+              className="grid gap-x-8 gap-y-2 py-5 md:grid-cols-[18rem_8rem_1fr] md:items-center"
+            >
+              <LedEstado cor={estado.led} />
+              <h3 className="text-lg font-semibold text-gelo-50">{estado.nome}</h3>
+              <p className="text-gelo-300">{estado.quando}</p>
+            </li>
+          ))}
+        </ul>
+      </Revelar>
     </Secao>
   )
 }

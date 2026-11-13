@@ -14,7 +14,8 @@ import Secao from '../ui/Secao.jsx'
 import DiagramaArquitetura from './DiagramaArquitetura.jsx'
 
 // "Uma direção só": o diagrama da arquitetura e, logo abaixo, a mesma história em texto (a lista
-// de etapas é o equivalente do diagrama para leitor de tela e para quem prefere ler). Em faixa.
+// de etapas é o equivalente do diagrama para leitor de tela e para quem prefere ler) e a nota
+// honesta do limite do protótipo. Em faixa.
 export default function SecaoArquitetura({ conteudo }) {
   return (
     <Secao
@@ -37,6 +38,9 @@ export default function SecaoArquitetura({ conteudo }) {
               </li>
             ))}
           </ol>
+        </Revelar>
+        <Revelar atraso={0.15}>
+          <p className="max-w-prose text-sm text-gelo-300">{conteudo.limite}</p>
         </Revelar>
       </div>
     </Secao>
