@@ -23,7 +23,8 @@ const COR = {
   vermelho: 'var(--color-ataque)',
 }
 
-function No({ x, y, largura, altura, titulo, detalhe, destaque = false }) {
+function No({ x, y, largura, altura, titulo, detalhe, destaque = false, perigo = false }) {
+  const traco = destaque ? COR.azul : perigo ? 'rgba(255, 64, 88, 0.55)' : 'rgba(155, 175, 190, 0.35)'
   return (
     <g>
       <rect
@@ -32,10 +33,11 @@ function No({ x, y, largura, altura, titulo, detalhe, destaque = false }) {
         width={largura}
         height={altura}
         rx="14"
-        fill={destaque ? 'rgba(0, 207, 255, 0.12)' : 'var(--color-noite-900)'}
-        stroke={destaque ? COR.azul : 'rgba(226, 232, 240, 0.2)'}
-        strokeWidth={destaque ? 2 : 1}
+        fill={destaque ? 'rgba(0, 207, 255, 0.12)' : perigo ? 'rgba(255, 64, 88, 0.07)' : 'var(--color-superficie)'}
+        stroke={traco}
+        strokeWidth={destaque ? 2 : 1.2}
       />
+      <rect x={x + 14} y={y} width={largura - 28} height="2.5" rx="1.25" fill={traco} />
       <text x={x + largura / 2} y={y + altura / 2 - 3} textAnchor="middle" className="fill-gelo-50 text-[15px] font-semibold">
         {titulo}
       </text>
@@ -46,10 +48,12 @@ function No({ x, y, largura, altura, titulo, detalhe, destaque = false }) {
   )
 }
 
-function Seta({ d, cor, marcador, tracejada = false }) {
+// `corre` anima o tracejado (classe .linha-fluxo): para com prefers-reduced-motion.
+function Seta({ d, cor, marcador, tracejada = false, corre = false }) {
   return (
     <path
       d={d}
+      className={corre ? 'linha-fluxo' : undefined}
       fill="none"
       stroke={cor}
       strokeWidth="2.2"
@@ -81,14 +85,24 @@ function DiagramaLargo() {
         <Ponta id={azul} cor={COR.azul} />
         <Ponta id={vermelho} cor={COR.vermelho} />
         <Ponta id={neutro} cor={COR.neutro} />
+        <radialGradient id={`${base}-halo`}>
+          <stop offset="0" stopColor="#00cfff" stopOpacity="0.2" />
+          <stop offset="1" stopColor="#00cfff" stopOpacity="0" />
+        </radialGradient>
+        <pattern id={`${base}-grade`} width="32" height="32" patternUnits="userSpaceOnUse">
+          <path d="M32 0 H0 V32" fill="none" stroke="#64cfff" strokeOpacity="0.06" />
+        </pattern>
       </defs>
 
+      <rect x="0" y="70" width="1000" height="400" fill={`url(#${base}-grade)`} />
+      <ellipse cx="625" cy="345" rx="260" ry="120" fill={`url(#${base}-halo)`} />
+
       {/* o caminho da ordem do atacante até a câmara */}
-      <No x={20} y={90} largura={190} altura={76} titulo="Internet" detalhe="atacante ou técnico" />
-      <No x={275} y={90} largura={190} altura={76} titulo="Controlador comercial" detalhe="vulnerável" />
+      <No x={20} y={90} largura={190} altura={76} titulo="Internet" detalhe="atacante ou técnico" perigo />
+      <No x={275} y={90} largura={190} altura={76} titulo="Controlador comercial" detalhe="vulnerável" perigo />
       <No x={530} y={90} largura={190} altura={76} titulo="Relé do C-Shield" detalhe="corta ou libera" />
       <No x={785} y={90} largura={190} altura={76} titulo="Câmara fria" detalhe="compressor e degelo" />
-      <Seta d="M212 128 H271" cor={COR.vermelho} marcador={vermelho} />
+      <Seta d="M212 128 H271" cor={COR.vermelho} marcador={vermelho} corre />
       <text x={241} y={113} textAnchor="middle" className="fill-gelo-300 text-[12px]">ordem</text>
       <Seta d="M467 128 H526" cor={COR.neutro} marcador={neutro} />
       <Seta d="M722 128 H781" cor={COR.neutro} marcador={neutro} />
@@ -109,7 +123,7 @@ function DiagramaLargo() {
       <text x={243} y={333} textAnchor="middle" className="fill-gelo-300 text-[12px]">https</text>
 
       {/* o C-Shield não escuta a rede: a linha da internet termina num X */}
-      <Seta d="M115 168 V252 H494" cor={COR.vermelho} tracejada />
+      <Seta d="M115 168 V252 H494" cor={COR.vermelho} tracejada corre />
       <path d="M496 244 L512 260 M512 244 L496 260" stroke={COR.vermelho} strokeWidth="3" strokeLinecap="round" />
       <text x={300} y={242} textAnchor="middle" className="fill-ataque text-[13px] font-semibold">não escuta a rede</text>
 

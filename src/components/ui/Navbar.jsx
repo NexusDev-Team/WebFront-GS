@@ -38,7 +38,12 @@ export default function Navbar() {
   const fechar = () => setAberto(false)
 
   return (
-    <header className="sticky top-0 z-40 border-b border-borda/60 bg-noite-950/80 backdrop-blur-md">
+    <header className="sticky top-0 z-40 bg-noite-950/90">
+      {/* O header se dissolve no conteúdo: um degradê desce da cor do fundo até transparente, sem linha seca. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-full h-10 bg-linear-to-b from-noite-950/90 to-transparent"
+      />
       <nav
         aria-label="Principal"
         className="conteudo flex min-h-20 flex-wrap items-center justify-between gap-x-6 gap-y-2 py-2"

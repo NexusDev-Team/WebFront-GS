@@ -34,7 +34,7 @@ export default function ChamadaFinal({ conteudo }) {
         </Revelar>
 
         <Revelar atraso={0.15}>
-          <PainelVidro className="p-6 sm:p-10">
+          <PainelVidro className="p-4 sm:p-6">
             <PreviaAtaque className="h-auto w-full" />
           </PainelVidro>
         </Revelar>

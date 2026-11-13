@@ -40,7 +40,11 @@ export default function Banner({ conteudo }) {
         />
         <div
           aria-hidden="true"
-          className="absolute inset-x-0 bottom-0 h-24 bg-linear-to-t from-noite-950 to-transparent md:h-32"
+          className="absolute inset-x-0 top-0 h-28 bg-linear-to-b from-noite-950 via-noite-950/60 to-transparent md:h-40"
+        />
+        <div
+          aria-hidden="true"
+          className="absolute inset-x-0 bottom-0 h-40 bg-linear-to-t from-noite-950 via-noite-950/70 to-transparent md:h-56"
         />
       </div>
 
