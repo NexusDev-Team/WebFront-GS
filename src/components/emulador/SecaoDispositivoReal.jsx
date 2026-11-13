@@ -25,7 +25,7 @@ export default function SecaoDispositivoReal() {
       ancora="dispositivo-real"
       rotulo="De verdade"
       titulo="Dispositivo real"
-      subtitulo="Tudo acima é um jogo. O C-Shield de verdade roda num ESP32; aqui você vê como ele seria e o circuito dele funcionando no simulador Wokwi. Nem este site consegue dar ordens ao C-Shield: ele só envia dados, e só quem está presente consegue liberar o bloqueio."
+      subtitulo="Tudo acima é um jogo; o C-Shield de verdade roda num ESP32. Nem este site consegue dar ordens ao C-Shield: ele só envia dados."
       faixa
     >
       <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-12">

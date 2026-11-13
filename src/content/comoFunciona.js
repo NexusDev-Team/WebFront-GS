@@ -18,7 +18,8 @@ import { URL_REPOSITORIO_EDGE, URL_WOKWI } from './links.js'
 
 export const CABECALHO = {
   rotulo: 'O dispositivo',
-  titulo: 'Como o C-Shield funciona',
+  titulo: 'Como o C-Shield',
+  destaque: 'protege o frio',
   subtitulo: 'Vê de longe. Só obedece de perto.',
 }
 

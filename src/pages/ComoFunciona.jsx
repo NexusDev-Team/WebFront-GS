@@ -31,6 +31,7 @@ export default function ComoFunciona() {
       <CabecalhoPagina
         rotulo={CABECALHO.rotulo}
         titulo={CABECALHO.titulo}
+        destaque={CABECALHO.destaque}
         subtitulo={CABECALHO.subtitulo}
       />
       <SecaoCiclo conteudo={CICLO} />
