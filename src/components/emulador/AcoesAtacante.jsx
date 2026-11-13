@@ -10,8 +10,8 @@
  */
 
 // As ações do atacante (W12, W15, W18), no alto do card da simulação, logo abaixo do ícone dele:
-// atacar o local escolhido (calor ou frio), o ataque em massa, parar o ataque (só desfaz as
-// ordens) e recomeçar (zera o jogo). Os botões de ataque ficam em leet, com aria-label legível.
+// atacar o local escolhido (um botão só: esquenta a câmara), o ataque em massa, parar o ataque (só desfaz as
+// ordens) e recomeçar (zera o jogo). O botão de ataque fica em leet, com aria-label legível.
 // Proteger um local NÃO está aqui: isso é a zona de defesa, na parte de baixo do card.
 import BotaoLed from '../ui/BotaoLed.jsx'
 import Atacante from './Atacante.jsx'
@@ -27,11 +27,8 @@ export default function AcoesAtacante({ selecionado, haAtaque, aoAtacar, aoAtaqu
         </span>
       </p>
       <div className="flex flex-wrap justify-center gap-2">
-        <BotaoLed className="px-3! text-sm!" variante="ataque" ariaLabel="Ataque de calor" disabled={!selecionado} onClick={() => aoAtacar('CALOR')}>
-          4T4QU3 D3 C4L0R
-        </BotaoLed>
-        <BotaoLed className="px-3! text-sm!" variante="ataque" ariaLabel="Ataque de frio" disabled={!selecionado} onClick={() => aoAtacar('FRIO')}>
-          4T4QU3 D3 FR10
+        <BotaoLed className="px-3! text-sm!" variante="ataque" ariaLabel="Ataque" disabled={!selecionado} onClick={() => aoAtacar('CALOR')}>
+          4T4QU3
         </BotaoLed>
         <BotaoLed className="px-3! text-sm!" variante="ataque" ariaLabel="Ataque em massa: esquentar os cinco locais de uma vez" onClick={aoAtaqueEmMassa}>
           Ataque em massa

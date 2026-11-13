@@ -11,8 +11,8 @@
 
 // Página Emulador: "Seja o hacker". Um card só conta a história: em cima o atacante, com os botões
 // das ações dele logo abaixo; no meio o mapa da cidade com 5 locais; embaixo a defesa, com o que
-// dá para fazer no local escolhido (ativar ou desativar o C-Shield). Ao lado, o placar; depois, a
-// câmara por dentro e a seção do dispositivo real. A página só liga as peças: o jogo inteiro vem
+// dá para fazer no local escolhido (ativar ou desativar o C-Shield). Ao lado fica a câmara por
+// dentro do local escolhido; depois vem a seção do dispositivo real. A página só liga as peças: o jogo inteiro vem
 // de useCidadeSimulada (sem API). O título fica vermelho só enquanto um local sem C-Shield está
 // sob ataque (algumSobAtaque).
 import { useEffect, useState } from 'react'
@@ -24,7 +24,6 @@ import AcoesAtacante from '../components/emulador/AcoesAtacante.jsx'
 import AcoesDefesa from '../components/emulador/AcoesDefesa.jsx'
 import AvisoAoVivo from '../components/emulador/AvisoAoVivo.jsx'
 import MapaCidade from '../components/emulador/MapaCidade.jsx'
-import PlacarComparativo from '../components/emulador/PlacarComparativo.jsx'
 import SecaoDispositivoReal from '../components/emulador/SecaoDispositivoReal.jsx'
 import BotaoLed from '../components/ui/BotaoLed.jsx'
 import Pagina from '../components/ui/Pagina.jsx'
@@ -69,7 +68,7 @@ export default function Emulador() {
         </div>
       </header>
 
-      <div className="grid items-start gap-4 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
+      <div className="grid items-stretch gap-4 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
         <PainelVidro as="section" aria-label="Simulação da cidade" className="flex flex-col">
           <div className="rounded-t-xl border-b border-ataque/40 bg-[color-mix(in_srgb,var(--color-ataque)_9%,transparent)] px-3 py-3">
             <AcoesAtacante
@@ -100,11 +99,9 @@ export default function Emulador() {
             />
           </div>
         </PainelVidro>
-        <PlacarComparativo placar={jogo.placar} />
+        <PainelCamara key={selecionadoId} cidade={jogo.cidade} localId={selecionadoId} aoLiberar={jogo.liberar} />
       </div>
       <AvisoAoVivo cidade={jogo.cidade} />
-
-      <PainelCamara key={selecionadoId} cidade={jogo.cidade} localId={selecionadoId} aoLiberar={jogo.liberar} />
 
       <SecaoDispositivoReal />
     </Pagina>

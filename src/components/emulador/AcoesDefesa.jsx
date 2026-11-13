@@ -13,7 +13,8 @@
 // escolhido para protegê-lo. ATIVAR ou DESATIVAR o C-Shield nele, na hora, só dentro do jogo. A
 // desativação fica desligada, com o motivo escrito, enquanto o ataque estiver bloqueado: o
 // bloqueio só termina presencialmente (botão de segurar na câmara por dentro). A unidade piloto
-// é fixa.
+// é fixa. A altura mínima é a mesma em todos os estados, para o card não mudar de tamanho ao
+// trocar de local ou ao ativar o C-Shield.
 import { motivoNaoDesativar } from '../../domain/cidade-protecao.js'
 import BotaoLed from '../ui/BotaoLed.jsx'
 import Logo from '../ui/Logo.jsx'
@@ -21,7 +22,7 @@ import Logo from '../ui/Logo.jsx'
 export default function AcoesDefesa({ def, local, piloto, aoAtivar, aoDesativar }) {
   const motivo = motivoNaoDesativar(local)
   return (
-    <div className="flex flex-col items-center gap-2 text-center" role="group" aria-label="Defesa do local escolhido">
+    <div className="flex min-h-24 flex-col items-center justify-center gap-2 text-center" role="group" aria-label="Defesa do local escolhido">
       <p className="flex flex-wrap items-center justify-center gap-2 text-gelo-50" aria-live="polite">
         <Logo variante="escudo" />
         <span className="font-titulo text-lg font-semibold">Defesa</span>

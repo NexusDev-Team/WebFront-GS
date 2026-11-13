@@ -15,6 +15,7 @@
 import { LOCAIS } from '../../domain/cidade.js'
 import { situacao } from '../../domain/cidade-placar.js'
 import Central from './Central.jsx'
+import FundoMapa from './FundoMapa.jsx'
 import { VIEWBOX } from './geometria.js'
 import LinhaAtaque from './LinhaAtaque.jsx'
 import LinhaDados from './LinhaDados.jsx'
@@ -31,6 +32,9 @@ export default function MapaCidade({ cidade, selecionadoId, aoSelecionar, reduzi
         aria-label="Mapa da cidade com cinco locais"
         className="h-auto w-full"
       >
+        {/* O fundo: ruas, quarteirões, avenida e rio, como um mapa de verdade */}
+        <FundoMapa />
+
         {/* A cidade: um contorno tracejado, com o atacante do lado de fora */}
         <rect
           x={30}

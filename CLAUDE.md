@@ -93,7 +93,7 @@ Não trocar sem decisão explícita do usuário.
   - motivos: `-`, `PORTA_ABERTA`, `DERIVA`, `SETPOINT_INVALIDO`, `DEGELO_FORA_HORARIO`, `DEGELO_LONGO`, `AQUECIMENTO_RAPIDO`, `RESFRIAMENTO_RAPIDO`, `TEMP_FORA_TOLERANCIA`, `SENSOR_SEM_LEITURA`.
   - LED azul fixo durante o bloqueio.
 - O nome exibido é sempre **C-Shield** (sai de uma constante única). "Guardião" só descreve o papel do dispositivo em textos.
-- **Acessibilidade obrigatória:** texto nunca transparente, contraste mínimo 4,5:1, nada pisca mais de 3 vezes por segundo, `prefers-reduced-motion` respeitado, foco visível, `aria-label` legível nos botões em leet (`4T4QU3 D3 C4L0R` = "Ataque de calor", `4T4QU3 D3 FR10` = "Ataque de frio").
+- **Acessibilidade obrigatória:** texto nunca transparente, contraste mínimo 4,5:1, nada pisca mais de 3 vezes por segundo, `prefers-reduced-motion` respeitado, foco visível, `aria-label` legível nos botões em leet (`4T4QU3` = "Ataque").
 - Segredos nunca commitados. `.env` no `.gitignore`; `.env.example` commitado com as chaves vazias.
 
 ## 7. Comandos de desenvolvimento

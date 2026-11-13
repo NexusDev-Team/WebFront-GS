@@ -12,10 +12,10 @@
 // O botão de segurar (W23): "Só obedece de perto" virado em gesto. É preciso SEGURAR por 3 s,
 // com a barra de 16 blocos enchendo como no visor do aparelho; soltar antes cancela. Funciona com
 // mouse, toque e teclado (Espaço ou Enter). O gesto vem de useSegurar, que o painel usa para
-// também mostrar o progresso no LCD; aqui só se desenha.
+// também mostrar o progresso no LCD; aqui só se desenha. Compacto, para caber ao lado do LED.
 const BLOCOS = 16
 
-export default function BotaoSegurar({ segurar, rotulo = 'Segure 3 s para liberar', desabilitado = false }) {
+export default function BotaoSegurar({ segurar, rotulo = 'Segure 3 s', desabilitado = false }) {
   const { progresso, segurando, props } = segurar
   const cheios = Math.floor(progresso * BLOCOS)
   return (
@@ -23,13 +23,14 @@ export default function BotaoSegurar({ segurar, rotulo = 'Segure 3 s para libera
       <button
         type="button"
         disabled={desabilitado}
+        aria-label="Segure por 3 segundos para liberar o C-Shield"
         {...props}
         onContextMenu={(e) => e.preventDefault()}
-        className="flex min-h-11 w-full max-w-sm cursor-pointer touch-none flex-col items-center justify-center gap-1 rounded-lg border border-led-forte bg-noite-900 px-4 py-3 font-titulo text-base font-semibold text-gelo-50 transition-colors duration-200 select-none hover:bg-noite-950 disabled:cursor-not-allowed disabled:opacity-50"
+        className="flex min-h-11 cursor-pointer touch-none flex-col items-center justify-center rounded-lg border border-led-forte bg-noite-900 px-3 py-1 font-titulo text-sm font-semibold text-gelo-50 transition-colors duration-200 select-none hover:bg-noite-950 disabled:cursor-not-allowed disabled:opacity-50"
         style={segurando ? { backgroundColor: 'var(--color-noite-950)' } : undefined}
       >
         <span>{segurando ? 'Continue segurando...' : rotulo}</span>
-        <span aria-hidden="true" className="font-mono text-lg tracking-widest text-led-forte">
+        <span aria-hidden="true" className="font-mono text-[10px] leading-tight text-led-forte">
           {'█'.repeat(cheios)}
           {'░'.repeat(BLOCOS - cheios)}
         </span>

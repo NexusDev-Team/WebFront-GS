@@ -72,13 +72,13 @@ const ROTULOS = {
 export default function Equipamento({ tipo, estado }) {
   const rotulo = ROTULOS[tipo][estado]
   return (
-    <figure className="flex w-28 flex-col items-center gap-2 text-center">
-      <svg viewBox="0 0 56 56" className="size-14" aria-hidden="true">
+    <figure className="flex min-w-0 flex-col items-center gap-1 text-center">
+      <svg viewBox="0 0 56 56" className="size-9" aria-hidden="true">
         {tipo === 'aquecedor' ? <Aquecedor estado={estado} /> : null}
         {tipo === 'ventoinha' ? <Ventoinha ligada={estado} /> : null}
         {tipo === 'refrigeracao' ? <Refrigeracao ligada={estado} /> : null}
       </svg>
-      <figcaption className="text-sm leading-snug text-gelo-50">{rotulo}</figcaption>
+      <figcaption className="text-xs leading-tight text-gelo-50">{rotulo}</figcaption>
     </figure>
   )
 }

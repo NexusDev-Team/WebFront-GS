@@ -53,9 +53,9 @@ export default function GraficoTemperatura({ pontos, tMin, tMax }) {
           </text>
         )}
       </svg>
-      <figcaption className="text-sm text-gelo-300">
-        Faixa segura (sombreada): {tMin} °C a {tMax} °C.
-        {fora ? ' A temperatura está fora da faixa.' : ''}
+      {/* Sempre uma linha só, para o painel não mudar de altura quando a temperatura sai da faixa. */}
+      <figcaption className={`text-sm ${fora ? 'text-gelo-50' : 'text-gelo-300'}`}>
+        {fora ? 'Fora da faixa segura' : 'Faixa segura'} (sombreada): {tMin} °C a {tMax} °C.
       </figcaption>
     </figure>
   )

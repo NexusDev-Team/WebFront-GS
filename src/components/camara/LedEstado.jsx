@@ -20,17 +20,17 @@ const LEDS = {
   azul: { cor: 'var(--color-led-forte)', texto: 'Azul fixo: C-Shield no controle' },
 }
 
-export default function LedEstado({ cor }) {
+export default function LedEstado({ cor, className = '' }) {
   const led = LEDS[cor] ?? LEDS.verde
   return (
-    <p className="flex items-center gap-3 text-gelo-50">
+    <p className={`flex items-center gap-3 text-gelo-50 ${className}`}>
       <span
         aria-hidden="true"
         className={`size-6 shrink-0 rounded-full ${cor === 'amarelo-pisca' ? 'led-pisca' : ''}`}
         style={{ backgroundColor: led.cor, boxShadow: '0 0 0 3px rgba(248, 250, 252, 0.1), inset 0 1px 1px rgba(248, 250, 252, 0.4)' }}
       />
       <span>
-        <span className="font-mono text-sm text-gelo-300">LED </span>
+        <span className="font-mono text-xs text-gelo-300">LED </span>
         {led.texto}
       </span>
     </p>
