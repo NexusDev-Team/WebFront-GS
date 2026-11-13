@@ -13,12 +13,13 @@ import Revelar from './Revelar.jsx'
 
 // Seção padrão das páginas (Design System v1.0): espaçamento vertical de 96 a 160 px, container
 // de 88% (até 1440 px), rótulo técnico, título e subtítulo opcionais, tudo entrando ao rolar.
-// `id` liga o título à seção (aria-labelledby). `fundo` é um nó decorativo posto atrás do conteúdo.
-export default function Secao({ id, rotulo, titulo, subtitulo, fundo = null, className = '', children }) {
+// `id` liga o título à seção (aria-labelledby); `ancora` é o id da própria seção (links #...). `fundo` é um nó decorativo posto atrás do conteúdo.
+export default function Secao({ id, ancora, rotulo, titulo, subtitulo, fundo = null, className = '', children }) {
   return (
     <section
+      id={ancora}
       aria-labelledby={titulo ? id : undefined}
-      className={`relative py-24 md:py-32 lg:py-40 ${className}`}
+      className={`relative scroll-mt-20 py-24 md:py-32 lg:py-40 ${className}`}
     >
       {fundo}
       <div className="relative mx-auto w-[88%] max-w-360 max-md:w-[calc(100%-3rem)]">

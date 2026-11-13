@@ -9,33 +9,45 @@
  *   Nicolas Cinel — RM572940
  */
 
+import { ArrowRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { fonteDoFato } from '../../content/inicio.js'
-import TituloSecao from '../ui/TituloSecao.jsx'
+import Secao from '../ui/Secao.jsx'
 import FatoNumero from './FatoNumero.jsx'
 
 // Seção "o problema": o que aconteceu na Europa, em um parágrafo e três números com fonte.
+// Sem cartões em volta: os números respiram sobre o fundo, separados por um fio fino.
 export default function SecaoProblema({ conteudo }) {
   return (
-    <section aria-labelledby="titulo-problema" className="border-t border-borda bg-noite-900/50 py-20 sm:py-28">
-      <div className="mx-auto flex max-w-6xl flex-col gap-10 px-4">
-        <TituloSecao id="titulo-problema" subtitulo={conteudo.texto}>
-          {conteudo.titulo}
-        </TituloSecao>
-
-        <div className="grid gap-6 md:grid-cols-3">
-          {conteudo.fatos.map((fato) => (
-            <FatoNumero key={fato.fonteId} valor={fato.valor} rotulo={fato.rotulo} fonte={fonteDoFato(fato)} />
-          ))}
-        </div>
-
-        <Link
-          to={conteudo.link.para}
-          className="inline-flex min-h-11 items-center font-semibold text-led-forte underline-offset-4 hover:underline"
-        >
-          {conteudo.link.rotulo}
-        </Link>
+    <Secao
+      id="titulo-problema"
+      ancora="problema"
+      rotulo="O problema"
+      titulo={conteudo.titulo}
+      subtitulo={conteudo.texto}
+    >
+      <div className="grid gap-10 md:grid-cols-3 md:gap-12">
+        {conteudo.fatos.map((fato, indice) => (
+          <FatoNumero
+            key={fato.fonteId}
+            valor={fato.valor}
+            rotulo={fato.rotulo}
+            fonte={fonteDoFato(fato)}
+            atraso={indice * 0.12}
+          />
+        ))}
       </div>
-    </section>
+
+      <Link
+        to={conteudo.link.para}
+        className="group mt-12 inline-flex min-h-11 items-center gap-2 font-semibold text-ciano underline-offset-4 hover:underline"
+      >
+        {conteudo.link.rotulo}
+        <ArrowRight
+          aria-hidden="true"
+          className="size-4 transition-transform duration-300 ease-suave motion-safe:group-hover:translate-x-1"
+        />
+      </Link>
+    </Secao>
   )
 }

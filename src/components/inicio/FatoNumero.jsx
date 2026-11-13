@@ -9,26 +9,31 @@
  *   Nicolas Cinel — RM572940
  */
 
-import PainelVidro from '../ui/PainelVidro.jsx'
+import Revelar from '../ui/Revelar.jsx'
 
 // Um número do problema: o valor grande (algarismos de largura fixa), o que ele significa e a fonte
-// (a notícia de onde vem, com link). `fonte` é a notícia de content/noticias.js.
-export default function FatoNumero({ valor, rotulo, fonte }) {
+// (a notícia de onde vem, com link). `fonte` é a notícia de content/noticias.js. Sem cartão:
+// só um fio fino no topo, para sobrar espaço vazio.
+export default function FatoNumero({ valor, rotulo, fonte, atraso = 0 }) {
   return (
-    <PainelVidro as="article" className="flex flex-col gap-4 p-6 sm:p-8">
-      <p className="font-titulo text-5xl font-bold tracking-tight text-gelo-50 tabular-nums">{valor}</p>
-      <p className="text-gelo-300">{rotulo}</p>
-      {fonte && (
-        <a
-          href={fonte.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="mt-auto inline-flex min-h-11 items-center text-sm text-led-forte underline-offset-4 hover:underline"
-        >
-          Fonte: {fonte.veiculo}
-          <span className="sr-only"> (abre em nova aba)</span>
-        </a>
-      )}
-    </PainelVidro>
+    <Revelar atraso={atraso}>
+      <article className="flex h-full flex-col gap-4 border-t border-borda pt-8">
+        <p className="font-titulo text-[clamp(3rem,6vw,4.75rem)] leading-none font-semibold tracking-tight text-gelo-50 tabular-nums">
+          {valor}
+        </p>
+        <p className="text-lg text-gelo-300">{rotulo}</p>
+        {fonte && (
+          <a
+            href={fonte.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-auto inline-flex min-h-11 items-center font-mono text-xs tracking-wider text-gelo-azul uppercase underline-offset-4 hover:underline"
+          >
+            Fonte: {fonte.veiculo}
+            <span className="sr-only"> (abre em nova aba)</span>
+          </a>
+        )}
+      </article>
+    </Revelar>
   )
 }
