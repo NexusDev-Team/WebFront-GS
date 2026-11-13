@@ -9,8 +9,7 @@
  *   Nicolas Cinel — RM572940
  */
 
-import { ArrowRight } from 'lucide-react'
-import { Link } from 'react-router-dom'
+import LinkSeta from '../ui/LinkSeta.jsx'
 import Secao from '../ui/Secao.jsx'
 import PassoSolucao from './PassoSolucao.jsx'
 
@@ -38,16 +37,9 @@ export default function SecaoSolucao({ conteudo }) {
         ))}
       </ol>
 
-      <Link
-        to={conteudo.link.para}
-        className="group mt-14 inline-flex min-h-11 items-center gap-2 font-semibold text-ciano underline-offset-4 hover:underline"
-      >
+      <LinkSeta to={conteudo.link.para} className="mt-14">
         {conteudo.link.rotulo}
-        <ArrowRight
-          aria-hidden="true"
-          className="size-4 transition-transform duration-300 ease-suave motion-safe:group-hover:translate-x-1"
-        />
-      </Link>
+      </LinkSeta>
     </Secao>
   )
 }

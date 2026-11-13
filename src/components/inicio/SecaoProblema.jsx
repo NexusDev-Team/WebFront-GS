@@ -9,10 +9,9 @@
  *   Nicolas Cinel — RM572940
  */
 
-import { ArrowRight } from 'lucide-react'
-import { Link } from 'react-router-dom'
 import { fonteDoFato } from '../../content/inicio.js'
 import FundoCyber from '../ui/FundoCyber.jsx'
+import LinkSeta from '../ui/LinkSeta.jsx'
 import Secao from '../ui/Secao.jsx'
 import FatoNumero from './FatoNumero.jsx'
 
@@ -40,16 +39,9 @@ export default function SecaoProblema({ conteudo }) {
         ))}
       </div>
 
-      <Link
-        to={conteudo.link.para}
-        className="group mt-12 inline-flex min-h-11 items-center gap-2 font-semibold text-ciano underline-offset-4 hover:underline"
-      >
+      <LinkSeta to={conteudo.link.para} className="mt-12">
         {conteudo.link.rotulo}
-        <ArrowRight
-          aria-hidden="true"
-          className="size-4 transition-transform duration-300 ease-suave motion-safe:group-hover:translate-x-1"
-        />
-      </Link>
+      </LinkSeta>
     </Secao>
   )
 }

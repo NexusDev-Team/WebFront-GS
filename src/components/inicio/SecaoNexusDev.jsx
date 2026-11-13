@@ -9,9 +9,8 @@
  *   Nicolas Cinel — RM572940
  */
 
-import { ArrowRight } from 'lucide-react'
-import { Link } from 'react-router-dom'
 import { EQUIPE } from '../../content/equipe.js'
+import LinkSeta from '../ui/LinkSeta.jsx'
 import Revelar from '../ui/Revelar.jsx'
 import Secao from '../ui/Secao.jsx'
 
@@ -43,16 +42,7 @@ export default function SecaoNexusDev({ conteudo }) {
               ))}
             </ul>
           </div>
-          <Link
-            to={conteudo.link.para}
-            className="group inline-flex min-h-11 items-center gap-2 font-semibold text-ciano underline-offset-4 hover:underline"
-          >
-            {conteudo.link.rotulo}
-            <ArrowRight
-              aria-hidden="true"
-              className="size-4 transition-transform duration-300 ease-suave motion-safe:group-hover:translate-x-1"
-            />
-          </Link>
+          <LinkSeta to={conteudo.link.para}>{conteudo.link.rotulo}</LinkSeta>
         </Revelar>
 
         <Revelar atraso={0.1}>
