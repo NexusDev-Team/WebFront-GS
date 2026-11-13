@@ -69,6 +69,12 @@ describe('LINHA_DO_TEMPO', () => {
       expect(['ataque', 'alerta', 'cshield']).toContain(e.tipo)
     }
   })
+  it('é enxuta: cinco marcos, quatro do caso (a partir de outubro) e o do C-Shield', () => {
+    expect(LINHA_DO_TEMPO).toHaveLength(5)
+    const doCaso = LINHA_DO_TEMPO.filter((e) => e.tipo !== 'cshield')
+    expect(doCaso).toHaveLength(4)
+    for (const e of doCaso) expect(e.data >= '2026-10-01', e.titulo).toBe(true)
+  })
   it('traz o número das 3h30 até alguém perceber', () => {
     expect(LINHA_DO_TEMPO.some((e) => /3h30/.test(e.titulo + e.texto))).toBe(true)
   })
