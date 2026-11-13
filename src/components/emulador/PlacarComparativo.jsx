@@ -9,69 +9,87 @@
  *   Nicolas Cinel — RM572940
  */
 
-// O placar comparativo (W19): as duas UBS lado a lado, uma com C-Shield e outra sem, com a
-// temperatura, o tempo até reagir, a exposição ao calor e a situação. Sempre visível e
-// atualizado a cada ciclo do jogo. Sem C-Shield, o tempo até reagir é o do caso real: 3h30.
+// O placar comparativo (W19), numa tabela compacta: as duas UBS lado a lado, uma com C-Shield e
+// outra sem, com a temperatura, o tempo até reagir, a exposição ao calor e a situação. Sempre
+// visível e atualizado a cada ciclo do jogo. Sem C-Shield, o tempo até reagir é o do caso real:
+// 3h30.
 import { formatarReacao } from '../../domain/cidade-placar.js'
+import PainelVidro from '../ui/PainelVidro.jsx'
 import TituloLed from '../ui/TituloLed.jsx'
 import { COR_SITUACAO, ROTULO_SITUACAO } from './rotulos.js'
 import { formatarGraus as num } from '../ui/formato.js'
 
-// Uma métrica: o rótulo pequeno em cima e o valor embaixo.
-function Metrica({ rotulo, children }) {
-  return (
-    <div className="flex flex-col gap-1">
-      <dt className="text-sm text-gelo-300">{rotulo}</dt>
-      <dd className="text-gelo-50">{children}</dd>
-    </div>
-  )
-}
-
-function Coluna({ item }) {
-  const reacao = formatarReacao(item)
-  return (
-    <section
-      aria-label={`${item.nome}, ${item.protegido ? 'com' : 'sem'} C-Shield`}
-      className="flex flex-col gap-4 rounded-xl border bg-noite-900 p-4"
-      style={{ borderColor: item.protegido ? 'var(--color-led-forte)' : 'var(--color-borda)' }}
-    >
-      <div>
-        <h3 className="text-lg font-bold text-gelo-50">{item.nome}</h3>
-        <p className="text-sm text-gelo-300">{item.protegido ? 'Com C-Shield' : 'Sem C-Shield'}</p>
-      </div>
-      <dl className="grid grid-cols-2 gap-4 xl:grid-cols-4">
-        <Metrica rotulo="Temperatura">
-          <span className="font-mono text-lg tabular-nums">{num(item.temperatura)} °C</span>
-        </Metrica>
-        <Metrica rotulo="Tempo até reagir">
-          <span className="font-mono text-lg tabular-nums">{reacao ?? '—'}</span>
-        </Metrica>
-        <Metrica rotulo="Exposição ao calor">
-          <span className="font-mono text-lg tabular-nums">{num(item.exposicao)} °C·min</span>
-        </Metrica>
-        <Metrica rotulo="Situação">
-          <span aria-hidden="true" className="mr-2 inline-block size-2.5 rounded-full" style={{ backgroundColor: COR_SITUACAO[item.situacao] }} />
-          {ROTULO_SITUACAO[item.situacao]}
-        </Metrica>
-      </dl>
-    </section>
-  )
-}
-
 export default function PlacarComparativo({ placar }) {
   return (
-    <section aria-labelledby="titulo-placar" className="flex flex-col gap-5">
-      <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
-        <TituloLed nivel={2}>
-          <span id="titulo-placar">Placar</span>
-        </TituloLed>
-        <p className="font-semibold text-gelo-50">Mesma cidade, mesmo ataque, mesma hora.</p>
-      </div>
-      <div className="grid gap-4 md:grid-cols-2">
-        {placar.map((item) => (
-          <Coluna key={item.id} item={item} />
-        ))}
-      </div>
-    </section>
+    <PainelVidro as="section" aria-labelledby="titulo-placar" className="flex flex-col gap-2 p-3 sm:p-4">
+      <TituloLed nivel={3}>
+        <span id="titulo-placar">Placar</span>
+      </TituloLed>
+      <table className="w-full table-fixed border-collapse text-left">
+        <caption className="sr-only">Comparação das duas UBS: uma com C-Shield e outra sem</caption>
+        <thead>
+          <tr>
+            <td className="w-[28%]" />
+            {placar.map((item) => (
+              <th
+                key={item.id}
+                scope="col"
+                className="border-t-2 px-2 pt-2 pb-1 align-top text-sm font-semibold text-gelo-50"
+                style={{ borderColor: item.protegido ? 'var(--color-led-forte)' : 'var(--color-borda)' }}
+              >
+                {item.nome}
+                <span className="block font-mono text-xs font-normal text-gelo-300">
+                  {item.protegido ? 'com C-Shield' : 'sem C-Shield'}
+                </span>
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody className="text-sm text-gelo-50">
+          <tr className="border-t border-borda">
+            <th scope="row" className="py-1.5 pr-1 align-top text-xs font-normal text-gelo-300">
+              Temperatura
+            </th>
+            {placar.map((item) => (
+              <td key={item.id} className="px-2 py-1.5 align-top font-mono">
+                {num(item.temperatura)} °C
+              </td>
+            ))}
+          </tr>
+          <tr className="border-t border-borda">
+            <th scope="row" className="py-1.5 pr-1 align-top text-xs font-normal text-gelo-300">
+              Tempo até reagir
+            </th>
+            {placar.map((item) => (
+              <td key={item.id} className="px-2 py-1.5 align-top">
+                {formatarReacao(item) ?? '—'}
+              </td>
+            ))}
+          </tr>
+          <tr className="border-t border-borda">
+            <th scope="row" className="py-1.5 pr-1 align-top text-xs font-normal text-gelo-300">
+              Exposição ao calor
+            </th>
+            {placar.map((item) => (
+              <td key={item.id} className="px-2 py-1.5 align-top font-mono">
+                {num(item.exposicao)} °C·min
+              </td>
+            ))}
+          </tr>
+          <tr className="border-t border-borda">
+            <th scope="row" className="py-1.5 pr-1 align-top text-xs font-normal text-gelo-300">
+              Situação
+            </th>
+            {placar.map((item) => (
+              <td key={item.id} className="px-2 py-1.5 align-top">
+                <span aria-hidden="true" className="mr-1.5 inline-block size-2.5 rounded-full" style={{ backgroundColor: COR_SITUACAO[item.situacao] }} />
+                {ROTULO_SITUACAO[item.situacao]}
+              </td>
+            ))}
+          </tr>
+        </tbody>
+      </table>
+      <p className="text-sm font-semibold text-gelo-50">Mesma cidade, mesmo ataque, mesma hora.</p>
+    </PainelVidro>
   )
 }

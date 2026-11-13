@@ -9,23 +9,17 @@
  *   Nicolas Cinel — RM572940
  */
 
-// O atacante, fora da cidade, no alto do mapa: uma figura de capuz em vermelho. As linhas de
-// ataque saem daqui.
-import { ATACANTE } from './geometria.js'
-
-const HALO = { paintOrder: 'stroke', stroke: 'var(--color-noite-950)', strokeWidth: 6, strokeLinejoin: 'round' }
-
-export default function Atacante() {
+// O ícone do atacante: uma figura de capuz em vermelho. Fica no alto do card da simulação, com os
+// botões de ataque logo abaixo; as linhas de ataque do mapa saem daqui. Decorativo (aria-hidden):
+// o texto "Atacante" ao lado diz quem é.
+export default function Atacante({ className = 'size-10' }) {
   return (
-    <g transform={`translate(${ATACANTE.x} ${ATACANTE.y})`} role="img" aria-label="Atacante, fora da cidade">
+    <svg viewBox="-28 -28 56 56" aria-hidden="true" className={className}>
       <circle r={24} fill="var(--color-noite-900)" stroke="var(--color-ataque)" strokeWidth={3} />
       <g fill="none" stroke="var(--color-ataque)" strokeWidth={3} strokeLinecap="round" strokeLinejoin="round">
         <path d="M-12 12 Q-12 -14 0 -14 Q12 -14 12 12" />
         <path d="M-6 0 H6" />
       </g>
-      <text x={34} y={9} fontSize={26} fontWeight={600} fill="var(--color-gelo-50)" style={HALO}>
-        Atacante
-      </text>
-    </g>
+    </svg>
   )
 }

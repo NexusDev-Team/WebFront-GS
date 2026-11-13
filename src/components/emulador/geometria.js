@@ -10,13 +10,14 @@
  */
 
 /*
- * geometria.js — medidas do mapa SVG (viewBox 0 0 1000 600). As posições dos locais vêm de
+ * geometria.js — medidas do mapa SVG (viewBox 0 70 1000 530: o topo do mapa é a borda de baixo da zona do atacante). As posições dos locais vêm de
  * LOCAIS (domain/cidade.js); aqui ficam o atacante, a central e a conta das linhas.
  */
 
-export const VIEWBOX = { largura: 1000, altura: 600 }
-// O atacante fica fora da cidade, no alto; a central, no meio.
-export const ATACANTE = { x: 500, y: 44 }
+export const VIEWBOX = { x: 0, y: 70, largura: 1000, altura: 530 }
+// As linhas de ataque saem do atacante, que fica FORA do mapa, na zona de cima do card: o ponto de
+// partida é o meio da borda de cima do mapa. A central fica no meio.
+export const ATACANTE = { x: 500, y: 70 }
 export const CENTRAL = { x: 500, y: 300 }
 export const RAIO_LOCAL = 34
 export const RAIO_ESCUDO = 46

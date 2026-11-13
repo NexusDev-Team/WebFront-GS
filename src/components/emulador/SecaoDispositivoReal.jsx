@@ -9,11 +9,12 @@
  *   Nicolas Cinel — RM572940
  */
 
-// Seção "Dispositivo real", no fim do emulador (antes era a página /simulador-real). Por enquanto
-// traz o cartão do Wokwi (o aparelho de verdade rodando) e a frase do produto; o painel ao vivo,
-// que lê o FIWARE, entra na etapa do dispositivo real. Aqui nada envia ordem ao C-Shield.
+// Seção "Dispositivo real", no fim do emulador (antes era a página /simulador-real): a imagem de
+// como o C-Shield seria e o circuito dele rodando no Wokwi. Não lê o FIWARE; aqui nada envia
+// ordem ao C-Shield.
+import ImagemDispositivo from './ImagemDispositivo.jsx'
+import WokwiEmbed from './WokwiEmbed.jsx'
 import { URL_WOKWI } from '../../content/links.js'
-import BotaoLed from '../ui/BotaoLed.jsx'
 import PainelVidro from '../ui/PainelVidro.jsx'
 import TituloLed from '../ui/TituloLed.jsx'
 
@@ -24,24 +25,16 @@ export default function SecaoDispositivoReal() {
         <span id="titulo-real">Dispositivo real</span>
       </TituloLed>
       <p className="max-w-prose text-gelo-50">
-        Tudo acima é um jogo. O C-Shield de verdade roda num ESP32; aqui ele roda no simulador Wokwi,
-        medindo, decidindo e mandando os dados para a central.
+        Tudo acima é um jogo. O C-Shield de verdade roda num ESP32; aqui você vê como ele seria e o
+        circuito dele funcionando no simulador Wokwi.
       </p>
       <p className="max-w-prose text-gelo-300">
         Nem este site consegue dar ordens ao C-Shield. Ele só envia dados, e só quem está presente
         consegue liberar o bloqueio.
       </p>
-      <p className="text-gelo-300">O painel ao vivo, com a temperatura do aparelho de verdade, chega na próxima etapa.</p>
-      <div>
-        <BotaoLed
-          as="a"
-          href={URL_WOKWI}
-          target="_blank"
-          rel="noopener noreferrer"
-          ariaLabel="Abrir o C-Shield no simulador Wokwi (abre em nova aba)"
-        >
-          Abrir o Wokwi <span aria-hidden="true">↗</span>
-        </BotaoLed>
+      <div className="grid items-center gap-6 lg:grid-cols-2">
+        <ImagemDispositivo />
+        <WokwiEmbed url={URL_WOKWI} />
       </div>
     </PainelVidro>
   )

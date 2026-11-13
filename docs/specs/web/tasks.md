@@ -16,10 +16,14 @@ Fase A, T4 do `docs/PROMPT-WEB.md`. Cada tarefa: requisitos cobertos (W..), veri
 ### Mudanças de escopo de 11/11 (tarde), pedidas pelo usuário
 
 - **D12 — Notícias no lugar dos incidentes.** A página `/incidentes` virou `/noticias`: mostra POR QUE o C-Shield existe, com manchetes reais dos ataques aos refrigeradores na Europa, no formato de portal (capa, grade, linha do tempo). Conteúdo fixo em `src/content`; cada cartão leva à matéria original. Onde a página da fonte não abriu na conferência, o título é da equipe e a tela avisa "Título da equipe". `/incidentes` redireciona para `/noticias`.
-- **D13 — CRUD de instalações no emulador.** O CRUD exigido pela rubrica passa a ser o das **instalações do C-Shield** (recurso `instalacoes` da MockAPI: `localId`, `apelido`, `observacao`, `instaladoEm`). Instalar protege um local; editar muda apelido e observação; remover tira a proteção, mas só depois de liberar o bloqueio. Substitui o botão "Ativar C-Shield". A UBS Vila Mariana é a unidade piloto, fixa e fora da API. A faixa segura nunca é cadastro.
+- **D13 (substituída pela D17) — CRUD de instalações no emulador.** O CRUD exigido pela rubrica passa a ser o das **instalações do C-Shield** (recurso `instalacoes` da MockAPI: `localId`, `apelido`, `observacao`, `instaladoEm`). Instalar protege um local; editar muda apelido e observação; remover tira a proteção, mas só depois de liberar o bloqueio. Substitui o botão "Ativar C-Shield". A UBS Vila Mariana é a unidade piloto, fixa e fora da API. A faixa segura nunca é cadastro.
 - **D14 — Dispositivo real dentro do emulador.** A página `/simulador-real` saiu: virou a seção `#dispositivo-real` no fim do emulador, com um botão no topo que leva até ela. `/simulador-real` redireciona para `/emulador#dispositivo-real`. O painel ao vivo (FIWARE) entra na Fase D como parte dessa seção.
 - **D15 — Página Nexus Dev e novo nome da equipe.** Nova página `/nexus-dev`, última do menu, com foto, nome, função e RM de cada integrante, visão, cultura e "Sobre a GS". A equipe passa a se chamar **Nexus Dev** (antes, Nexus Vision) no site, nos cabeçalhos dos arquivos e nos specs. Funções, fotos e a revisão dos textos ficam com a equipe.
 - **D16 — T14 cortada.** Sem a página de incidentes, não há mais incidente automático a cada bloqueio. **W28 a W35 ficam substituídos** pelos requisitos W53 a W58 (ver `requirements.md`).
+
+- **D17 — O CRUD sai do emulador e vira o cadastro de câmaras do bairro, em Notícias (12/11).** O usuário não gostou do ativar/desativar ligado à API dentro do emulador. Agora: (a) o emulador fica **sem nenhuma API**: ativar e desativar o C-Shield num local é uma ação do jogo, na zona de defesa do card; o apelido saiu; "Recomeçar" zera tudo; (b) o CRUD em API externa (rubrica) é o cadastro **"E na sua cidade?"**, no fim de `/noticias`: cadastrar, listar com filtro por tipo, editar e excluir câmaras do bairro (recurso `camaras` da MockAPI: `nome`, `bairro`, `tipo`, `observacao`, `cadastradoEm`). Substitui W54 a W56 pelos requisitos W59 a W61.
+
+- **D18 — Sem ponte FIWARE (12/11).** Saem `api/`, `services/fiware.js`, `useDispositivoReal()`, o painel ao vivo, `relesPublicados` e `FIWARE_HOST`. A seção `#dispositivo-real` mostra o Wokwi embutido (ou cartão com link) e a imagem do aparelho (`src/assets/dispositivo.png`). **W36 a W41a ficam obsoletos**; W42 e W43 continuam valendo. Plano em `plano-fase-d.md`.
 
 ### Tabela original (referência)
 
@@ -43,7 +47,7 @@ Fase A, T4 do `docs/PROMPT-WEB.md`. Cada tarefa: requisitos cobertos (W..), veri
 - **T8** `src/domain/perfis.js`, `cshield.js` (`criarContexto`, `avaliar(leitura, ctx, agoraMs)` devolvendo `{decisao, ctx}` sem mutar a entrada), `fisica.js` (Newton ilustrativo, efeito dos relés) e `lcd.js` (textos de `painel.h`). TDD portando os casos de `test_decisao.cpp` (perfis, normal, porta, deriva, setpoint inválido, sem setpoint, degelo longo/fora de hora, aquecimento rápido porta fechada/aberta, sensor inválido, trava ignora ordem, liberação antes/depois da trava, descarte do histórico, reabertura, crítico, exposição, prioridade, relés, alarme até regularizar, ataque de frio). Cobre T1, W21, W22, W24, W25. Verificar: `npx vitest run` verde. Commits `test:` e `feat(domain):` alternados.
 - **T9** `src/domain/cidade.js`: 5 locais, ataque individual, ataque em massa, local protegido que não muda de política, ativar C-Shield, situação ("Ataque bloqueado", "Seguro", "Seguro · lote em análise"), placar das UBS e ataque coordenado. Cobre W10, W13–W19. Verificar: testes verdes.
 
-## Fase C — O que vale nota (até 13/11)
+## Fase C — O que vale nota (até 13/11) — concluída em 12/11 (ver D12 a D17 acima)
 
 - **T10 (replanejada, ver D12 e D13)** `services/mockapi.js` (cliente por recurso: listar, criar, atualizar, excluir; erros normalizados) + `useInstalacoes()` + painel de instalações no emulador; a página `/noticias` no lugar de `/incidentes`. Antes: `useIncidentes()` + página `/incidentes` com IncidenteForm, IncidenteItem, FiltrosIncidentes, confirmação inline. Cobre W30–W34 (W35 se D9). Verificar: criar, filtrar, editar e excluir no navegador contra a MockAPI real; lista vazia e erro simulados.
 - **T11** `useCShield(perfil)` (ciclo com `useEffect` + intervalo, limpeza) e `useCidadeSimulada()` (usa `cidade.js`, relógio acelerado, `usePrefereMenosMovimento`). Cobre W13–W19.
@@ -53,9 +57,9 @@ Fase A, T4 do `docs/PROMPT-WEB.md`. Cada tarefa: requisitos cobertos (W..), veri
 
 ## Fase D — Dispositivo real e deploy (até 14/11)
 
-- **T15** `api/estado.js` e `api/historico.js` (só GET, 405, lista de atributos, `lastN` limitado, `FIWARE_HOST`), `services/fiware.js`, `useDispositivoReal()` (polling 3 s, offline > 30 s). Proxy no `vite.config.js` ou `vercel dev` para desenvolver. Cobre W36–W41. Verificar: greps do prompt §4.1 vazios; `curl -X POST` local → 405.
-- **T16** Página `/simulador-real` (PainelReal, offline, "Nem este site consegue dar ordens ao C-Shield.") e `WokwiEmbed` no emulador (testar se o Wokwi aceita iframe). Cobre W27, W39–W43.
-- **T17** Deploy na Vercel com as variáveis; atualizar cada rota sem 404; página real com o Wokwi rodando. Cobre W3. (Ação externa: confirmar antes.)
+- **T15 (D18)** Limpeza do que era FIWARE: remover `relesPublicados` e seus testes, `FIWARE_HOST` do `.env.example`. Não há `api/`, `services/fiware.js` nem `useDispositivoReal()`. Verificar: vitest verde, grep de `fiware_host|relesPublicados` vazio.
+- **T16 (D18)** Seção `#dispositivo-real` do emulador com `WokwiEmbed` (iframe, ou cartão com link se o Wokwi bloquear) e `ImagemDispositivo` (`src/assets/dispositivo.png`). Cobre W27, W42, W43.
+- **T17** Deploy na Vercel só com `VITE_MOCKAPI_URL`; atualizar cada rota sem 404; página real com o Wokwi rodando. Cobre W3. (Ação externa: confirmar antes.)
 
 ## Fase E — Experiência (até 15/11)
 

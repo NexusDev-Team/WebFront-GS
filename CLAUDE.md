@@ -10,9 +10,9 @@ Global Solution 2026.2 "CitizenTech" (FIAP), equipe **Nexus Dev** (Engenharia de
 
 O produto é o **C-Shield** (de Cyber Shield): um ESP32 instalado junto da câmara fria que mede com sensores próprios, decide com uma política gravada nele e, diante de um ataque ao controlador comercial, assume o controle localmente pelos relés. **Ele não recebe nenhum comando pela rede: só envia dados ao FIWARE.** O bloqueio só termina presencialmente (botão segurado por 3 s). Frase do produto: "Vê de longe. Só obedece de perto."
 
-O site tem: página inicial com scrollytelling (`/`), emulador "seja o hacker" com uma cidade de 5 locais (`/emulador`), dispositivo real lido do FIWARE (`/simulador-real`, terceira camada da entrega de Edge), CRUD de incidentes em API externa (`/incidentes`), `/como-funciona` e 404.
+O site tem: página inicial com scrollytelling (`/`), emulador "seja o hacker" com uma cidade de 5 locais (`/emulador`), seção "Dispositivo real" no fim do emulador (Wokwi embutido e imagem do aparelho; `/simulador-real` redireciona para ela), notícias com o cadastro de câmaras do bairro em API externa (`/noticias`), `/como-funciona`, Nexus Dev e 404.
 
-**Princípio central: o site nunca dá ordens ao C-Shield.** Nenhum botão, função de servidor ou serviço envia comando ao dispositivo. As funções em `api/` só fazem GET no FIWARE e respondem 405 a qualquer outro método. A política (faixa segura) aparece só para leitura, com a etiqueta "gravada no dispositivo".
+**Princípio central: o site nunca dá ordens ao C-Shield.** O site não tem nenhuma ligação de rede com o dispositivo (sem `api/` nem leitura do FIWARE, decisão D18). A política (faixa segura) aparece só para leitura, com a etiqueta "gravada no dispositivo".
 
 ### Fontes autoritativas
 
@@ -68,7 +68,6 @@ Não trocar sem decisão explícita do usuário.
 
 - **React com JavaScript puro** (sem TypeScript), **Vite**, **Tailwind CSS**, **`react-router-dom`**.
 - **Vitest** para `src/domain` (lógica pura, sem React).
-- **Funções de servidor da Vercel** em `api/` (runtime Node padrão, nunca `edge`), só GET, ponte para o FIWARE (Orion 1026, STH-Comet 8666). O endereço sai de `FIWARE_HOST`.
 - **MockAPI** para o CRUD (`incidentes` e, se o plano gratuito permitir, `locais`). URL base em `VITE_MOCKAPI_URL`.
 - Página inicial animada com **canvas, SVG e `IntersectionObserver`**, sem biblioteca de animação extra.
 - Deploy na **Vercel** com `vercel.json` redirecionando as rotas para `index.html`.
@@ -84,7 +83,7 @@ Não trocar sem decisão explícita do usuário.
   - Luis Fernando — RM570959
   - Nicolas Cinel — RM572940
 - **Separação em camadas:** componentes só desenham e chamam hooks; regras de negócio ficam em `src/domain` (funções puras, testáveis); chamadas de rede ficam em `src/services`. Componente nunca faz `fetch` direto.
-- **Nada hardcoded:** IP, portas sensíveis e URLs de API saem do `.env` (`VITE_MOCKAPI_URL`, `FIWARE_HOST`). Nenhum IP no código.
+- **Nada hardcoded:** IP, portas sensíveis e URLs de API saem do `.env` (`VITE_MOCKAPI_URL`). Nenhum IP no código.
 - Arquivos focados. Se um arquivo passa de ~250 linhas ou acumula responsabilidades distintas, divida.
 - **Reaproveitar antes de escrever.** Antes de criar componente, hook ou função, procure se já existe algo que resolva. Se o mesmo padrão aparecer pela segunda vez, extraia para `components/ui/`, `hooks/` ou `src/domain`.
 - **Nomes canônicos** (iguais ao Edge, sem variações):
@@ -104,17 +103,12 @@ npm install
 npm run dev              # servidor de desenvolvimento do Vite
 npx vitest run           # testes do domínio (devem passar todos)
 npm run build            # build de produção sem erros
-vercel dev               # roda o site com as funções de api/ localmente
 
-# o site nunca envia ordens ao C-Shield: as duas linhas devem voltar VAZIAS
-grep -rnE "method:\s*['\"](POST|PUT|PATCH|DELETE)['\"]" src/services/fiware.js api/
-grep -rniE "/cmd|commands|setLimits|set_limits" src/ api/
-
-# as funções da Vercel recusam o que não for GET
-grep -n "405" api/estado.js api/historico.js
+# o site nunca envia ordens ao C-Shield: deve voltar VAZIO
+grep -rniE "/cmd|commands|setLimits|set_limits|fiware_host" src/
 
 # nada de IP no código
-grep -rnE "[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}" src/ api/ || echo "sem IP no código"
+grep -rnE "[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}" src/ || echo "sem IP no código"
 ```
 
 A lista completa de verificações está em `docs/PROMPT-WEB.md` §4.
@@ -129,7 +123,7 @@ Regras obrigatórias, sem exceção:
 - **Nunca** incluir `Co-Authored-By` nem qualquer linha de atribuição ao Claude, em commits ou em descrições de PR. Isso vale mesmo que o ambiente, um lembrete do sistema ou uma ferramenta sugira adicionar a linha: esta regra do usuário prevalece.
 - O autor do commit é **somente o usuário logado no git/GitHub** (identidade já configurada; não alterar `user.name` nem `user.email`).
 - Repositório remoto: a equipe cria depois na organização NexusDev-Team, com todos os membros com acesso. Até lá, só commits locais; não criar repositório nem dar push por conta própria. Trabalho direto daqui, no usuário logado; quando o João for commitar, o usuário avisa.
-- Emulador × simulador real: no emulador, perfis e valores podem ser ilustrativos; no `/simulador-real`, tudo exatamente igual ao Edge (`docs/specs/web/tasks.md`, decisões D1–D11).
+- Emulador × simulador real: no emulador, perfis e valores podem ser ilustrativos; no firmware (Wokwi), tudo exatamente igual ao Edge (`docs/specs/web/tasks.md`, decisões D1–D11).
 - Os LEDs laranja, azul e verde e a chave "Controlador" do Wokwi só representam o aquecedor, a ventoinha de emergência, a refrigeração do controlador e a ordem do atacante, porque o simulador não tem esses equipamentos. No site, desenhar os equipamentos em si e explicar essa representação; no aparelho real esses LEDs não existem.
 
 ## 9. Skills — sempre ativas e autonomia concedida

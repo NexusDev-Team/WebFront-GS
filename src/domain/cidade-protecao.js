@@ -10,11 +10,11 @@
  */
 
 /*
- * cidade-protecao.js — quem tem o C-Shield na cidade: instalar, remover e sincronizar com as
- * instalações cadastradas. Funções puras sobre a cidade de cidade.js (nunca mudam a recebida).
+ * cidade-protecao.js — quem tem o C-Shield na cidade: ativar (instalar) e desativar (remover) por
+ * local, só dentro do jogo (sem API). Funções puras sobre a cidade de cidade.js (nunca mudam a recebida).
  */
 import { criarContexto } from './cshield.js'
-import { ID_PILOTO, LOCAIS } from './cidade.js'
+import { ID_PILOTO } from './cidade.js'
 
 // Instala o C-Shield num local. A política não muda (W26): é a mesma de sempre, gravada no
 // dispositivo. Se o local já estava sob ataque, passa a ser protegido dali em diante: a exposição
@@ -54,16 +54,12 @@ export function removerCShield(cidade, localId) {
   return nova
 }
 
-// Põe a proteção da cidade de acordo com a lista de instalações cadastradas: instala quem está na
-// lista e remove quem saiu. A unidade piloto sempre fica; ids desconhecidos são ignorados; um
-// local bloqueado só sai depois de liberado (ver removerCShield).
-export function sincronizarProtecao(cidade, idsInstalados) {
-  let nova = cidade
-  for (const def of LOCAIS) {
-    const deveTer = def.id === ID_PILOTO || idsInstalados.includes(def.id)
-    const tem = nova.locais[def.id].protegido
-    if (deveTer && !tem) nova = instalarCShield(nova, def.id)
-    else if (!deveTer && tem) nova = removerCShield(nova, def.id)
-  }
-  return nova
+// O bloqueio só termina presencialmente (botão segurado por 3 s): com o ataque bloqueado, não dá
+// para desativar o C-Shield do local. Primeiro é preciso liberar.
+export function podeDesativar(local) {
+  return !local.contexto.bloqueado
+}
+
+export function motivoNaoDesativar(local) {
+  return podeDesativar(local) ? '' : 'Libere o bloqueio no local primeiro.'
 }

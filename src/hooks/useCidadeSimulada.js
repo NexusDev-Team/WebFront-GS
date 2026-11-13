@@ -12,8 +12,8 @@
 /*
  * useCidadeSimulada — o jogo da cidade no React. Guarda a cidade (src/domain/cidade.js), a faz
  * andar com um intervalo de 100 ms (1 s real = 1 min simulado) e expõe as ações do jogador.
- * Nenhuma regra mora aqui: tudo vem do domínio. O C-Shield de cada local vem das instalações
- * (instalar, remover e sincronizar), não de um botão que protege tudo. A cidade fica numa ref (fonte da verdade) e
+ * Nenhuma regra mora aqui: tudo vem do domínio. O C-Shield de cada local é ativado e
+ * desativado um a um (instalar e remover), sem API. A cidade fica numa ref (fonte da verdade) e
  * também no estado, para a tela redesenhar.
  *
  * Cuidados: o passo de tempo é limitado a 250 ms reais (uma aba que dormiu não dá salto); o
@@ -25,13 +25,13 @@ import {
   atacar as atacarNaCidade,
   criarCidade,
   liberar as liberarNaCidade,
+  pararAtaques as pararAtaquesNaCidade,
   passo,
   recomecar as recomecarCidade,
 } from '../domain/cidade.js'
 import {
   instalarCShield as instalarNaCidade,
   removerCShield as removerNaCidade,
-  sincronizarProtecao,
 } from '../domain/cidade-protecao.js'
 import { eventosDoPasso, resultadoDaLiberacao } from '../domain/cidade-eventos.js'
 import { placar as placarDaCidade } from '../domain/cidade-placar.js'
@@ -46,7 +46,6 @@ export function useCidadeSimulada() {
   const cidadeRef = useRef(cidade)
   const ultimoRef = useRef(0)
   const contadorEventos = useRef(0)
-  const idsInstaladosRef = useRef([]) // últimas instalações cadastradas (para o recomeçar)
 
   // Troca a cidade (ref + estado) por uma nova.
   const aplicar = useCallback((nova) => {
@@ -81,16 +80,11 @@ export function useCidadeSimulada() {
     (tipo) => aplicar(ataqueEmMassaNaCidade(cidadeRef.current, tipo, Date.now())),
     [aplicar],
   )
-  // Instalações cadastradas: o jogo só espelha o que a API diz quem tem o C-Shield.
+  // Desfaz as ordens do atacante em todos os locais; o jogo segue e o bloqueio fica.
+  const pararAtaques = useCallback(() => aplicar(pararAtaquesNaCidade(cidadeRef.current)), [aplicar])
+  // Ativar e desativar o C-Shield num local (só no jogo, sem API).
   const instalar = useCallback((localId) => aplicar(instalarNaCidade(cidadeRef.current, localId)), [aplicar])
   const remover = useCallback((localId) => aplicar(removerNaCidade(cidadeRef.current, localId)), [aplicar])
-  const sincronizar = useCallback(
-    (ids) => {
-      idsInstaladosRef.current = ids
-      aplicar(sincronizarProtecao(cidadeRef.current, ids))
-    },
-    [aplicar],
-  )
   // Devolve 'SEM_BLOQUEIO' | 'RECUSADA' | 'ACEITA' para a tela avisar no LCD.
   const liberar = useCallback(
     (localId) => {
@@ -100,14 +94,14 @@ export function useCidadeSimulada() {
     },
     [aplicar],
   )
-  // Recomeçar zera o jogo, não o cadastro: as instalações continuam protegidas.
+  // Recomeçar zera o jogo inteiro, inclusive o C-Shield ativado nos locais.
   const recomecar = useCallback(() => {
-    aplicar(sincronizarProtecao(recomecarCidade(), idsInstaladosRef.current))
+    aplicar(recomecarCidade())
     setEventos(SEM_EVENTOS)
     contadorEventos.current = 0
   }, [aplicar])
 
   const placar = useMemo(() => placarDaCidade(cidade), [cidade])
 
-  return { cidade, placar, eventos, atacar, ataqueEmMassa, instalar, remover, sincronizar, liberar, recomecar }
+  return { cidade, placar, eventos, atacar, ataqueEmMassa, pararAtaques, instalar, remover, liberar, recomecar }
 }

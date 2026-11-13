@@ -86,7 +86,7 @@ export function criarCliente(baseUrl, recurso, { fetchImpl = (...args) => fetch(
 
 const URL_BASE = import.meta.env.VITE_MOCKAPI_URL
 
-// As instalações do C-Shield: quem tem o aparelho, na ordem em que foi instalado.
-export const instalacoesApi = criarCliente(URL_BASE, 'instalacoes', {
-  ordem: { campo: 'instaladoEm', sentido: 'asc' },
+// As câmaras do bairro cadastradas pela pessoa: da mais recente para a mais antiga.
+export const camarasApi = criarCliente(URL_BASE, 'camaras', {
+  ordem: { campo: 'cadastradoEm', sentido: 'desc' },
 })
