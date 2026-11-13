@@ -115,6 +115,11 @@
     animation-delay: -5s;
   }
 
+  /* Pulso de luz que corre pela linha entre os passos do "como funciona" (6 s por volta). */
+  .pulso-linha {
+    animation: pulso-linha 6s linear infinite;
+  }
+
   /* Fora da tela, as animações ambientais pausam. */
   .fundo-cyber[data-pausado='true'] .binario-sobe,
   .fundo-cyber[data-pausado='true'] .circuito-brilho {
@@ -169,6 +174,11 @@
   to { stroke-dashoffset: -100; }
 }
 
+@keyframes pulso-linha {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(500%); }
+}
+
 @keyframes led-falha {
   0%, 100% { opacity: 1; }
   40% { opacity: 0.35; }
@@ -209,7 +219,8 @@
   .gira,
   .linha-fluxo,
   .binario-sobe,
-  .circuito-brilho {
+  .circuito-brilho,
+  .pulso-linha {
     animation: none;
   }
 
