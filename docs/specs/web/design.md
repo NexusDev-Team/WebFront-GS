@@ -2,9 +2,54 @@
 
 Fase A, T3 do `docs/PROMPT-WEB.md`. Requisitos citados como W1..W52 (`requirements.md`).
 
-> **Atualização de 12/11 (decisão do João):** o visual foi trocado por **"Glacial industrial"**, descrito na seção 0. As seções 1 e 2 e a camada "hacker + gelo" abaixo ficam como histórico e **foram substituídas**. Os NOMES dos tokens (`noite-950`, `gelo-50`, `led-forte`...) foram mantidos; só os valores e as fontes mudaram.
+> **Atualização de 12/11, noite:** o visual passou a seguir o **Design System v1.0 "Cyber-criogênico"** (seção 0). "Glacial industrial" (seção 0.1) e as seções 1 e 2 ficam como histórico.
+>
+> **Atualização de 12/11, tarde (decisão do João):** o visual foi trocado por **"Glacial industrial"**, descrito na seção 0.1. As seções 1 e 2 e a camada "hacker + gelo" abaixo ficam como histórico e **foram substituídas**. Os NOMES dos tokens (`noite-950`, `gelo-50`, `led-forte`...) foram mantidos; só os valores e as fontes mudaram.
 
-## 0. Direção atual: "Glacial industrial" (12/11)
+## 0. Direção atual: "Cyber-criogênico", Design System v1.0 (12/11)
+
+Decisão de 12/11, noite: o visual passa a seguir o **C-Shield Design System v1.0** (cybersecurity encontra tecnologia criogênica), com a referência de hero em `docs/specs/web/referencias/hero-referencia.png` e a logo em `logo-referencia.jpg`. O visual "Glacial industrial" abaixo (agora seção 0.1) fica como histórico. Os NOMES dos tokens foram mantidos; só os valores, as fontes e os componentes mudam.
+
+Princípios:
+
+1. **Parece produto real, não painel de videogame.** Minimalista, futurista e premium. Espaço vazio faz parte do design; nada de cartão em toda seção.
+2. **A página conta uma história, por etapas:** Hero, Problema, Como funciona, Monitoramento, Simulação de ataque, Nexus Dev, Rodapé.
+3. **Distribuição de cor:** cerca de 70% preto e azul profundo, 20% azul e gelo, 8% ciano neon e 2% verde, vermelho e âmbar (só estado real). O ciano é destaque, nunca a cor de tudo.
+4. **Fundo com profundidade sem competir com o conteúdo:** binários nas bordas com 8 a 18% de opacidade, circuitos finos, partículas discretas e névoa azul perto do aparelho. Gelo só onde é estratégico.
+5. **O aparelho é o protagonista.** Estrutura preta ou grafite, display azul "C-SHIELD", LED verde, botão físico, gelo concentrado nas bordas e a frente limpa.
+6. **Vidro com moderação:** só onde precisa separar (o card de temperatura, por exemplo).
+7. **Movimento sutil:** entrada com fade e translateY, aparelho flutuando, LED com pulso discreto, binários lentos, brilho percorrendo os circuitos. Duração padrão de 300 ms, ambientais de 5 a 12 s, curva `cubic-bezier(0.22, 1, 0.36, 1)`, `prefers-reduced-motion` respeitado e nada piscando.
+
+Tokens (valores de `src/styles/tokens.css`):
+
+| Token | Valor | Papel |
+| --- | --- | --- |
+| `noite-950` | `#020912` | Fundo principal |
+| `noite-900` | `#061522` | Seções secundárias |
+| `superficie` | `#0A1B2A` | Cards e painéis |
+| `elevado` | `#10283A` | Elementos elevados |
+| `painel` | `rgba(10, 27, 42, 0.65)` | Vidro (com `blur(16px)`) |
+| `borda` | `rgba(100, 207, 255, 0.18)` | Borda de vidro |
+| `led-forte` / `ciano` | `#00CFFF` | Ciano de ação e destaque |
+| `gelo-azul` / `lcd-texto` | `#64CFFF` | Azul-gelo: luz e elementos congelados |
+| `led-fraco` | `#063A5A` | Azul profundo, só decoração, nunca texto |
+| `gelo-50` | `#F4F8FC` | Texto principal |
+| `gelo-100` | `#D6E2EC` | Texto intermediário |
+| `gelo-300` | `#9BAFBE` | Texto secundário |
+| `texto-mudo` | `#6F8597` | Legendas de 18 px ou mais, ou decoração (o `#657B8D` do doc original dá cerca de 4,4:1, por isso foi clareado) |
+| `ok` / `atencao` / `critico` e `ataque` | `#00E59B` / `#FFB547` / `#FF4058` | Só estado real |
+
+Tipografia (Google Fonts): títulos em **Space Grotesk** (500 a 700), texto em **Inter** (400 a 600) e elementos técnicos em **IBM Plex Mono** (400 e 500). Escala: H1 de 40 a 76 px, H2 de 30 a 48 px, H3 de 22 a 28 px, corpo de 16 a 18 px, labels técnicos de 11 a 13 px em caixa alta com tracking largo. Line-height de 1,05 a 1,15 nos títulos e cerca de 1,6 no corpo.
+
+Layout: conteúdo até 1440 px, container de 88% no desktop e 24 px de margem no celular; navbar de 80 px; seções com 120 a 160 px de espaçamento; cards com 12 a 18 px de raio; botões em pílula (999 px) com 48 a 56 px de altura e hover com brilho e 1 a 2 px de deslocamento.
+
+Hero (referência de composição): texto à esquerda e aparelho à direita, 90 a 100vh. O fundo é a imagem `src/assets/imghero.png` (já traz aparelho, névoa, binários e circuito), em tela cheia, com um degradê da cor do fundo cobrindo a esquerda para o texto ler bem. No celular, o título vem primeiro, o aparelho logo abaixo e os botões empilham.
+
+Mudanças de texto em relação ao doc original: o produto **não recebe comandos** e só destrava presencialmente, então "bloqueio de sinais suspeitos e recuperação automática" vira "ignora ordens da rede" e "liberação só presencial", fiéis a "Vê de longe. Só obedece de perto."
+
+Componentes novos: `FundoCyber` (binários e circuitos), `Secao` (espaçamento e título), `Revelar` (entrada ao rolar), `ImagemHero`, `GraficoTemperatura` (recharts) e `SecaoNexusDev`. Ícones vêm do `lucide-react`; animações de entrada vêm do `framer-motion`.
+
+## 0.1 Histórico: "Glacial industrial" (12/11, tarde)
 
 O primeiro visual (sala de controle com clima hacker) foi reprovado: informação demais junta, bagunçado e com cara de gerado por IA. O novo tira o "invasor" da interface e mostra o C-Shield como um produto industrial de IoT e prevenção. O clima hacker fica **só no emulador**, onde a pessoa faz o papel do atacante.
 
