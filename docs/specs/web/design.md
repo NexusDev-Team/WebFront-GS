@@ -49,6 +49,17 @@ Mudanças de texto em relação ao doc original: o produto **não recebe comando
 
 Componentes novos: `FundoCyber` (binários e circuitos), `Secao` (espaçamento e título), `Revelar` (entrada ao rolar), `ImagemHero`, `GraficoTemperatura` (recharts) e `SecaoNexusDev`. Ícones vêm do `lucide-react`; animações de entrada vêm do `framer-motion`.
 
+### Padrão das páginas internas (13/11)
+
+Todas as rotas seguem o ritmo da página inicial; ver `docs/specs/web/plano-padronizacao.md`.
+
+- **Cabeçalho:** `CabecalhoPagina` é o hero das páginas internas, sem imagem: rótulo técnico com fio degradê, título grande (a 2ª linha, `destaque`, em ciano), subtítulo opcional, ações opcionais e `FundoCyber` atrás, com a entrada escalonada de `ui/movimento.js`. No emulador, `variante="ataque"` deixa o título vermelho com falha de energia.
+- **Seções:** só `Secao` (rótulo, título, subtítulo, `Revelar`). `faixa` aplica o fundo de faixa e alterna com seções lisas; `compacta` reduz o respiro e serve só ao jogo do emulador. Sem `Pagina`, `TituloSecao` nem `TituloLed` de nível 2 nas páginas (o `TituloLed` ficou só dentro do card da câmara do jogo).
+- **Pouco cartão:** números, equipe, cultura e manchete usam fios finos; `.cartao` só onde agrupa de verdade (estados, representações do Wokwi, notícias, chamada).
+- **Link com seta:** `LinkSeta`, o mesmo da página inicial.
+- **Ritmo (L = lisa, F = faixa):** Como funciona: L, F, L, F, L · Emulador: jogo (L, compacta), dispositivo real (F) · Notícias: manchete (L), linha do tempo (F), "E na sua cidade?" com a chamada (L), mais notícias (F, por último) · Nexus Dev: integrantes (L), visão (F), cultura (L), GS (F).
+- **Equipe:** `ListaEquipe` (iniciais, nome, RM; `comFuncao` na página Nexus Dev) e `ListaTecnologias`, as mesmas da página inicial. Os cartões com foto saíram.
+
 ## 0.1 Histórico: "Glacial industrial" (12/11, tarde)
 
 O primeiro visual (sala de controle com clima hacker) foi reprovado: informação demais junta, bagunçado e com cara de gerado por IA. O novo tira o "invasor" da interface e mostra o C-Shield como um produto industrial de IoT e prevenção. O clima hacker fica **só no emulador**, onde a pessoa faz o papel do atacante.
