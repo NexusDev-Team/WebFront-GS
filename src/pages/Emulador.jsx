@@ -9,7 +9,7 @@
  *   Nicolas Cinel — RM572940
  */
 
-// Página Emulador: "Seja o hacker". Um card só conta a história: em cima o atacante, com os botões
+// Página Emulador: cabeçalho no estilo do hero, o jogo em seção compacta e o dispositivo real em faixa. "Seja o hacker". Um card só conta a história: em cima o atacante, com os botões
 // das ações dele logo abaixo; no meio o mapa da cidade com 5 locais; embaixo a defesa, com o que
 // dá para fazer no local escolhido (ativar ou desativar o C-Shield). Ao lado fica a câmara por
 // dentro do local escolhido; depois vem a seção do dispositivo real. A página só liga as peças: o jogo inteiro vem
@@ -26,10 +26,9 @@ import AvisoAoVivo from '../components/emulador/AvisoAoVivo.jsx'
 import MapaCidade from '../components/emulador/MapaCidade.jsx'
 import SecaoDispositivoReal from '../components/emulador/SecaoDispositivoReal.jsx'
 import BotaoLed from '../components/ui/BotaoLed.jsx'
-import Pagina from '../components/ui/Pagina.jsx'
+import CabecalhoPagina from '../components/ui/CabecalhoPagina.jsx'
 import PainelVidro from '../components/ui/PainelVidro.jsx'
-import Rotulo from '../components/ui/Rotulo.jsx'
-import TituloLed from '../components/ui/TituloLed.jsx'
+import Secao from '../components/ui/Secao.jsx'
 import { useCidadeSimulada } from '../hooks/useCidadeSimulada.js'
 import { usePrefereMenosMovimento } from '../hooks/usePrefereMenosMovimento.js'
 
@@ -51,59 +50,61 @@ export default function Emulador() {
   const haAtaque = Object.values(jogo.cidade.locais).some((l) => l.ordem !== 'NORMAL')
 
   return (
-    <Pagina className="flex flex-col gap-6">
-      <header className="flex flex-col gap-3">
-        <Rotulo>Simulador</Rotulo>
-        <TituloLed nivel={1} variante={algumSobAtaque(jogo.cidade) ? 'ataque' : 'repouso'}>
-          Seja o hacker
-        </TituloLed>
-        <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
-          <p className="text-gelo-300">Escolha um local, ataque e depois ative o C-Shield nele.</p>
-          <span className="rounded-full border border-borda bg-noite-900 px-3 py-1 text-sm text-gelo-300">
-            Tempo acelerado: 1 s = 1 min
-          </span>
-          <BotaoLed as="a" href="#dispositivo-real" variante="fantasma">
-            Ver o dispositivo real <span aria-hidden="true">↓</span>
-          </BotaoLed>
-        </div>
-      </header>
+    <>
+      <CabecalhoPagina
+        rotulo="Simulador"
+        titulo="Seja o hacker"
+        variante={algumSobAtaque(jogo.cidade) ? 'ataque' : 'repouso'}
+        subtitulo="Escolha um local, ataque e depois ative o C-Shield nele."
+      >
+        <span className="rounded-full border border-borda bg-noite-900 px-3 py-1 text-sm text-gelo-300">
+          Tempo acelerado: 1 s = 1 min
+        </span>
+        <BotaoLed as="a" href="#dispositivo-real" variante="fantasma">
+          Ver o dispositivo real <span aria-hidden="true">↓</span>
+        </BotaoLed>
+      </CabecalhoPagina>
 
-      <div className="grid items-stretch gap-4 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
-        <PainelVidro as="section" aria-label="Simulação da cidade" className="flex flex-col">
-          <div className="rounded-t-xl border-b border-ataque/40 bg-[color-mix(in_srgb,var(--color-ataque)_9%,transparent)] px-3 py-3">
-            <AcoesAtacante
-              selecionado={selecionado}
-              haAtaque={haAtaque}
-              aoAtacar={(tipo) => jogo.atacar(selecionadoId, tipo)}
-              aoAtaqueEmMassa={() => jogo.ataqueEmMassa('CALOR')}
-              aoPararAtaque={jogo.pararAtaques}
-              aoRecomecar={jogo.recomecar}
-            />
+      <Secao compacta rotuloAria="Jogo do emulador">
+        <div className="flex flex-col gap-6">
+          <div className="grid items-stretch gap-4 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
+            <PainelVidro as="section" aria-label="Simulação da cidade" className="flex flex-col">
+              <div className="rounded-t-xl border-b border-ataque/40 bg-[color-mix(in_srgb,var(--color-ataque)_9%,transparent)] px-3 py-3">
+                <AcoesAtacante
+                  selecionado={selecionado}
+                  haAtaque={haAtaque}
+                  aoAtacar={(tipo) => jogo.atacar(selecionadoId, tipo)}
+                  aoAtaqueEmMassa={() => jogo.ataqueEmMassa('CALOR')}
+                  aoPararAtaque={jogo.pararAtaques}
+                  aoRecomecar={jogo.recomecar}
+                />
+              </div>
+              <div className="px-1 py-1 sm:px-2">
+                <MapaCidade
+                  cidade={jogo.cidade}
+                  selecionadoId={selecionadoId}
+                  aoSelecionar={setSelecionadoId}
+                  reduzirMovimento={reduzirMovimento}
+                />
+              </div>
+              <div className="rounded-b-xl border-t border-led-forte/40 bg-[color-mix(in_srgb,var(--color-led-forte)_9%,transparent)] px-3 py-3">
+                <AcoesDefesa
+                  key={selecionadoId}
+                  def={selecionado}
+                  local={jogo.cidade.locais[selecionadoId]}
+                  piloto={selecionadoId === ID_PILOTO}
+                  aoAtivar={() => jogo.instalar(selecionadoId)}
+                  aoDesativar={() => jogo.remover(selecionadoId)}
+                />
+              </div>
+            </PainelVidro>
+            <PainelCamara key={selecionadoId} cidade={jogo.cidade} localId={selecionadoId} aoLiberar={jogo.liberar} />
           </div>
-          <div className="px-1 py-1 sm:px-2">
-            <MapaCidade
-              cidade={jogo.cidade}
-              selecionadoId={selecionadoId}
-              aoSelecionar={setSelecionadoId}
-              reduzirMovimento={reduzirMovimento}
-            />
-          </div>
-          <div className="rounded-b-xl border-t border-led-forte/40 bg-[color-mix(in_srgb,var(--color-led-forte)_9%,transparent)] px-3 py-3">
-            <AcoesDefesa
-              key={selecionadoId}
-              def={selecionado}
-              local={jogo.cidade.locais[selecionadoId]}
-              piloto={selecionadoId === ID_PILOTO}
-              aoAtivar={() => jogo.instalar(selecionadoId)}
-              aoDesativar={() => jogo.remover(selecionadoId)}
-            />
-          </div>
-        </PainelVidro>
-        <PainelCamara key={selecionadoId} cidade={jogo.cidade} localId={selecionadoId} aoLiberar={jogo.liberar} />
-      </div>
-      <AvisoAoVivo cidade={jogo.cidade} />
+          <AvisoAoVivo cidade={jogo.cidade} />
+        </div>
+      </Secao>
 
       <SecaoDispositivoReal />
-    </Pagina>
+    </>
   )
 }
