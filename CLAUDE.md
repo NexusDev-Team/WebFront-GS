@@ -69,7 +69,7 @@ Não trocar sem decisão explícita do usuário.
 - **React com JavaScript puro** (sem TypeScript), **Vite**, **Tailwind CSS**, **`react-router-dom`**.
 - **Vitest** para `src/domain` (lógica pura, sem React).
 - **MockAPI** para o CRUD (`incidentes` e, se o plano gratuito permitir, `locais`). URL base em `VITE_MOCKAPI_URL`.
-- Página inicial animada com **canvas, SVG e `IntersectionObserver`**, sem biblioteca de animação extra.
+- Página inicial animada com **canvas, SVG e `IntersectionObserver`**. Decisão de 12/11 (design system v1.0): também liberados **`framer-motion`** (animações), **`recharts`** (gráficos) e **`lucide-react`** (ícones). O projeto continua em **JavaScript puro, sem TypeScript**.
 - Deploy na **Vercel** com `vercel.json` redirecionando as rotas para `index.html`.
 - Conferência visual com o **Playwright** (MCP disponível): capturas em 390 px e 1440 px.
 
@@ -154,6 +154,8 @@ Os plugins **superpowers** e **caveman** ficam sempre ativos neste projeto (`.cl
 - `svg-animations` (supermemoryai/skills) — animação de SVG (mapa, geladeira, linhas de ataque e de dados).
 - `optimize-web-animations` (mengto/skills) — desempenho de animações (canvas, `requestAnimationFrame`).
 - `react-vite-best-practices` (asyrafhussin/agent-skills) — boas práticas de React com Vite.
+- `design-taste-frontend` (Leonxlnx/taste-skill) — direção de design anti-genérico, com verificador e portão de acabamento.
+- `awesome-design-md` (wearescientist/awesome-design-md) — biblioteca de `DESIGN.md` de grandes produtos, usada só como referência de estilo (ler um estilo, não copiar).
 
 Também disponíveis no ambiente: `vercel-react-best-practices`, `vercel-composition-patterns`, `impeccable-design-polish`, `paint`, `dataviz` (gráficos de temperatura e placar).
 
