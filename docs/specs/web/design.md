@@ -36,7 +36,7 @@ Tokens (valores de `src/styles/tokens.css`):
 | `gelo-50` | `#F4F8FC` | Texto principal |
 | `gelo-100` | `#D6E2EC` | Texto intermediário |
 | `gelo-300` | `#9BAFBE` | Texto secundário |
-| `texto-mudo` | `#6F8597` | Legendas de 18 px ou mais, ou decoração (o `#657B8D` do doc original dá cerca de 4,4:1, por isso foi clareado) |
+| `texto-mudo` | `#6F8597` | Legendas e apoio (o `#657B8D` do doc original dá 4,54:1 sobre `noite-950`, mas só 4,19:1 sobre `noite-900` e 3,97:1 sobre `superficie`; por isso foi clareado para `#6F8597`, com 5,21:1, 4,81:1 e 4,55:1). Ainda não é usado em nenhum componente |
 | `ok` / `atencao` / `critico` e `ataque` | `#00E59B` / `#FFB547` / `#FF4058` | Só estado real |
 
 Tipografia (Google Fonts): títulos em **Space Grotesk** (500 a 700), texto em **Inter** (400 a 600) e elementos técnicos em **IBM Plex Mono** (400 e 500). Escala: H1 de 40 a 76 px, H2 de 30 a 48 px, H3 de 22 a 28 px, corpo de 16 a 18 px, labels técnicos de 11 a 13 px em caixa alta com tracking largo. Line-height de 1,05 a 1,15 nos títulos e cerca de 1,6 no corpo.
