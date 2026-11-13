@@ -141,3 +141,13 @@ export const CHAMADA = {
 export function fonteDoFato(fato) {
   return NOTICIAS.find((noticia) => noticia.id === fato.fonteId)
 }
+
+// Prévia da equipe na página inicial (a lista de integrantes vem de equipe.js).
+export const NEXUS = {
+  rotulo: 'Nexus Dev',
+  titulo: 'Quem constrói o C-Shield',
+  texto:
+    'Cinco estudantes de Engenharia de Software da FIAP, na Global Solution 2026.2, criando uma proteção para o frio que não depende de ninguém acordar às 2 da manhã.',
+  tecnologias: ['React', 'Vite', 'Tailwind CSS', 'ESP32', 'FIWARE'],
+  link: { rotulo: 'Conhecer a equipe', para: '/nexus-dev' },
+}
