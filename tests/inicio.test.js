@@ -20,7 +20,7 @@ describe('BANNER', () => {
   it('tem título, texto, duas ações e a imagem com texto alternativo', () => {
     expect(BANNER.rotulo).toBe('Tecnologia. Segurança. Controle.')
     expect(BANNER.tituloLinha1).toBe('Proteção inteligente')
-    expect(BANNER.tituloLinha2).toBe('para a cadeia de frio')
+    expect(BANNER.tituloLinha2).toBe('para a saúde da cidade')
     expect(BANNER.texto).toBe('O C-Shield atua onde ninguém mais consegue.')
     expect(BANNER.acaoPrincipal.para).toBe('/emulador')
     expect(BANNER.acaoSecundaria.para).toBe('/como-funciona')

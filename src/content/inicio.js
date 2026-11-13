@@ -21,7 +21,7 @@ import { NOTICIAS } from './noticias.js'
 export const BANNER = {
   rotulo: 'Tecnologia. Segurança. Controle.',
   tituloLinha1: 'Proteção inteligente',
-  tituloLinha2: 'para a cadeia de frio',
+  tituloLinha2: 'para a saúde da cidade',
   texto: 'O C-Shield atua onde ninguém mais consegue.',
   acaoPrincipal: { rotulo: 'Simular um ataque', para: '/emulador' },
   acaoSecundaria: { rotulo: 'Como funciona', para: '/como-funciona' },

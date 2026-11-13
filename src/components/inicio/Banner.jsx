@@ -19,23 +19,23 @@ import ImagemHero from './ImagemHero.jsx'
 // Hero da página inicial (Design System v1.0, referência de composição): texto à esquerda e o
 // aparelho à direita, com 90 a 100% da altura da janela. No desktop a imagem é o fundo de tela
 // cheia, com um degradê da cor do fundo por cima da esquerda para o texto ler bem; no celular o
-// título fica no alto e o aparelho aparece de fundo na metade de baixo, com a imagem esmaecendo
-// para o texto ler bem.
+// aparelho aparece de fundo, no alto, junto do título, com um véu escuro por cima para o texto
+// ler bem.
 export default function Banner({ conteudo }) {
   return (
     <section
       aria-labelledby="titulo-banner"
-      className="relative flex min-h-[calc(100svh-5rem)] flex-col overflow-hidden md:justify-center"
+      className="relative flex flex-col md:min-h-[calc(100svh-5rem)] overflow-hidden md:justify-center"
     >
-      <div className="absolute inset-x-0 bottom-0 h-[64%] md:inset-0 md:h-auto">
+      <div className="absolute inset-0">
         <ImagemHero
           src={conteudo.imagem.src}
           alt={conteudo.imagem.alt}
-          className="object-[92%_center] md:object-[center_center]"
+          className="object-[88%_top] md:object-[center_center]"
         />
         <div
           aria-hidden="true"
-          className="absolute inset-0 bg-linear-to-b from-noite-950 via-noite-950/40 via-35% to-noite-950/20 md:bg-linear-to-r md:from-noite-950 md:via-noite-950/55 md:to-transparent md:to-70%"
+          className="absolute inset-0 bg-linear-to-b from-noite-950/80 via-noite-950/45 to-noite-950/85 md:bg-linear-to-r md:from-noite-950 md:via-noite-950/55 md:to-transparent md:to-70%"
         />
         <div
           aria-hidden="true"
@@ -47,7 +47,7 @@ export default function Banner({ conteudo }) {
         variants={CONTAINER}
         initial="hidden"
         animate="visivel"
-        className="conteudo relative z-10 flex flex-col items-start gap-6 pt-12 pb-[46svh] md:pt-0 md:pb-0"
+        className="conteudo relative z-10 flex flex-col items-start gap-6 py-20 md:py-0"
       >
         <motion.p variants={ITEM} className="rotulo-tecnico flex w-full items-center gap-5 md:max-w-2xl">
           <span>{conteudo.rotulo}</span>
