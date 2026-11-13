@@ -10,6 +10,7 @@
  */
 
 // Rotas do site. Navbar e rodapé vêm de components/ui.
+import { MotionConfig } from 'framer-motion'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import Navbar from './components/ui/Navbar.jsx'
 import Footer from './components/ui/Footer.jsx'
@@ -22,7 +23,7 @@ import NaoEncontrada from './pages/NaoEncontrada.jsx'
 
 export default function App() {
   return (
-    <>
+    <MotionConfig reducedMotion="user">
       <a
         href="#conteudo"
         className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-led-forte focus:px-4 focus:py-2 focus:text-noite-950"
@@ -44,6 +45,6 @@ export default function App() {
         </Routes>
       </main>
       <Footer />
-    </>
+    </MotionConfig>
   )
 }
