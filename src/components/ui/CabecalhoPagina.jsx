@@ -13,6 +13,13 @@ import { motion } from 'framer-motion'
 import FundoCyber from './FundoCyber.jsx'
 import { ENTRADA_CONTAINER, ENTRADA_ITEM } from './movimento.js'
 
+// Impede a quebra de linha no hífen do nome ("C-" / "Shield"): o nome vai num trecho sem quebra.
+function semQuebraNoNome(texto) {
+  return texto.split('C-Shield').flatMap((parte, i) =>
+    i === 0 ? [parte] : [<span key={i} className="whitespace-nowrap">C-Shield</span>, parte],
+  )
+}
+
 // Cabeçalho das páginas internas, no estilo do hero da inicial (sem imagem): rótulo técnico com
 // fio degradê, título grande (a 2ª linha, `destaque`, em ciano), subtítulo e ações opcionais
 // (`children`), com entrada escalonada. `id` é o id do h1 e liga a seção a ele.
@@ -54,11 +61,11 @@ export default function CabecalhoPagina({
             ataque ? 'led-falha text-critico' : 'text-gelo-50'
           }`}
         >
-          {titulo}
+          {semQuebraNoNome(titulo)}
           {destaque ? (
             <>
               <br />
-              <span className={ataque ? '' : 'titulo-ciano'}>{destaque}</span>
+              <span className={ataque ? '' : 'titulo-ciano'}>{semQuebraNoNome(destaque)}</span>
             </>
           ) : null}
         </motion.h1>
