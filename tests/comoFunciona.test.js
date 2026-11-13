@@ -35,9 +35,10 @@ describe('links', () => {
 })
 
 describe('CABECALHO', () => {
-  it('tem rótulo, título e a frase do produto', () => {
+  it('tem rótulo, título com destaque (a 2ª linha em ciano) e a frase do produto', () => {
     expect(CABECALHO.rotulo).toBe('O dispositivo')
-    expect(CABECALHO.titulo).toBe('Como o C-Shield funciona')
+    expect(CABECALHO.titulo).toBe('Como o C-Shield')
+    expect(CABECALHO.destaque).toBe('protege o frio')
     expect(CABECALHO.subtitulo).toBe('Vê de longe. Só obedece de perto.')
   })
 })
