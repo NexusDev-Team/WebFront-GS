@@ -15,18 +15,20 @@
  * notícia (fonteId), e fonteDoFato devolve o veículo e o link. Assim a fonte não se repete aqui.
  * Fatos e fontes: docs/specs/PLANO-GS.md, seção "O caso".
  */
+import imagemHero from '../assets/imghero.jpg'
 import { NOTICIAS } from './noticias.js'
 
 export const BANNER = {
-  rotulo: 'Cadeia do frio e gestão térmica',
-  titulo: 'Proteção inteligente para a cadeia de frio',
-  texto: 'Às 2h da manhã, o C-Shield atua onde ninguém mais consegue.',
+  rotulo: 'Tecnologia. Segurança. Controle.',
+  tituloLinha1: 'Proteção inteligente',
+  tituloLinha2: 'para a cadeia de frio',
+  texto: 'O C-Shield atua onde ninguém mais consegue.',
   acaoPrincipal: { rotulo: 'Simular um ataque', para: '/emulador' },
   acaoSecundaria: { rotulo: 'Como funciona', para: '/como-funciona' },
-  // A imagem é fornecida pela equipe; se o arquivo não existir, o banner mostra um espaço reservado.
+  // Render do aparelho enviado pela equipe (fundo de tela cheia do hero).
   imagem: {
-    src: '/imagens/hero-camara.webp',
-    alt: 'Câmara fria industrial coberta de gelo, à noite',
+    src: imagemHero,
+    alt: 'Aparelho C-Shield com tela azul e LED verde, com gelo nas bordas e envolto em névoa azul.',
   },
 }
 

@@ -9,74 +9,92 @@
  *   Nicolas Cinel — RM572940
  */
 
-import { useState } from 'react'
+import { motion } from 'framer-motion'
+import { ArrowDown, Play } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import BotaoLed from '../ui/BotaoLed.jsx'
-import FlocoNeve from '../ui/FlocoNeve.jsx'
-import Logo from '../ui/Logo.jsx'
-import Rotulo from '../ui/Rotulo.jsx'
-import TituloLed from '../ui/TituloLed.jsx'
+import ImagemHero from './ImagemHero.jsx'
 
-// Máscara que funde as bordas da imagem com o fundo da página.
-const MASCARA = 'radial-gradient(ellipse 70% 70% at 50% 50%, #000 55%, transparent 100%)'
-
-// Espaço reservado enquanto a imagem da câmara fria não existe: um cartão de vidro fosco com o
-// escudo da logo e dois anéis de luz.
-function ImagemReservada() {
-  return (
-    <div className="vidro-fosco relative flex aspect-[4/3] w-full flex-col items-center justify-center gap-5 overflow-hidden">
-      <div aria-hidden="true" className="absolute size-56 rounded-full border border-led-forte/20" />
-      <div aria-hidden="true" className="absolute size-36 rounded-full border border-led-forte/30" />
-      <Logo variante="escudo" className="relative h-24!" />
-      <p className="relative text-sm text-gelo-300">C-Shield · junto da câmara fria</p>
-    </div>
-  )
+// Entrada do texto: cada bloco sobe 24 px e aparece, com 120 ms de diferença entre eles.
+const CONTAINER = { hidden: {}, visivel: { transition: { staggerChildren: 0.12, delayChildren: 0.1 } } }
+const ITEM = {
+  hidden: { opacity: 0, y: 24 },
+  visivel: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] } },
 }
 
-// Banner da página inicial, como no mockup: o texto à esquerda e a câmara fria à direita, com uma
-// luz azul atrás, uma malha hexagonal na borda e flocos de neve de enfeite. Se o arquivo da imagem
-// não existir, mostra o espaço reservado.
+// Hero da página inicial (Design System v1.0, referência de composição): texto à esquerda e o
+// aparelho à direita, com 90 a 100% da altura da janela. No desktop a imagem é o fundo de tela
+// cheia, com um degradê da cor do fundo por cima da esquerda para o texto ler bem; no celular o
+// título vem primeiro e o aparelho logo abaixo.
 export default function Banner({ conteudo }) {
-  const [semImagem, setSemImagem] = useState(false)
-
   return (
-    <section aria-labelledby="titulo-banner" className="relative overflow-hidden">
-      <div aria-hidden="true" className="luz-azul absolute top-1/2 -right-32 size-[640px] -translate-y-1/2" />
-      <div aria-hidden="true" className="malha-hex absolute inset-y-0 right-0 hidden w-1/2 sm:block" />
-      <FlocoNeve className="absolute top-[58%] left-4 hidden size-12 text-led-forte/35 sm:block" />
-      <FlocoNeve className="absolute right-8 bottom-[18%] hidden size-14 text-led-forte/30 lg:block" />
-
-      <div className="relative mx-auto grid min-h-[min(80vh,720px)] max-w-6xl items-center gap-12 px-4 py-16 lg:grid-cols-[1.15fr_1fr]">
-        <div className="flex flex-col items-start gap-6">
-          <Rotulo className="text-base sm:text-lg">{conteudo.rotulo}</Rotulo>
-          <TituloLed nivel={1} className="max-w-2xl leading-[1.05] text-balance lg:text-[3.25rem]">
-            <span id="titulo-banner">{conteudo.titulo}</span>
-          </TituloLed>
-          <p className="max-w-lg text-lg text-gelo-300 sm:text-xl">{conteudo.texto}</p>
-          <div className="flex flex-wrap gap-3 pt-2">
-            <BotaoLed as={Link} to={conteudo.acaoPrincipal.para}>
-              {conteudo.acaoPrincipal.rotulo}
-            </BotaoLed>
-            <BotaoLed as={Link} to={conteudo.acaoSecundaria.para} variante="fantasma">
-              {conteudo.acaoSecundaria.rotulo}
-            </BotaoLed>
-          </div>
-        </div>
-
-        {semImagem ? (
-          <ImagemReservada />
-        ) : (
-          <img
-            src={conteudo.imagem.src}
-            alt={conteudo.imagem.alt}
-            loading="eager"
-            fetchPriority="high"
-            onError={() => setSemImagem(true)}
-            className="aspect-[4/3] w-full object-cover"
-            style={{ maskImage: MASCARA, WebkitMaskImage: MASCARA }}
-          />
-        )}
+    <section
+      aria-labelledby="titulo-banner"
+      className="relative flex min-h-[calc(100svh-5rem)] flex-col overflow-hidden md:justify-center"
+    >
+      <div className="relative order-2 aspect-[4/5] w-full md:absolute md:inset-0 md:order-none md:aspect-auto">
+        <ImagemHero
+          src={conteudo.imagem.src}
+          alt={conteudo.imagem.alt}
+          className="object-[76%_center] md:object-[center_center]"
+        />
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 bg-linear-to-b from-noite-950 via-transparent to-noite-950 md:bg-linear-to-r md:from-noite-950 md:via-noite-950/55 md:to-transparent md:to-70%"
+        />
+        <div
+          aria-hidden="true"
+          className="absolute inset-x-0 bottom-0 hidden h-32 bg-linear-to-t from-noite-950 to-transparent md:block"
+        />
       </div>
+
+      <motion.div
+        variants={CONTAINER}
+        initial="hidden"
+        animate="visivel"
+        className="relative z-10 mx-auto flex w-[88%] max-w-360 flex-col items-start gap-6 pt-12 pb-8 max-md:w-[calc(100%-3rem)] md:pt-0 md:pb-0"
+      >
+        <motion.p variants={ITEM} className="rotulo-tecnico flex w-full items-center gap-5 md:max-w-2xl">
+          <span>{conteudo.rotulo}</span>
+          <span aria-hidden="true" className="hidden h-px flex-1 bg-linear-to-r from-gelo-azul/50 to-transparent sm:block" />
+        </motion.p>
+
+        <motion.h1
+          id="titulo-banner"
+          variants={ITEM}
+          className="max-w-3xl text-[clamp(2.5rem,5.4vw,4.75rem)] leading-[1.08] font-bold tracking-tight text-gelo-50"
+        >
+          {conteudo.tituloLinha1}
+          <br />
+          <span className="titulo-ciano">{conteudo.tituloLinha2}</span>
+        </motion.h1>
+
+        <motion.p variants={ITEM} className="max-w-xl text-lg text-gelo-100 sm:text-xl">
+          {conteudo.texto}
+        </motion.p>
+
+        <motion.div variants={ITEM} className="flex flex-col items-stretch gap-4 pt-2 sm:flex-row sm:items-center">
+          <BotaoLed as={Link} to={conteudo.acaoPrincipal.para} seta className="min-h-14! px-8!">
+            {conteudo.acaoPrincipal.rotulo}
+          </BotaoLed>
+          <BotaoLed
+            as={Link}
+            to={conteudo.acaoSecundaria.para}
+            variante="secundario"
+            icone={<Play className="size-4 fill-current" />}
+          >
+            {conteudo.acaoSecundaria.rotulo}
+          </BotaoLed>
+        </motion.div>
+      </motion.div>
+
+      <a
+        href="#problema"
+        aria-label="Rolar para a próxima seção"
+        className="absolute bottom-6 left-1/2 z-10 hidden h-14 w-8 -translate-x-1/2 items-center justify-center rounded-full border border-gelo-300/50 text-gelo-100 transition-colors duration-300 hover:border-ciano hover:text-ciano md:flex"
+      >
+        <ArrowDown aria-hidden="true" className="size-4 motion-safe:animate-bounce" />
+      </a>
     </section>
   )
 }
