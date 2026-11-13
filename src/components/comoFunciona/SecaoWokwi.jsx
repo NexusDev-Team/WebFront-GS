@@ -10,34 +10,45 @@
  */
 
 import BotaoLed from '../ui/BotaoLed.jsx'
-import TituloSecao from '../ui/TituloSecao.jsx'
+import Revelar from '../ui/Revelar.jsx'
+import Secao from '../ui/Secao.jsx'
 
 // "No simulador Wokwi" (W26c): explica que os LEDs laranja, azul e verde e a chave "Controlador"
 // são representações, porque o simulador não tem os equipamentos. No aparelho real eles não existem.
+// Em faixa.
 export default function SecaoWokwi({ conteudo }) {
   return (
-    <section id={conteudo.id} aria-labelledby="titulo-wokwi" className="border-t border-borda py-16 sm:py-24">
-      <div className="conteudo flex flex-col gap-10">
-        <TituloSecao id="titulo-wokwi" subtitulo={conteudo.subtitulo}>
-          {conteudo.titulo}
-        </TituloSecao>
-
+    <Secao
+      id="titulo-wokwi"
+      ancora={conteudo.id}
+      rotulo="Simulador"
+      titulo={conteudo.titulo}
+      subtitulo={conteudo.subtitulo}
+      faixa
+    >
+      <div className="flex flex-col gap-10">
         <ul className="grid gap-6 md:grid-cols-2">
-          {conteudo.representacoes.map((item) => (
-            <li key={item.peca} className="cartao flex flex-col gap-2 p-6">
-              <h3 className="text-lg font-bold text-gelo-50">{item.peca}</h3>
-              <p className="text-gelo-50">
-                <span className="text-gelo-300">Representa </span>
-                {item.representa}
-              </p>
-              <p className="text-sm text-gelo-300">{item.comportamento}</p>
+          {conteudo.representacoes.map((item, indice) => (
+            <li key={item.peca}>
+              <Revelar atraso={(indice % 2) * 0.08} className="h-full">
+                <div className="cartao flex h-full flex-col gap-2 p-6">
+                  <h3 className="text-lg font-bold text-gelo-50">{item.peca}</h3>
+                  <p className="text-gelo-50">
+                    <span className="text-gelo-300">Representa </span>
+                    {item.representa}
+                  </p>
+                  <p className="text-sm text-gelo-300">{item.comportamento}</p>
+                </div>
+              </Revelar>
             </li>
           ))}
         </ul>
 
-        <p className="max-w-prose rounded-xl border border-borda bg-noite-900 px-5 py-4 text-gelo-50">{conteudo.nota}</p>
+        <Revelar>
+          <p className="max-w-prose border-l-2 border-ciano pl-5 text-gelo-50">{conteudo.nota}</p>
+        </Revelar>
 
-        <div className="flex flex-wrap gap-3">
+        <Revelar className="flex flex-wrap gap-3">
           {conteudo.links.map((link, indice) => (
             <BotaoLed
               key={link.url}
@@ -51,8 +62,8 @@ export default function SecaoWokwi({ conteudo }) {
               <span className="sr-only"> (abre em nova aba)</span>
             </BotaoLed>
           ))}
-        </div>
+        </Revelar>
       </div>
-    </section>
+    </Secao>
   )
 }

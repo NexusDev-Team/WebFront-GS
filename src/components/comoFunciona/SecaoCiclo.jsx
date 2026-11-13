@@ -10,23 +10,18 @@
  */
 
 import PassoSolucao from '../inicio/PassoSolucao.jsx'
-import TituloSecao from '../ui/TituloSecao.jsx'
+import Secao from '../ui/Secao.jsx'
 
 // "O ciclo de proteção": os quatro verbos (medir, decidir, assumir, alertar), com o texto completo.
-// Reaproveita o cartão numerado da página inicial.
+// Reaproveita o passo numerado da página inicial. Seção lisa (sem faixa).
 export default function SecaoCiclo({ conteudo }) {
   return (
-    <section id={conteudo.id} aria-labelledby="titulo-ciclo" className="py-16 sm:py-24">
-      <div className="conteudo flex flex-col gap-10">
-        <TituloSecao id="titulo-ciclo" subtitulo={conteudo.subtitulo}>
-          {conteudo.titulo}
-        </TituloSecao>
-        <ol className="grid gap-6 sm:grid-cols-2">
-          {conteudo.passos.map((passo) => (
-            <PassoSolucao key={passo.numero} {...passo} />
-          ))}
-        </ol>
-      </div>
-    </section>
+    <Secao id="titulo-ciclo" ancora={conteudo.id} rotulo="O ciclo" titulo={conteudo.titulo} subtitulo={conteudo.subtitulo}>
+      <ol className="grid gap-10 sm:grid-cols-2 lg:gap-12">
+        {conteudo.passos.map((passo, indice) => (
+          <PassoSolucao key={passo.numero} {...passo} atraso={indice * 0.08} ultimo />
+        ))}
+      </ol>
+    </Secao>
   )
 }
