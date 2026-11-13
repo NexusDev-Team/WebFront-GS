@@ -74,20 +74,7 @@ export const PROBLEMA = {
 export const PAINEL = {
   titulo: 'Painel do C-Shield',
   subtitulo: 'O que o aparelho mostra no local e envia à central. Nada aqui manda ordens a ele.',
-  alertas: {
-    titulo: 'Alertas',
-    texto: 'Ordens perigosas barradas hoje: 0. Último bloqueio: nenhum.',
-    aviso: 'Valores da demonstração.',
-  },
-  variacao: { titulo: 'Variação no período mostrado' },
-  historico: {
-    titulo: 'Histórico térmico',
-    reles: [
-      { nome: 'Ventoinha de emergência', estado: 'desligada', ligado: false },
-      { nome: 'Aquecedor', estado: 'liberado', ligado: true },
-    ],
-    nota: 'Os relés só mudam pelo próprio C-Shield.',
-  },
+  historico: { titulo: 'Histórico térmico' },
 }
 
 export const SOLUCAO = {
