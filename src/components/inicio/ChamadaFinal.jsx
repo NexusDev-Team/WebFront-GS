@@ -11,22 +11,33 @@
 
 import { Link } from 'react-router-dom'
 import BotaoLed from '../ui/BotaoLed.jsx'
+import PainelVidro from '../ui/PainelVidro.jsx'
+import Revelar from '../ui/Revelar.jsx'
+import Secao from '../ui/Secao.jsx'
+import PreviaAtaque from './PreviaAtaque.jsx'
 
-// Faixa final da página inicial: o contraste que resume o projeto (3h30 contra segundos) e o
-// botão para o emulador.
+// Seção "Simulação de ataque": o contraste que resume o projeto (3h30 contra segundos), uma prévia
+// ilustrada do jogo e o botão para o emulador (a área interativa de verdade).
 export default function ChamadaFinal({ conteudo }) {
   return (
-    <section aria-labelledby="titulo-chamada" className="border-t border-borda py-20 sm:py-28">
-      <div className="mx-auto max-w-6xl px-4">
-        <div className="cartao flex flex-col gap-8 px-6 py-14 sm:flex-row sm:items-center sm:justify-between sm:px-12">
-          <h2 id="titulo-chamada" className="max-w-2xl text-2xl font-bold text-balance text-gelo-50 sm:text-3xl">
-            {conteudo.texto}
-          </h2>
-          <BotaoLed as={Link} to={conteudo.acao.para} className="shrink-0 self-start sm:self-auto">
+    <Secao id="titulo-chamada" ancora="simulacao" rotulo={conteudo.rotulo} titulo={conteudo.titulo}>
+      <div className="grid items-center gap-12 lg:grid-cols-[1fr_1.1fr] lg:gap-16">
+        <Revelar className="flex flex-col items-start gap-8">
+          <div className="flex max-w-xl flex-col gap-3 text-lg leading-relaxed sm:text-xl">
+            <p className="text-gelo-100">{conteudo.texto}</p>
+            <p className="text-gelo-300">{conteudo.convite}</p>
+          </div>
+          <BotaoLed as={Link} to={conteudo.acao.para} seta className="min-h-14! px-8!">
             {conteudo.acao.rotulo}
           </BotaoLed>
-        </div>
+        </Revelar>
+
+        <Revelar atraso={0.15}>
+          <PainelVidro className="p-6 sm:p-10">
+            <PreviaAtaque className="h-auto w-full" />
+          </PainelVidro>
+        </Revelar>
       </div>
-    </section>
+    </Secao>
   )
 }

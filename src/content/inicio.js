@@ -130,7 +130,10 @@ export const SOLUCAO = {
 
 // A faixa final da página: o contraste que resume o projeto, e o caminho para o emulador.
 export const CHAMADA = {
+  rotulo: 'Simulação de ataque',
+  titulo: 'Agora é a sua vez de atacar',
   texto: 'Na Europa, foram 3h30 até alguém perceber. Com o C-Shield, segundos.',
+  convite: 'Tente esquentar uma câmara e veja o que acontece.',
   acao: { rotulo: 'Simular um ataque', para: '/emulador' },
 }
 
