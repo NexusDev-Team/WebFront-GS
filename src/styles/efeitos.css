@@ -69,6 +69,18 @@
 
   /* Palavra de destaque do título (a 2ª linha do hero): ciano sólido, que já passa em contraste.
      Onde há suporte, vira um degradê ciano para azul-gelo (os dois tons passam de 4,5:1). */
+  /* Faixa de fundo das seções alternadas: aparece e some em degradê, sem borda nem corte seco, na
+     mesma cor de fundo do resto do site. Só decoração (vem com aria-hidden). */
+  .faixa-suave {
+    background-image: linear-gradient(
+      to bottom,
+      transparent 0%,
+      color-mix(in srgb, var(--color-noite-900) 85%, transparent) 22%,
+      color-mix(in srgb, var(--color-noite-900) 85%, transparent) 78%,
+      transparent 100%
+    );
+  }
+
   .titulo-ciano {
     color: var(--color-ciano);
   }

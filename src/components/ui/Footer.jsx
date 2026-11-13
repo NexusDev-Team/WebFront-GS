@@ -30,7 +30,8 @@ function LinkExterno({ href, children }) {
 
 export default function Footer() {
   return (
-    <footer className="border-t border-borda/60 bg-noite-950">
+    <footer className="bg-noite-950">
+      <div aria-hidden="true" className="h-px bg-linear-to-r from-transparent via-borda to-transparent" />
       <div className="conteudo py-14">
         <div className="grid gap-10 md:grid-cols-[1.4fr_1fr_1fr]">
           <div className="flex flex-col gap-4">
