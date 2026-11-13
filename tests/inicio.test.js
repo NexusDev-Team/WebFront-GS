@@ -101,30 +101,22 @@ describe('DEMO (a câmara simulada da demonstração)', () => {
   })
 })
 
-describe('PAINEL (o painel do C-Shield da página inicial)', () => {
-  it('tem título, subtítulo e as partes: alertas, variação e histórico', () => {
-    expect(PAINEL.titulo).toBe('Painel do C-Shield')
-    for (const parte of ['alertas', 'variacao', 'historico']) {
-      expect(PAINEL[parte], parte).toBeDefined()
-    }
+describe('PAINEL (o texto do monitoramento da página inicial)', () => {
+  it('tem o subtítulo da seção e o título do gráfico de histórico', () => {
+    expect(PAINEL.subtitulo.length).toBeGreaterThan(20)
+    expect(PAINEL.historico.titulo).toBe('Histórico térmico')
   })
   it('o subtítulo diz que nada ali manda ordens ao aparelho', () => {
     expect(PAINEL.subtitulo).toMatch(/Nada aqui manda ordens/)
   })
-  it('os relés são só indicadores: cada um tem nome e estado em texto, e a nota diz quem os muda', () => {
-    expect(PAINEL.historico.reles).toHaveLength(2)
-    for (const rele of PAINEL.historico.reles) {
-      expect(rele.nome.length, rele.nome).toBeGreaterThan(5)
-      expect(rele.estado.length, rele.nome).toBeGreaterThan(3)
-      expect(typeof rele.ligado, rele.nome).toBe('boolean')
-    }
-    expect(PAINEL.historico.nota).toMatch(/só mudam pelo próprio C-Shield/)
+  it('a Home ficou enxuta: não há mais cartões de alertas, variação nem relés', () => {
+    expect(PAINEL).not.toHaveProperty('alertas')
+    expect(PAINEL).not.toHaveProperty('variacao')
+    expect(PAINEL.historico).not.toHaveProperty('reles')
+    expect(PAINEL.historico).not.toHaveProperty('nota')
   })
   it('nenhum texto sugere controle remoto, automação ou comandos pela rede (W43)', () => {
     expect(JSON.stringify(PAINEL)).not.toMatch(/automa[cç]|controle t[eé]rmico|comando|liga(r)? o|desliga(r)? o/i)
-  })
-  it('os valores de alerta são identificados como da demonstração', () => {
-    expect(PAINEL.alertas.aviso).toMatch(/demonstra/i)
   })
 })
 
