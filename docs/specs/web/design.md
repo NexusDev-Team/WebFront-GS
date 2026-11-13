@@ -94,7 +94,7 @@ Esboço da `/` (decisões do João: banner, problema e solução, sem scrollytel
  Problema       "INVADIRAM O FRIO PELA INTERNET" · [3h30] [12.976] [110 °C] com fonte linkada
  Painel         "PAINEL DO C-SHIELD" · "Nada aqui manda ordens a ele"
                 [Display C-Shield (vidro fosco)] [Alertas · Variação · Faixa segura ›] [Histórico + relés só de leitura]
- Solução        "VÊ DE LONGE. SÓ OBEDECE DE PERTO." · [01 Medir] [02 Decidir] [03 Assumir] [04 Alertar]
+ Solução        "C-SHIELD NÃO ESPERA NINGUÉM. ELE AGE." · [01 Medir] [02 Decidir] [03 Assumir] [04 Alertar e bloquear]
  Chamada final  "Na Europa, foram 3h30 até alguém perceber. Com o C-Shield, segundos." [Simular um ataque]
 [Rodapé: marca e frase · links do site · links do projeto]
 ```
@@ -105,10 +105,9 @@ Esboço da `/como-funciona`:
 
 ```
  Cabeçalho   "O dispositivo" · h1 "Como o C-Shield funciona" · "Vê de longe. Só obedece de perto."
- Ciclo       [01 Medir] [02 Decidir] [03 Assumir] [04 Alertar]   (texto completo)
+ Ciclo       [01 Medir] [02 Decidir] [03 Assumir] [04 Alertar e bloquear]   (texto completo)
  Direção     diagrama SVG (desktop) / duas colunas (celular) + lista das 6 etapas em texto
  Estados     5 cartões: LED (cor e texto) · quando acontece · o que o aparelho faz
- Faixas      vacina · congelado · resfriado · plasma  ("gravada no dispositivo", #faixas)
  Wokwi       LED laranja, azul, verde e a chave "Controlador" são representações; no aparelho real não existem
  Origem      IEC 61511 · diodos de dados · o limite do protótipo · "Conheça a equipe"
 ```

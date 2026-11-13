@@ -10,12 +10,11 @@
  */
 
 // Página Como funciona (W44, W26c): o ciclo de proteção, a arquitetura em uma direção, os cinco
-// estados, as faixas seguras, a explicação dos LEDs do Wokwi e de onde vem a ideia. O texto fica
+// estados, a explicação dos LEDs do Wokwi e de onde vem a ideia. O texto fica
 // em content/comoFunciona.js; a página só liga as seções.
 import SecaoArquitetura from '../components/comoFunciona/SecaoArquitetura.jsx'
 import SecaoCiclo from '../components/comoFunciona/SecaoCiclo.jsx'
 import SecaoEstados from '../components/comoFunciona/SecaoEstados.jsx'
-import SecaoFaixas from '../components/comoFunciona/SecaoFaixas.jsx'
 import SecaoOrigem from '../components/comoFunciona/SecaoOrigem.jsx'
 import SecaoWokwi from '../components/comoFunciona/SecaoWokwi.jsx'
 import Rotulo from '../components/ui/Rotulo.jsx'
@@ -25,7 +24,6 @@ import {
   CABECALHO,
   CICLO,
   ESTADOS_DA_PAGINA,
-  FAIXAS,
   ORIGEM,
   WOKWI,
 } from '../content/comoFunciona.js'
@@ -41,7 +39,6 @@ export default function ComoFunciona() {
       <SecaoCiclo conteudo={CICLO} />
       <SecaoArquitetura conteudo={ARQUITETURA} />
       <SecaoEstados estados={ESTADOS_DA_PAGINA} />
-      <SecaoFaixas conteudo={FAIXAS} />
       <SecaoWokwi conteudo={WOKWI} />
       <SecaoOrigem conteudo={ORIGEM} />
     </>

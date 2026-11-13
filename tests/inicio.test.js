@@ -30,6 +30,9 @@ describe('BANNER', () => {
 })
 
 describe('PROBLEMA', () => {
+  it('o título fala em refrigeração', () => {
+    expect(PROBLEMA.titulo).toBe('Invadiram a refrigeração pela internet')
+  })
   it('tem três fatos, cada um com número, explicação e uma notícia de fonte com link https', () => {
     expect(PROBLEMA.fatos).toHaveLength(3)
     for (const fato of PROBLEMA.fatos) {
@@ -53,8 +56,12 @@ describe('PROBLEMA', () => {
 })
 
 describe('SOLUCAO', () => {
-  it('tem quatro passos, na ordem medir, decidir, assumir e alertar', () => {
-    expect(SOLUCAO.passos.map((p) => p.verbo)).toEqual(['Medir', 'Decidir', 'Assumir', 'Alertar'])
+  it('o título é a frase da ação e o texto explica que o aparelho só envia dados pela rede', () => {
+    expect(SOLUCAO.titulo).toBe('C-Shield não espera ninguém. Ele age.')
+    expect(SOLUCAO.texto).toMatch(/só envia dados/)
+  })
+  it('tem quatro passos, na ordem medir, decidir, assumir e alertar e bloquear', () => {
+    expect(SOLUCAO.passos.map((p) => p.verbo)).toEqual(['Medir', 'Decidir', 'Assumir', 'Alertar e bloquear'])
     expect(SOLUCAO.passos.map((p) => p.numero)).toEqual(['01', '02', '03', '04'])
   })
   it('cada passo tem texto e um ícone conhecido', () => {
@@ -95,18 +102,14 @@ describe('DEMO (a câmara simulada da demonstração)', () => {
 })
 
 describe('PAINEL (o painel do C-Shield da página inicial)', () => {
-  it('tem título, subtítulo e as partes: alertas, variação, link da faixa e histórico', () => {
+  it('tem título, subtítulo e as partes: alertas, variação e histórico', () => {
     expect(PAINEL.titulo).toBe('Painel do C-Shield')
-    for (const parte of ['alertas', 'variacao', 'faixa', 'historico']) {
+    for (const parte of ['alertas', 'variacao', 'historico']) {
       expect(PAINEL[parte], parte).toBeDefined()
     }
   })
   it('o subtítulo diz que nada ali manda ordens ao aparelho', () => {
     expect(PAINEL.subtitulo).toMatch(/Nada aqui manda ordens/)
-  })
-  it('o link da faixa leva à âncora das faixas seguras do Como funciona', () => {
-    expect(PAINEL.faixa.para).toBe('/como-funciona#faixas')
-    expect(PAINEL.faixa.rotulo).toMatch(/gravada no dispositivo/)
   })
   it('os relés são só indicadores: cada um tem nome e estado em texto, e a nota diz quem os muda', () => {
     expect(PAINEL.historico.reles).toHaveLength(2)

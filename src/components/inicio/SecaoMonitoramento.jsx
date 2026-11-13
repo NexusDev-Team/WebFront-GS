@@ -10,8 +10,7 @@
  */
 
 import { lazy, Suspense } from 'react'
-import { ArrowRight, TriangleAlert } from 'lucide-react'
-import { Link } from 'react-router-dom'
+import { TriangleAlert } from 'lucide-react'
 import { DEMO, PAINEL } from '../../content/inicio.js'
 import { PERFIS_FIRMWARE } from '../../domain/perfis.js'
 import { amplitudeDaSerie, dentroDaFaixa } from '../../domain/serieDemo.js'
@@ -104,17 +103,6 @@ export default function SecaoMonitoramento({ serie }) {
           </PainelVidro>
         </Revelar>
       </div>
-
-      <Link
-        to={PAINEL.faixa.para}
-        className="group mt-10 inline-flex min-h-11 items-center gap-2 font-semibold text-ciano underline-offset-4 hover:underline"
-      >
-        {PAINEL.faixa.rotulo}
-        <ArrowRight
-          aria-hidden="true"
-          className="size-4 transition-transform duration-300 ease-suave motion-safe:group-hover:translate-x-1"
-        />
-      </Link>
     </Secao>
   )
 }

@@ -12,8 +12,7 @@
 /*
  * comoFunciona.js — o texto da página Como funciona (W44, W26c). Os estados e as cores de LED
  * seguem o contrato do Edge (docs/specs/PLANO-GS.md, "Como o Guardião decide"); a página nunca
- * diz que o C-Shield recebe comandos pela rede (W43). As faixas seguras vêm de domain/perfis.js,
- * aqui só ficam os exemplos reais de cada uma.
+ * diz que o C-Shield recebe comandos pela rede (W43).
  */
 import { URL_REPOSITORIO_EDGE, URL_WOKWI } from './links.js'
 
@@ -51,10 +50,10 @@ export const CICLO = {
     },
     {
       numero: '04',
-      verbo: 'Alertar',
+      verbo: 'Alertar e bloquear',
       icone: 'sino',
       texto:
-        'Luz, buzzer e mensagem no display avisam no local, mesmo sem internet. O aparelho envia o evento ao FIWARE e ao site, só nessa direção. O bloqueio só termina presencialmente: o botão do aparelho, segurado por 3 segundos.',
+        'Luz, buzzer e mensagem no display avisam no local, mesmo sem internet, e o bloqueio fica ativo: as ordens do controlador são ignoradas. O aparelho envia o evento ao FIWARE e ao site, só nessa direção. O bloqueio só termina presencialmente: o botão do aparelho, segurado por 3 segundos.',
     },
   ],
 }
@@ -115,20 +114,6 @@ export const ESTADOS_DA_PAGINA = [
     acao: 'LED amarelo piscando, um bipe a cada 10 segundos e display com "Estado: Falha".',
   },
 ]
-
-export const FAIXAS = {
-  id: 'faixas',
-  titulo: 'Faixas seguras',
-  subtitulo:
-    'Cada produto tem a sua faixa, gravada no próprio aparelho. Este site só mostra: ninguém a altera pela rede.',
-  etiqueta: 'gravada no dispositivo',
-  exemplos: {
-    VACINA: 'Sala de vacina da UBS',
-    CONGELADO: 'Freezer do supermercado',
-    RESFRIADO: 'Câmara do açougue',
-    PLASMA: 'Banco de sangue (EFS, França)',
-  },
-}
 
 export const WOKWI = {
   id: 'wokwi',

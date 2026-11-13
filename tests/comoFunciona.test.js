@@ -19,16 +19,14 @@ import {
   CABECALHO,
   CICLO,
   ESTADOS_DA_PAGINA,
-  FAIXAS,
   ORIGEM,
   WOKWI,
 } from '../src/content/comoFunciona.js'
 import { URL_REPOSITORIO_EDGE, URL_WOKWI } from '../src/content/links.js'
 import { corLed } from '../src/domain/cshield-saida.js'
 import { ESTADOS } from '../src/domain/nomes.js'
-import { PERFIS_FIRMWARE } from '../src/domain/perfis.js'
 
-const TUDO = JSON.stringify({ CABECALHO, CICLO, ARQUITETURA, ESTADOS_DA_PAGINA, FAIXAS, WOKWI, ORIGEM })
+const TUDO = JSON.stringify({ CABECALHO, CICLO, ARQUITETURA, ESTADOS_DA_PAGINA, WOKWI, ORIGEM })
 
 describe('links', () => {
   it('o Wokwi e o repositório do Edge são links https do projeto', () => {
@@ -46,8 +44,8 @@ describe('CABECALHO', () => {
 })
 
 describe('CICLO (os quatro verbos)', () => {
-  it('são medir, decidir, assumir e alertar, numerados de 01 a 04, com ícone conhecido', () => {
-    expect(CICLO.passos.map((p) => p.verbo)).toEqual(['Medir', 'Decidir', 'Assumir', 'Alertar'])
+  it('são medir, decidir, assumir e alertar e bloquear, numerados de 01 a 04, com ícone conhecido', () => {
+    expect(CICLO.passos.map((p) => p.verbo)).toEqual(['Medir', 'Decidir', 'Assumir', 'Alertar e bloquear'])
     expect(CICLO.passos.map((p) => p.numero)).toEqual(['01', '02', '03', '04'])
     for (const passo of CICLO.passos) {
       expect(['termometro', 'escudo', 'rele', 'sino'], passo.verbo).toContain(passo.icone)
@@ -59,8 +57,9 @@ describe('CICLO (os quatro verbos)', () => {
     expect(assumir.texto).toMatch(/calor/i)
     expect(assumir.texto).toMatch(/frio/i)
   })
-  it('alertar diz que o bloqueio só termina com o botão do aparelho, segurado por 3 segundos', () => {
-    const alertar = CICLO.passos.find((p) => p.verbo === 'Alertar')
+  it('alertar e bloquear diz que o bloqueio só termina com o botão do aparelho, segurado por 3 segundos', () => {
+    const alertar = CICLO.passos.find((p) => p.verbo === 'Alertar e bloquear')
+    expect(alertar.texto).toMatch(/bloqueio/)
     expect(alertar.texto).toMatch(/3 segundos/)
   })
 })
@@ -100,14 +99,6 @@ describe('ESTADOS_DA_PAGINA (os cinco estados)', () => {
       expect(estado.quando.length, estado.id).toBeGreaterThan(20)
       expect(estado.acao.length, estado.id).toBeGreaterThan(20)
     }
-  })
-})
-
-describe('FAIXAS (faixas seguras)', () => {
-  it('há um exemplo real para cada perfil do firmware, e a etiqueta "gravada no dispositivo"', () => {
-    expect(Object.keys(FAIXAS.exemplos).sort()).toEqual(Object.keys(PERFIS_FIRMWARE).sort())
-    expect(FAIXAS.etiqueta).toBe('gravada no dispositivo')
-    expect(FAIXAS.id).toBe('faixas')
   })
 })
 

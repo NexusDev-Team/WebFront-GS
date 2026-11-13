@@ -45,7 +45,7 @@ export const DEMO = {
 }
 
 export const PROBLEMA = {
-  titulo: 'Invadiram o frio pela internet',
+  titulo: 'Invadiram a refrigeração pela internet',
   texto:
     'Entre outubro e novembro de 2026, invasores entraram pela internet nos controladores de refrigeração de supermercados e de um banco de sangue na Europa e mandaram os equipamentos esquentar. Ninguém entrou nos prédios.',
   fatos: [
@@ -80,7 +80,6 @@ export const PAINEL = {
     aviso: 'Valores da demonstração.',
   },
   variacao: { titulo: 'Variação no período mostrado' },
-  faixa: { rotulo: 'Faixa segura · gravada no dispositivo', para: '/como-funciona#faixas' },
   historico: {
     titulo: 'Histórico térmico',
     reles: [
@@ -92,9 +91,9 @@ export const PAINEL = {
 }
 
 export const SOLUCAO = {
-  titulo: 'Vê de longe. Só obedece de perto.',
+  titulo: 'C-Shield não espera ninguém. Ele age.',
   texto:
-    'Um dispositivo independente, instalado junto da câmara, que não recebe nenhum comando pela rede. Ele só envia dados.',
+    'O C-Shield é um dispositivo independente, instalado junto da câmara fria. Ele mede com sensores próprios, decide com uma regra gravada nele e, se o controlador for atacado, assume os relés na hora, sem esperar ordem de ninguém. Não recebe nenhum comando pela rede: só envia dados.',
   passos: [
     {
       numero: '01',
@@ -119,10 +118,10 @@ export const SOLUCAO = {
     },
     {
       numero: '04',
-      verbo: 'Alertar',
+      verbo: 'Alertar e bloquear',
       icone: 'sino',
       texto:
-        'Luz, som e mensagem no local avisam na hora. Para liberar, é preciso estar presente e segurar o botão por 3 segundos.',
+        'Luz, som e mensagem no local avisam na hora, e o bloqueio fica ativo: as ordens do controlador são ignoradas. Para liberar, é preciso estar presente e segurar o botão por 3 segundos.',
     },
   ],
   link: { rotulo: 'Entender o funcionamento', para: '/como-funciona' },
