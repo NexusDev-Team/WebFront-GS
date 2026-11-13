@@ -9,13 +9,13 @@
  *   Nicolas Cinel — RM572940
  */
 
-import { EQUIPE } from '../../content/equipe.js'
+import ListaEquipe from '../equipe/ListaEquipe.jsx'
 import LinkSeta from '../ui/LinkSeta.jsx'
 import Revelar from '../ui/Revelar.jsx'
 import Secao from '../ui/Secao.jsx'
 
-// Prévia da equipe na página inicial: o propósito, as tecnologias e os cinco integrantes (nomes e
-// RMs vêm de content/equipe.js, a mesma fonte da página Nexus Dev). Sem cartões: uma lista com
+// Prévia da equipe na página inicial: o propósito, as tecnologias e os cinco integrantes (ListaEquipe,
+// a mesma lista da página Nexus Dev). Sem cartões: uma lista com
 // fios finos, e o link leva à página completa.
 export default function SecaoNexusDev({ conteudo }) {
   return (
@@ -47,22 +47,7 @@ export default function SecaoNexusDev({ conteudo }) {
 
         <Revelar atraso={0.1}>
           <p className="rotulo-tecnico mb-4">Integrantes</p>
-          <ul className="divide-y divide-borda border-y border-borda">
-            {EQUIPE.map((pessoa) => (
-              <li key={pessoa.rm} className="flex items-center justify-between gap-4 py-4">
-                <span className="flex items-center gap-4">
-                  <span
-                    aria-hidden="true"
-                    className="grid size-10 shrink-0 place-items-center rounded-full border border-borda bg-superficie font-mono text-xs text-gelo-azul"
-                  >
-                    {pessoa.iniciais}
-                  </span>
-                  <span className="text-gelo-50">{pessoa.nome}</span>
-                </span>
-                <span className="font-mono text-xs tracking-wider text-gelo-300">{pessoa.rm}</span>
-              </li>
-            ))}
-          </ul>
+          <ListaEquipe />
         </Revelar>
       </div>
     </Secao>
