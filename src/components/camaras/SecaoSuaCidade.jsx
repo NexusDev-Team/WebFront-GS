@@ -35,7 +35,7 @@ export default function SecaoSuaCidade({ children = null }) {
       id="sua-cidade"
       rotulo="Cadastro do bairro"
       titulo="E na sua cidade?"
-      subtitulo="Os mesmos equipamentos atacados na Europa existem aqui. Cadastre uma câmara fria do seu bairro: a padaria, a UBS, o hemocentro, o mercadinho. Quanto mais gente olhar para elas, mais cedo alguém percebe que algo esquentou."
+      subtitulo="Os mesmos equipamentos atacados na Europa existem aqui. Cadastre uma câmara fria do seu bairro: a padaria, a UBS, o hemocentro."
       fundo={<FundoCyber />}
     >
       <div className="flex flex-col gap-4">

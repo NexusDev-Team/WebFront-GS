@@ -10,20 +10,12 @@
  */
 
 /*
- * linhaDoTempo.js — o caso em ordem, do primeiro sinal ao que o C-Shield muda. Fatos de
+ * linhaDoTempo.js — o caso em ordem, da primeira onda ao que o C-Shield muda (só os marcos que contam). Fatos de
  * docs/specs/PLANO-GS.md ("O caso"). tipo: 'ataque' (vermelho), 'alerta' (amarelo) ou
  * 'cshield' (azul forte: o que o produto faz).
  */
 
 export const LINHA_DO_TEMPO = [
-  {
-    data: '2026-08',
-    quando: 'Agosto',
-    titulo: 'Geladeiras de bases militares dos EUA falham',
-    texto:
-      'Pelo menos seis bases americanas perderam comida e o Pentágono investiga se foi ataque. Pesquisadores já avisavam de falhas nos controladores de refrigeração.',
-    tipo: 'alerta',
-  },
   {
     data: '2026-10-11',
     quando: '11 de outubro',
@@ -55,14 +47,6 @@ export const LINHA_DO_TEMPO = [
     texto:
       'O plasma, guardado a cerca de -30 °C, recebeu ordem para chegar a 110 °C. Só não houve perda porque um técnico de plantão ouviu o alarme.',
     tipo: 'ataque',
-  },
-  {
-    data: '2026-11-06',
-    quando: '6 de novembro',
-    titulo: 'Os EUA mandam tirar a refrigeração da internet',
-    texto:
-      'Órgãos do governo americano pediram limites de temperatura nos aparelhos depois dos controladores e alerta para qualquer desvio.',
-    tipo: 'alerta',
   },
   {
     data: '2026-11-11',
