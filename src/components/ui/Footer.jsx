@@ -42,7 +42,7 @@ export default function Footer() {
             <ul>
               <li><Link to="/emulador" className={CLASSE_LINK}>Emulador</Link></li>
               <li><Link to="/como-funciona" className={CLASSE_LINK}>Como funciona</Link></li>
-              <li><Link to="/noticias" className={CLASSE_LINK}>Notícias</Link></li>
+              <li><Link to="/problema" className={CLASSE_LINK}>Problema</Link></li>
               <li><Link to="/nexus-dev" className={CLASSE_LINK}>Nexus Dev</Link></li>
             </ul>
           </nav>

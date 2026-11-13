@@ -9,7 +9,7 @@
  *   Nicolas Cinel — RM572940
  */
 
-// Página Notícias: POR QUE o C-Shield existe. Ordem: cabeçalho, a manchete (sem imagem), a linha do
+// Página Problema (antes Notícias): POR QUE o C-Shield existe. Ordem: cabeçalho, a manchete (sem imagem), a linha do
 // tempo do caso, "E na sua cidade?" (cadastro de câmaras do bairro, o CRUD em API externa) com a
 // chamada para o emulador logo abaixo, e por último as outras matérias. O conteúdo é fixo
 // (src/content) e cada cartão leva à matéria original.
@@ -26,13 +26,14 @@ import Secao from '../components/ui/Secao.jsx'
 import { LINHA_DO_TEMPO } from '../content/linhaDoTempo.js'
 import { noticiaDestaque, noticiasOrdenadas } from '../content/noticias.js'
 
-export default function Noticias() {
+export default function Problema() {
   return (
     <>
       <CabecalhoPagina
-        rotulo="Notícias"
-        titulo="Por que o C-Shield existe"
-        subtitulo="Em outubro e novembro de 2026, invasores entraram pela internet nos controladores de refrigeração de supermercados e de um banco de sangue na Europa e mandaram tudo esquentar. Ninguém entrou nos prédios. Estas são as notícias."
+        rotulo="O problema"
+        titulo="Invadiram o frio"
+        destaque="pela internet"
+        subtitulo="Em 2026, invasores mandaram esquentar supermercados e um banco de sangue na Europa. Ninguém entrou nos prédios."
       />
 
       <Secao rotuloAria="Manchete do dia">

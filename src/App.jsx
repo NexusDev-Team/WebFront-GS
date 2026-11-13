@@ -14,9 +14,9 @@ import { MotionConfig } from 'framer-motion'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import Navbar from './components/ui/Navbar.jsx'
 import Footer from './components/ui/Footer.jsx'
-import Inicio from './pages/Inicio.jsx'
+import Home from './pages/Home.jsx'
 import Emulador from './pages/Emulador.jsx'
-import Noticias from './pages/Noticias.jsx'
+import Problema from './pages/Problema.jsx'
 import NexusDev from './pages/NexusDev.jsx'
 import ComoFunciona from './pages/ComoFunciona.jsx'
 import NaoEncontrada from './pages/NaoEncontrada.jsx'
@@ -33,14 +33,15 @@ export default function App() {
       <Navbar />
       <main id="conteudo" tabIndex={-1} className="outline-none">
         <Routes>
-          <Route path="/" element={<Inicio />} />
+          <Route path="/" element={<Home />} />
           <Route path="/emulador" element={<Emulador />} />
-          <Route path="/noticias" element={<Noticias />} />
+          <Route path="/problema" element={<Problema />} />
           <Route path="/como-funciona" element={<ComoFunciona />} />
           <Route path="/nexus-dev" element={<NexusDev />} />
-          {/* Rotas antigas: o dispositivo real virou seção do emulador e os incidentes viraram notícias. */}
+          {/* Rotas antigas: o dispositivo real virou seção do emulador; notícias e incidentes viraram a página Problema. */}
           <Route path="/simulador-real" element={<Navigate to="/emulador#dispositivo-real" replace />} />
-          <Route path="/incidentes" element={<Navigate to="/noticias" replace />} />
+          <Route path="/noticias" element={<Navigate to="/problema" replace />} />
+          <Route path="/incidentes" element={<Navigate to="/problema" replace />} />
           <Route path="*" element={<NaoEncontrada />} />
         </Routes>
       </main>

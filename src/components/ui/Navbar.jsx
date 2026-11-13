@@ -19,9 +19,9 @@ import Logo from './Logo.jsx'
 // pílula "Simular ataque →". No celular vira um botão de menu (aria-expanded). NavLink já marca a
 // rota atual com aria-current="page" (W4); a rota atual leva ciano e um sublinhado de 2 px.
 const LINKS = [
-  { para: '/', rotulo: 'Início' },
+  { para: '/', rotulo: 'Home' },
   { para: '/como-funciona', rotulo: 'Como funciona' },
-  { para: '/noticias', rotulo: 'Notícias' },
+  { para: '/problema', rotulo: 'Problema' },
   { para: '/nexus-dev', rotulo: 'Nexus Dev' },
 ]
 

@@ -65,7 +65,7 @@ export const PROBLEMA = {
       fonteId: 'agora-litoral-banco-de-sangue',
     },
   ],
-  link: { rotulo: 'Ver as notícias', para: '/noticias' },
+  link: { rotulo: 'Entender o problema', para: '/problema' },
 }
 
 // O painel do C-Shield: o que o aparelho mostra no local e envia à central. Tudo aqui é leitura. Os

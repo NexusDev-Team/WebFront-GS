@@ -21,7 +21,7 @@ import SecaoSolucao from '../components/inicio/SecaoSolucao.jsx'
 import { BANNER, CHAMADA, DEMO, NEXUS, PROBLEMA, SOLUCAO } from '../content/inicio.js'
 import { useLeituraDemo } from '../hooks/useLeituraDemo.js'
 
-export default function Inicio() {
+export default function Home() {
   const serie = useLeituraDemo(DEMO)
 
   return (
