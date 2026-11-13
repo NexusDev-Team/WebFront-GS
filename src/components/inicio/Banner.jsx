@@ -17,7 +17,8 @@ import { ENTRADA_CONTAINER as CONTAINER, ENTRADA_ITEM as ITEM } from '../ui/movi
 import ImagemHero from './ImagemHero.jsx'
 
 // Hero da página inicial (Design System v1.0, referência de composição): texto à esquerda e o
-// aparelho à direita, com 90 a 100% da altura da janela. No desktop a imagem é o fundo de tela
+// aparelho à direita, com 90 a 100% da altura da janela. No desktop os textos ficam no alto, logo abaixo
+// do header, e os botões ficam mais embaixo (a 26% da altura da janela, contados do fim). No desktop a imagem é o fundo de tela
 // cheia, com um degradê da cor do fundo por cima da esquerda para o texto ler bem; no celular o
 // aparelho aparece de fundo, no alto, junto do título, com um véu escuro por cima para o texto
 // ler bem.
@@ -25,7 +26,7 @@ export default function Banner({ conteudo }) {
   return (
     <section
       aria-labelledby="titulo-banner"
-      className="relative flex flex-col md:min-h-[calc(100svh-5rem)] overflow-hidden md:justify-center"
+      className="relative flex flex-col overflow-hidden md:min-h-[calc(100svh-5rem)]"
     >
       <div className="absolute inset-0">
         <ImagemHero
@@ -47,7 +48,7 @@ export default function Banner({ conteudo }) {
         variants={CONTAINER}
         initial="hidden"
         animate="visivel"
-        className="conteudo relative z-10 flex flex-col items-start gap-6 py-20 md:py-0"
+        className="conteudo relative z-10 flex flex-col items-start gap-6 py-20 md:flex-1 md:pt-14 md:pb-0"
       >
         <motion.p variants={ITEM} className="rotulo-tecnico flex w-full items-center gap-5 md:max-w-2xl">
           <span>{conteudo.rotulo}</span>
@@ -57,7 +58,7 @@ export default function Banner({ conteudo }) {
         <motion.h1
           id="titulo-banner"
           variants={ITEM}
-          className="max-w-3xl text-[clamp(2.5rem,5.4vw,4.75rem)] leading-[1.08] font-bold tracking-tight text-gelo-50"
+          className="max-w-3xl text-[clamp(2.5rem,4.6vw,4.25rem)] leading-[1.08] font-bold tracking-tight text-gelo-50"
         >
           {conteudo.tituloLinha1}
           <br />
@@ -68,7 +69,10 @@ export default function Banner({ conteudo }) {
           {conteudo.texto}
         </motion.p>
 
-        <motion.div variants={ITEM} className="flex flex-col items-stretch gap-4 pt-2 sm:flex-row sm:items-center">
+        <motion.div
+          variants={ITEM}
+          className="flex flex-col items-stretch gap-4 pt-2 sm:flex-row sm:items-center md:mt-auto md:mb-[26svh]"
+        >
           <BotaoLed as={Link} to={conteudo.acaoPrincipal.para} seta className="min-h-14! px-8!">
             {conteudo.acaoPrincipal.rotulo}
           </BotaoLed>
