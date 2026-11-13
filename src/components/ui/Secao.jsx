@@ -14,12 +14,30 @@ import Revelar from './Revelar.jsx'
 // Seção padrão das páginas (Design System v1.0): espaçamento vertical de 96 a 160 px, container
 // de 88% (até 1440 px), rótulo técnico, título e subtítulo opcionais, tudo entrando ao rolar.
 // `id` liga o título à seção (aria-labelledby); `ancora` é o id da própria seção (links #...). `fundo` é um nó decorativo posto atrás do conteúdo.
-export default function Secao({ id, ancora, rotulo, titulo, subtitulo, fundo = null, className = '', children }) {
+// `faixa` aplica o fundo de faixa (ritmo liso/faixa entre seções); `compacta` reduz o respiro vertical
+// (usada onde o conteúdo precisa caber na tela, como o jogo do emulador). `rotuloAria` nomeia a
+// seção quando ela não tem título visível.
+export default function Secao({
+  id,
+  ancora,
+  rotulo,
+  titulo,
+  subtitulo,
+  fundo = null,
+  faixa = false,
+  compacta = false,
+  rotuloAria,
+  className = '',
+  children,
+}) {
   return (
     <section
       id={ancora}
       aria-labelledby={titulo ? id : undefined}
-      className={`relative scroll-mt-20 py-24 md:py-32 lg:py-40 ${className}`}
+      aria-label={titulo ? undefined : rotuloAria}
+      className={`relative scroll-mt-20 ${compacta ? 'py-16 md:py-24' : 'py-24 md:py-32 lg:py-40'} ${
+        faixa ? 'border-y border-borda/50 bg-noite-900/60' : ''
+      } ${className}`}
     >
       {fundo}
       <div className="relative conteudo">

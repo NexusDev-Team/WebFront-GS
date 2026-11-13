@@ -25,7 +25,7 @@ export default function SecaoNexusDev({ conteudo }) {
       rotulo={conteudo.rotulo}
       titulo={conteudo.titulo}
       subtitulo={conteudo.texto}
-      className="border-t border-borda/50 bg-noite-900/60"
+      faixa
     >
       <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
         <Revelar className="flex flex-col items-start gap-8">

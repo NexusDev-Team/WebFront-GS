@@ -24,7 +24,7 @@ export default function SecaoSolucao({ conteudo }) {
       rotulo="Como funciona"
       titulo={conteudo.titulo}
       subtitulo={conteudo.texto}
-      className="border-y border-borda/50 bg-noite-900/60"
+      faixa
     >
       <ol className="grid gap-12 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8">
         {conteudo.passos.map((passo, indice) => (
