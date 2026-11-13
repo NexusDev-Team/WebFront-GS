@@ -11,6 +11,7 @@
 
 import { Link } from 'react-router-dom'
 import BotaoLed from '../ui/BotaoLed.jsx'
+import FundoCyber from '../ui/FundoCyber.jsx'
 import PainelVidro from '../ui/PainelVidro.jsx'
 import Revelar from '../ui/Revelar.jsx'
 import Secao from '../ui/Secao.jsx'
@@ -20,7 +21,7 @@ import PreviaAtaque from './PreviaAtaque.jsx'
 // ilustrada do jogo e o botão para o emulador (a área interativa de verdade).
 export default function ChamadaFinal({ conteudo }) {
   return (
-    <Secao id="titulo-chamada" ancora="simulacao" rotulo={conteudo.rotulo} titulo={conteudo.titulo}>
+    <Secao id="titulo-chamada" ancora="simulacao" rotulo={conteudo.rotulo} titulo={conteudo.titulo} fundo={<FundoCyber />}>
       <div className="grid items-center gap-12 lg:grid-cols-[1fr_1.1fr] lg:gap-16">
         <Revelar className="flex flex-col items-start gap-8">
           <div className="flex max-w-xl flex-col gap-3 text-lg leading-relaxed sm:text-xl">

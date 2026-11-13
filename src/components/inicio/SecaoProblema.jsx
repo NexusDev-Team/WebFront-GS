@@ -12,6 +12,7 @@
 import { ArrowRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { fonteDoFato } from '../../content/inicio.js'
+import FundoCyber from '../ui/FundoCyber.jsx'
 import Secao from '../ui/Secao.jsx'
 import FatoNumero from './FatoNumero.jsx'
 
@@ -25,6 +26,7 @@ export default function SecaoProblema({ conteudo }) {
       rotulo="O problema"
       titulo={conteudo.titulo}
       subtitulo={conteudo.texto}
+      fundo={<FundoCyber />}
     >
       <div className="grid gap-10 md:grid-cols-3 md:gap-12">
         {conteudo.fatos.map((fato, indice) => (

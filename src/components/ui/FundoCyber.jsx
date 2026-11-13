@@ -50,12 +50,12 @@ export default function FundoCyber({ className = '' }) {
         fill="none"
       >
         <g stroke="var(--color-led-fraco)" strokeWidth="1.2">
-          <path d="M0 210 H96 L140 164 H300" />
-          <path d="M1440 640 H1330 L1286 684 H1120" />
+          <path d="M0 120 H30 L56 146 V380" />
+          <path d="M1440 560 H1410 L1384 534 V300" />
         </g>
         <g stroke="var(--color-gelo-azul)" strokeWidth="1.6" strokeLinecap="round">
-          <path className="circuito-brilho" pathLength="100" d="M0 210 H96 L140 164 H300" />
-          <path className="circuito-brilho circuito-brilho-b" pathLength="100" d="M1440 640 H1330 L1286 684 H1120" />
+          <path className="circuito-brilho" pathLength="100" d="M0 120 H30 L56 146 V380" />
+          <path className="circuito-brilho circuito-brilho-b" pathLength="100" d="M1440 560 H1410 L1384 534 V300" />
         </g>
       </svg>
     </div>
