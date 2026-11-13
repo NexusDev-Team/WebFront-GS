@@ -40,8 +40,8 @@
   --color-menta-texto: #052e16;
   --color-alerta-fundo: rgba(239, 68, 68, 0.12);
 
-  --font-titulo: "Plus Jakarta Sans", system-ui, sans-serif;
+  --font-titulo: "Space Grotesk", system-ui, sans-serif;
   --font-texto: "Inter", system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, monospace;
-  --font-lcd: "JetBrains Mono", ui-monospace, monospace;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+  --font-lcd: "IBM Plex Mono", ui-monospace, monospace;
 }
