@@ -10,32 +10,32 @@
  */
 
 // Seção "Dispositivo real", no fim do emulador (antes era a página /simulador-real): a imagem de
-// como o C-Shield seria e o circuito dele rodando no Wokwi. Não lê o FIWARE; aqui nada envia
-// ordem ao C-Shield.
+// como o C-Shield seria e o circuito dele rodando no Wokwi. Em faixa, como as outras seções.
+// Não lê o FIWARE; aqui nada envia ordem ao C-Shield.
 import ImagemDispositivo from './ImagemDispositivo.jsx'
 import WokwiEmbed from './WokwiEmbed.jsx'
 import { URL_WOKWI } from '../../content/links.js'
-import PainelVidro from '../ui/PainelVidro.jsx'
-import TituloLed from '../ui/TituloLed.jsx'
+import Revelar from '../ui/Revelar.jsx'
+import Secao from '../ui/Secao.jsx'
 
 export default function SecaoDispositivoReal() {
   return (
-    <PainelVidro as="section" id="dispositivo-real" aria-labelledby="titulo-real" className="flex scroll-mt-24 flex-col gap-4 p-5 sm:p-8">
-      <TituloLed nivel={2} variante="assumiu">
-        <span id="titulo-real">Dispositivo real</span>
-      </TituloLed>
-      <p className="max-w-prose text-gelo-50">
-        Tudo acima é um jogo. O C-Shield de verdade roda num ESP32; aqui você vê como ele seria e o
-        circuito dele funcionando no simulador Wokwi.
-      </p>
-      <p className="max-w-prose text-gelo-300">
-        Nem este site consegue dar ordens ao C-Shield. Ele só envia dados, e só quem está presente
-        consegue liberar o bloqueio.
-      </p>
-      <div className="grid items-center gap-6 lg:grid-cols-2">
-        <ImagemDispositivo />
-        <WokwiEmbed url={URL_WOKWI} />
+    <Secao
+      id="titulo-real"
+      ancora="dispositivo-real"
+      rotulo="De verdade"
+      titulo="Dispositivo real"
+      subtitulo="Tudo acima é um jogo. O C-Shield de verdade roda num ESP32; aqui você vê como ele seria e o circuito dele funcionando no simulador Wokwi. Nem este site consegue dar ordens ao C-Shield: ele só envia dados, e só quem está presente consegue liberar o bloqueio."
+      faixa
+    >
+      <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-12">
+        <Revelar>
+          <ImagemDispositivo />
+        </Revelar>
+        <Revelar atraso={0.1}>
+          <WokwiEmbed url={URL_WOKWI} />
+        </Revelar>
       </div>
-    </PainelVidro>
+    </Secao>
   )
 }
