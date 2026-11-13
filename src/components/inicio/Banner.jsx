@@ -13,14 +13,8 @@ import { motion } from 'framer-motion'
 import { ArrowDown, Play } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import BotaoLed from '../ui/BotaoLed.jsx'
+import { ENTRADA_CONTAINER as CONTAINER, ENTRADA_ITEM as ITEM } from '../ui/movimento.js'
 import ImagemHero from './ImagemHero.jsx'
-
-// Entrada do texto: cada bloco sobe 24 px e aparece, com 120 ms de diferença entre eles.
-const CONTAINER = { hidden: {}, visivel: { transition: { staggerChildren: 0.12, delayChildren: 0.1 } } }
-const ITEM = {
-  hidden: { opacity: 0, y: 24 },
-  visivel: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] } },
-}
 
 // Hero da página inicial (Design System v1.0, referência de composição): texto à esquerda e o
 // aparelho à direita, com 90 a 100% da altura da janela. No desktop a imagem é o fundo de tela
