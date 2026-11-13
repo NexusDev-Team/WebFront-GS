@@ -10,6 +10,7 @@
  */
 
 import ListaEquipe from '../equipe/ListaEquipe.jsx'
+import ListaTecnologias from '../equipe/ListaTecnologias.jsx'
 import LinkSeta from '../ui/LinkSeta.jsx'
 import Revelar from '../ui/Revelar.jsx'
 import Secao from '../ui/Secao.jsx'
@@ -31,16 +32,7 @@ export default function SecaoNexusDev({ conteudo }) {
         <Revelar className="flex flex-col items-start gap-8">
           <div>
             <p className="rotulo-tecnico mb-4">Tecnologias</p>
-            <ul className="flex flex-wrap gap-3">
-              {conteudo.tecnologias.map((tecnologia) => (
-                <li
-                  key={tecnologia}
-                  className="rounded-full border border-borda px-4 py-1.5 font-mono text-sm text-gelo-100"
-                >
-                  {tecnologia}
-                </li>
-              ))}
-            </ul>
+            <ListaTecnologias tecnologias={conteudo.tecnologias} />
           </div>
           <LinkSeta to={conteudo.link.para}>{conteudo.link.rotulo}</LinkSeta>
         </Revelar>
