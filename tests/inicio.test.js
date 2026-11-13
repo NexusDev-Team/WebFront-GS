@@ -50,8 +50,8 @@ describe('PROBLEMA', () => {
   it('as fontes são três notícias diferentes', () => {
     expect(new Set(PROBLEMA.fatos.map((f) => f.fonteId)).size).toBe(3)
   })
-  it('leva para a página de notícias', () => {
-    expect(PROBLEMA.link.para).toBe('/noticias')
+  it('leva para a página Problema', () => {
+    expect(PROBLEMA.link).toEqual({ rotulo: 'Entender o problema', para: '/problema' })
   })
 })
 
