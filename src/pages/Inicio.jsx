@@ -9,29 +9,26 @@
  *   Nicolas Cinel — RM572940
  */
 
-// Página inicial: banner, monitoramento (demonstração), o problema, o painel do C-Shield, a
-// solução e a chamada final (decisão de 12/11: seguir o mockup). A leitura simulada fica aqui
-// para as seções que a usam compartilharem os mesmos números.
+// Página inicial (Design System v1.0): hero, o problema, como funciona, monitoramento e a chamada
+// para a simulação de ataque, nessa ordem (a história do produto, uma etapa por vez). A leitura
+// simulada fica aqui para as seções que a usam compartilharem os mesmos números.
 import Banner from '../components/inicio/Banner.jsx'
 import ChamadaFinal from '../components/inicio/ChamadaFinal.jsx'
 import SecaoMonitoramento from '../components/inicio/SecaoMonitoramento.jsx'
-import SecaoPainel from '../components/inicio/SecaoPainel.jsx'
 import SecaoProblema from '../components/inicio/SecaoProblema.jsx'
 import SecaoSolucao from '../components/inicio/SecaoSolucao.jsx'
-import { BANNER, CHAMADA, DEMO, PAINEL, PROBLEMA, SOLUCAO } from '../content/inicio.js'
+import { BANNER, CHAMADA, DEMO, PROBLEMA, SOLUCAO } from '../content/inicio.js'
 import { useLeituraDemo } from '../hooks/useLeituraDemo.js'
 
 export default function Inicio() {
   const serie = useLeituraDemo(DEMO)
-  const temperaturas = serie.map((leitura) => leitura.temperatura)
 
   return (
     <>
       <Banner conteudo={BANNER} />
-      <SecaoMonitoramento temperaturas={temperaturas} />
       <SecaoProblema conteudo={PROBLEMA} />
-      <SecaoPainel conteudo={PAINEL} serie={serie} />
       <SecaoSolucao conteudo={SOLUCAO} />
+      <SecaoMonitoramento serie={serie} />
       <ChamadaFinal conteudo={CHAMADA} />
     </>
   )

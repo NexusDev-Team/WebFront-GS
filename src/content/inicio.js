@@ -74,7 +74,6 @@ export const PROBLEMA = {
 export const PAINEL = {
   titulo: 'Painel do C-Shield',
   subtitulo: 'O que o aparelho mostra no local e envia à central. Nada aqui manda ordens a ele.',
-  display: { titulo: 'Display C-Shield', modo: 'Ativo', legendaAlvo: 'Temp. alvo' },
   alertas: {
     titulo: 'Alertas',
     texto: 'Ordens perigosas barradas hoje: 0. Último bloqueio: nenhum.',

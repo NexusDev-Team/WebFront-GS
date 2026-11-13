@@ -18,13 +18,13 @@ const TEXTOS = JSON.stringify({ BANNER, PROBLEMA, SOLUCAO })
 
 describe('BANNER', () => {
   it('tem título, texto, duas ações e a imagem com texto alternativo', () => {
-    expect(BANNER.rotulo).toBe('Cadeia do frio e gestão térmica')
-    expect(BANNER.titulo).toBe('Proteção inteligente para a cadeia de frio')
-    expect(BANNER.texto).toBe('Às 2h da manhã, o C-Shield atua onde ninguém mais consegue.')
-    expect(BANNER.texto.length).toBeGreaterThan(40)
+    expect(BANNER.rotulo).toBe('Tecnologia. Segurança. Controle.')
+    expect(BANNER.tituloLinha1).toBe('Proteção inteligente')
+    expect(BANNER.tituloLinha2).toBe('para a cadeia de frio')
+    expect(BANNER.texto).toBe('O C-Shield atua onde ninguém mais consegue.')
     expect(BANNER.acaoPrincipal.para).toBe('/emulador')
     expect(BANNER.acaoSecundaria.para).toBe('/como-funciona')
-    expect(BANNER.imagem.src).toMatch(/^\/imagens\//)
+    expect(BANNER.imagem.src).toMatch(/imghero/)
     expect(BANNER.imagem.alt.length).toBeGreaterThan(15)
   })
 })
@@ -95,13 +95,11 @@ describe('DEMO (a câmara simulada da demonstração)', () => {
 })
 
 describe('PAINEL (o painel do C-Shield da página inicial)', () => {
-  it('tem título, subtítulo e as partes: display, alertas, variação, link da faixa e histórico', () => {
+  it('tem título, subtítulo e as partes: alertas, variação, link da faixa e histórico', () => {
     expect(PAINEL.titulo).toBe('Painel do C-Shield')
-    for (const parte of ['display', 'alertas', 'variacao', 'faixa', 'historico']) {
+    for (const parte of ['alertas', 'variacao', 'faixa', 'historico']) {
       expect(PAINEL[parte], parte).toBeDefined()
     }
-    expect(PAINEL.display.titulo).toBe('Display C-Shield')
-    expect(PAINEL.display.modo).toBe('Ativo')
   })
   it('o subtítulo diz que nada ali manda ordens ao aparelho', () => {
     expect(PAINEL.subtitulo).toMatch(/Nada aqui manda ordens/)
