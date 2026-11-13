@@ -93,7 +93,7 @@ export const PAINEL = {
 export const SOLUCAO = {
   titulo: 'C-Shield não espera ninguém. Ele age.',
   texto:
-    'O C-Shield é um dispositivo independente, instalado junto da câmara fria. Ele mede com sensores próprios, decide com uma regra gravada nele e, se o controlador for atacado, assume os relés na hora, sem esperar ordem de ninguém. Não recebe nenhum comando pela rede: só envia dados.',
+    'O C-Shield fica ao lado da câmara fria e vigia a temperatura por conta própria. Se alguém invadir o sistema e tentar esquentar a câmara, ele age na hora. Ele não recebe nenhum comando pela rede, só envia dados.',
   passos: [
     {
       numero: '01',
