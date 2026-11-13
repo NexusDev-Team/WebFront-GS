@@ -31,7 +31,7 @@ function LinkExterno({ href, children }) {
 export default function Footer() {
   return (
     <footer className="border-t border-borda/60 bg-noite-950">
-      <div className="mx-auto w-[88%] max-w-360 py-14 max-md:w-[calc(100%-3rem)]">
+      <div className="conteudo py-14">
         <div className="grid gap-10 md:grid-cols-[1.4fr_1fr_1fr]">
           <div className="flex flex-col gap-4">
             <Logo variante="compacta" />

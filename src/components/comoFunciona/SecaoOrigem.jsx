@@ -17,7 +17,7 @@ import TituloSecao from '../ui/TituloSecao.jsx'
 export default function SecaoOrigem({ conteudo }) {
   return (
     <section id={conteudo.id} aria-labelledby="titulo-origem" className="border-t border-borda bg-noite-900/50 py-16 sm:py-24">
-      <div className="mx-auto flex max-w-6xl flex-col gap-10 px-4">
+      <div className="conteudo flex flex-col gap-10">
         <TituloSecao id="titulo-origem" subtitulo={conteudo.subtitulo}>
           {conteudo.titulo}
         </TituloSecao>

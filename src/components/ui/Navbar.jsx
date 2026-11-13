@@ -41,7 +41,7 @@ export default function Navbar() {
     <header className="sticky top-0 z-40 border-b border-borda/60 bg-noite-950/80 backdrop-blur-md">
       <nav
         aria-label="Principal"
-        className="mx-auto flex min-h-20 w-[88%] max-w-360 flex-wrap items-center justify-between gap-x-6 gap-y-2 py-2 max-md:w-[calc(100%-3rem)]"
+        className="conteudo flex min-h-20 flex-wrap items-center justify-between gap-x-6 gap-y-2 py-2"
       >
         <Link to="/" aria-label="C-Shield, página inicial" className="rounded-xl" onClick={fechar}>
           <Logo variante="compacta" />

@@ -18,7 +18,7 @@ import TituloSecao from '../ui/TituloSecao.jsx'
 export default function SecaoEstados({ estados }) {
   return (
     <section aria-labelledby="titulo-estados" className="border-t border-borda py-16 sm:py-24">
-      <div className="mx-auto flex max-w-6xl flex-col gap-10 px-4">
+      <div className="conteudo flex flex-col gap-10">
         <TituloSecao
           id="titulo-estados"
           subtitulo="O aparelho está sempre em um destes cinco estados. A prioridade, do mais grave ao mais leve, é crítico, bloqueio, falha de sensor, atenção e normal."

@@ -19,9 +19,9 @@ const VARIANTES = {
 }
 
 const TAMANHOS = {
-  1: 'text-4xl font-extrabold tracking-tight sm:text-6xl',
-  2: 'text-3xl font-bold tracking-tight sm:text-4xl',
-  3: 'text-xl font-bold',
+  1: 'text-[clamp(2.5rem,5vw,4.5rem)] leading-[1.08] font-bold tracking-tight',
+  2: 'text-[clamp(1.875rem,3.5vw,3rem)] leading-[1.1] font-semibold tracking-tight',
+  3: 'text-2xl font-semibold',
 }
 
 export default function TituloLed({ nivel = 2, variante = 'repouso', className = '', children }) {

@@ -17,7 +17,7 @@ import TituloSecao from '../ui/TituloSecao.jsx'
 export default function SecaoWokwi({ conteudo }) {
   return (
     <section id={conteudo.id} aria-labelledby="titulo-wokwi" className="border-t border-borda py-16 sm:py-24">
-      <div className="mx-auto flex max-w-6xl flex-col gap-10 px-4">
+      <div className="conteudo flex flex-col gap-10">
         <TituloSecao id="titulo-wokwi" subtitulo={conteudo.subtitulo}>
           {conteudo.titulo}
         </TituloSecao>

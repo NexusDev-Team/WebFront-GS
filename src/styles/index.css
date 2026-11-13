@@ -14,6 +14,18 @@
 @import "./tokens.css";
 @import "./efeitos.css";
 
+/* Container padrão do site (Design System v1.0): 88% da tela, até 1440 px, e 24 px de margem no
+   celular. Navbar, rodapé, seções e páginas usam o mesmo, para tudo alinhar na mesma margem. */
+@utility conteudo {
+  margin-inline: auto;
+  width: 88%;
+  max-width: 90rem;
+
+  @media (max-width: 47.99rem) {
+    width: calc(100% - 3rem);
+  }
+}
+
 @layer base {
   html {
     scroll-behavior: smooth;

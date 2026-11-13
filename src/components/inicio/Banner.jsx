@@ -52,7 +52,7 @@ export default function Banner({ conteudo }) {
         variants={CONTAINER}
         initial="hidden"
         animate="visivel"
-        className="relative z-10 mx-auto flex w-[88%] max-w-360 flex-col items-start gap-6 pt-12 pb-8 max-md:w-[calc(100%-3rem)] md:pt-0 md:pb-0"
+        className="conteudo relative z-10 flex flex-col items-start gap-6 pt-12 pb-8 md:pt-0 md:pb-0"
       >
         <motion.p variants={ITEM} className="rotulo-tecnico flex w-full items-center gap-5 md:max-w-2xl">
           <span>{conteudo.rotulo}</span>

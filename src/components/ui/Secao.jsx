@@ -22,7 +22,7 @@ export default function Secao({ id, ancora, rotulo, titulo, subtitulo, fundo = n
       className={`relative scroll-mt-20 py-24 md:py-32 lg:py-40 ${className}`}
     >
       {fundo}
-      <div className="relative mx-auto w-[88%] max-w-360 max-md:w-[calc(100%-3rem)]">
+      <div className="relative conteudo">
         {titulo ? (
           <Revelar className="mb-12 flex max-w-3xl flex-col gap-4 md:mb-16">
             {rotulo ? <p className="rotulo-tecnico">{rotulo}</p> : null}

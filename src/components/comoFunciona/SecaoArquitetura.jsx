@@ -17,7 +17,7 @@ import DiagramaArquitetura from './DiagramaArquitetura.jsx'
 export default function SecaoArquitetura({ conteudo }) {
   return (
     <section id={conteudo.id} aria-labelledby="titulo-arquitetura" className="border-t border-borda bg-noite-900/50 py-16 sm:py-24">
-      <div className="mx-auto flex max-w-6xl flex-col gap-10 px-4">
+      <div className="conteudo flex flex-col gap-10">
         <TituloSecao id="titulo-arquitetura" subtitulo={conteudo.subtitulo}>
           {conteudo.titulo}
         </TituloSecao>

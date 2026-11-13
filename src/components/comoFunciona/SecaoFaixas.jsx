@@ -29,7 +29,7 @@ export default function SecaoFaixas({ conteudo }) {
       aria-labelledby="titulo-faixas"
       className="scroll-mt-20 border-t border-borda bg-noite-900/50 py-16 sm:py-24"
     >
-      <div className="mx-auto flex max-w-6xl flex-col gap-10 px-4">
+      <div className="conteudo flex flex-col gap-10">
         <TituloSecao id="titulo-faixas" subtitulo={conteudo.subtitulo}>
           {conteudo.titulo}
         </TituloSecao>

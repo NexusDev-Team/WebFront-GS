@@ -33,7 +33,7 @@ import {
 export default function ComoFunciona() {
   return (
     <>
-      <header className="mx-auto flex max-w-6xl flex-col gap-4 px-4 pt-16 pb-6 sm:pt-20">
+      <header className="conteudo flex flex-col gap-4 pt-16 pb-6 sm:pt-20">
         <Rotulo>{CABECALHO.rotulo}</Rotulo>
         <TituloLed nivel={1}>{CABECALHO.titulo}</TituloLed>
         <p className="max-w-2xl text-lg text-gelo-300 sm:text-xl">{CABECALHO.subtitulo}</p>

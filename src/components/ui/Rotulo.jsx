@@ -12,5 +12,5 @@
 // Rótulo curto acima do título da página: diz em que parte do site a pessoa está.
 // Uso: no máximo um por página, só no topo.
 export default function Rotulo({ className = '', children }) {
-  return <p className={`text-sm font-medium text-led-forte ${className}`}>{children}</p>
+  return <p className={`rotulo-tecnico ${className}`}>{children}</p>
 }
