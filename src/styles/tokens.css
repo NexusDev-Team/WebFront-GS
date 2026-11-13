@@ -10,38 +10,57 @@
  */
 
 /*
- * Tokens do visual "Glacial industrial" (docs/specs/web/design.md §1 e §2, decisão de 12/11).
- * Os NOMES dos tokens vêm da primeira versão e foram mantidos para não mexer em todos os
+ * Tokens do Design System v1.0 "Cyber-criogênico" (docs/specs/web/design.md §0, decisão de 12/11).
+ * Os NOMES dos tokens vêm das versões anteriores e foram mantidos para não mexer em todos os
  * componentes; só os valores mudaram. Tailwind v4: o @theme gera as utilidades
  * (bg-noite-950, text-gelo-50...).
- * Regras de contraste: led-fraco NUNCA em texto; verde e vermelho só para estado real.
+ * Regras: led-fraco NUNCA em texto; texto-mudo só em 18 px ou mais; verde, âmbar e vermelho só
+ * para estado real; o ciano é destaque, não a cor de tudo.
  */
 @theme {
-  --color-noite-950: #060b18;
-  --color-noite-900: #0f172a;
-  --color-painel: rgba(15, 23, 42, 0.72);
-  --color-borda: rgba(226, 232, 240, 0.1);
-  --color-gelo-50: #f8fafc;
-  --color-gelo-100: #e2e8f0;
-  --color-gelo-300: #cbd5e1;
-  --color-led-fraco: #1e6fa3;
-  --color-led-forte: #38bdf8;
-  --color-ciano: #06b6d4;
-  --color-ok: #22c55e;
-  --color-atencao: #eab308;
-  --color-critico: #ef4444;
-  --color-ataque: #ef4444;
-  /* Display de vidro do C-Shield: fundo azul-noite, texto azul-gelo (contraste acima de 7:1). */
-  --color-lcd-fundo: #0b1a2e;
-  --color-lcd-texto: #7dd3fc;
+  /* Fundos */
+  --color-noite-950: #020912;
+  --color-noite-900: #061522;
+  --color-superficie: #0a1b2a;
+  --color-elevado: #10283a;
+  --color-painel: rgba(10, 27, 42, 0.65);
+  --color-borda: rgba(100, 207, 255, 0.18);
 
-  /* Pílula de estado "estabilizado" (verde-menta) e fundo dos alertas, como no mockup. */
+  /* Texto */
+  --color-gelo-50: #f4f8fc;
+  --color-gelo-100: #d6e2ec;
+  --color-gelo-300: #9bafbe;
+  --color-texto-mudo: #6f8597;
+
+  /* Marca: ciano de ação, azul-gelo de luz e azul profundo de decoração */
+  --color-led-forte: #00cfff;
+  --color-ciano: #00cfff;
+  --color-gelo-azul: #64cfff;
+  --color-led-fraco: #063a5a;
+
+  /* Estado real */
+  --color-ok: #00e59b;
+  --color-atencao: #ffb547;
+  --color-critico: #ff4058;
+  --color-ataque: #ff4058;
+
+  /* Display de vidro do C-Shield: fundo azul-noite, texto azul-gelo (contraste acima de 7:1). */
+  --color-lcd-fundo: #0a1b2a;
+  --color-lcd-texto: #64cfff;
+
+  /* Pílula de estado "estabilizado" (verde-menta) e fundo dos alertas. */
   --color-menta: #bbf7d0;
   --color-menta-texto: #052e16;
-  --color-alerta-fundo: rgba(239, 68, 68, 0.12);
+  --color-alerta-fundo: rgba(255, 64, 88, 0.12);
 
   --font-titulo: "Space Grotesk", system-ui, sans-serif;
   --font-texto: "Inter", system-ui, sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, monospace;
   --font-lcd: "IBM Plex Mono", ui-monospace, monospace;
+
+  /* Forma e movimento */
+  --radius-card: 16px;
+  --ease-suave: cubic-bezier(0.22, 1, 0.36, 1);
+  --shadow-vidro: 0 8px 32px rgba(0, 0, 0, 0.25);
+  --shadow-glow-ciano: 0 0 24px rgba(0, 207, 255, 0.18);
 }

@@ -24,7 +24,7 @@
     /* Um único gradiente fraco de azul-glacial no topo da página, sem padrão repetido. */
     background-image: radial-gradient(
       ellipse 80% 40% at 50% 0%,
-      rgba(56, 189, 248, 0.06),
+      rgba(0, 207, 255, 0.06),
       transparent 70%
     );
     background-repeat: no-repeat;

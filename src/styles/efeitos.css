@@ -70,7 +70,7 @@
 
   /* Luz azul difusa atrás da imagem do banner. Só decoração. */
   .luz-azul {
-    background: radial-gradient(closest-side, rgba(56, 189, 248, 0.18), transparent 70%);
+    background: radial-gradient(closest-side, rgba(0, 207, 255, 0.18), transparent 70%);
     filter: blur(24px);
     pointer-events: none;
   }
@@ -87,12 +87,12 @@
   /* Vidro fosco do display do C-Shield: desfoque, degradê azul e brilho interno. */
   .vidro-fosco {
     position: relative;
-    background-image: linear-gradient(135deg, rgba(56, 189, 248, 0.25), rgba(15, 23, 42, 0.6));
+    background-image: linear-gradient(135deg, rgba(0, 207, 255, 0.25), rgba(15, 23, 42, 0.6));
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(125, 211, 252, 0.35);
+    border: 1px solid rgba(100, 207, 255, 0.35);
     border-radius: 1.25rem;
-    box-shadow: inset 0 0 40px rgba(56, 189, 248, 0.15);
+    box-shadow: inset 0 0 40px rgba(0, 207, 255, 0.15);
   }
 }
 

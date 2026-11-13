@@ -32,7 +32,7 @@ function No({ x, y, largura, altura, titulo, detalhe, destaque = false }) {
         width={largura}
         height={altura}
         rx="14"
-        fill={destaque ? 'rgba(56, 189, 248, 0.12)' : 'var(--color-noite-900)'}
+        fill={destaque ? 'rgba(0, 207, 255, 0.12)' : 'var(--color-noite-900)'}
         stroke={destaque ? COR.azul : 'rgba(226, 232, 240, 0.2)'}
         strokeWidth={destaque ? 2 : 1}
       />
