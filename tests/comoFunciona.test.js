@@ -11,7 +11,7 @@
 
 
 // Conteúdo da página Como funciona (W44, W26c): o ciclo, a arquitetura em uma direção, os cinco
-// estados, as faixas seguras, a explicação dos LEDs do Wokwi e a origem da ideia. Os estados e as
+// estados e a explicação dos LEDs do Wokwi (a página ficou enxuta: sem a origem da ideia). Os estados e as
 // cores de LED são conferidos contra o próprio domínio, para a página não divergir do firmware.
 import { describe, expect, it } from 'vitest'
 import {
@@ -19,14 +19,13 @@ import {
   CABECALHO,
   CICLO,
   ESTADOS_DA_PAGINA,
-  ORIGEM,
   WOKWI,
 } from '../src/content/comoFunciona.js'
 import { URL_REPOSITORIO_EDGE, URL_WOKWI } from '../src/content/links.js'
 import { corLed } from '../src/domain/cshield-saida.js'
 import { ESTADOS } from '../src/domain/nomes.js'
 
-const TUDO = JSON.stringify({ CABECALHO, CICLO, ARQUITETURA, ESTADOS_DA_PAGINA, WOKWI, ORIGEM })
+const TUDO = JSON.stringify({ CABECALHO, CICLO, ARQUITETURA, ESTADOS_DA_PAGINA, WOKWI })
 
 describe('links', () => {
   it('o Wokwi e o repositório do Edge são links https do projeto', () => {
@@ -76,6 +75,14 @@ describe('ARQUITETURA (uma direção só)', () => {
   })
 })
 
+describe('ARQUITETURA: o limite do protótipo', () => {
+  it('diz com honestidade que a direção única vem do software e que o diodo físico fica no roadmap', () => {
+    expect(ARQUITETURA.limite).toMatch(/software/)
+    expect(ARQUITETURA.limite).toMatch(/diodo/)
+    expect(ARQUITETURA.limite).toMatch(/roadmap/)
+  })
+})
+
 describe('ESTADOS_DA_PAGINA (os cinco estados)', () => {
   it('são os cinco nomes canônicos do Edge, na ordem do contrato', () => {
     expect(ESTADOS_DA_PAGINA.map((e) => e.id)).toEqual([
@@ -93,41 +100,40 @@ describe('ESTADOS_DA_PAGINA (os cinco estados)', () => {
     }
     expect(ESTADOS_DA_PAGINA.find((e) => e.id === ESTADOS.BLOQUEIO).led).toBe('azul')
   })
-  it('cada estado diz quando acontece e o que o aparelho faz', () => {
+  it('cada estado diz só o nome e quando acontece (a lista é compacta, uma linha por estado)', () => {
     for (const estado of ESTADOS_DA_PAGINA) {
       expect(estado.nome.length, estado.id).toBeGreaterThan(3)
       expect(estado.quando.length, estado.id).toBeGreaterThan(20)
-      expect(estado.acao.length, estado.id).toBeGreaterThan(20)
+      expect(estado, estado.id).not.toHaveProperty('acao')
     }
   })
 })
 
 describe('WOKWI (os LEDs e a chave são representações)', () => {
-  it('explica as quatro peças: LED laranja, azul, verde e a chave do controlador', () => {
-    expect(WOKWI.representacoes.map((r) => r.peca)).toEqual(['LED laranja', 'LED azul', 'LED verde', 'Chave "Controlador"'])
-    for (const r of WOKWI.representacoes) {
-      expect(r.representa.length, r.peca).toBeGreaterThan(10)
-      expect(r.comportamento.length, r.peca).toBeGreaterThan(20)
+  it('explica em um texto curto o que os LEDs laranja, azul e verde e a chave "Controlador" representam', () => {
+    expect(WOKWI.texto).toMatch(/LEDs laranja, azul e verde/)
+    expect(WOKWI.texto).toMatch(/chave "Controlador"/)
+    for (const equipamento of ['aquecedor', 'ventoinha de emergência', 'refrigeração', 'ordem do atacante']) {
+      expect(WOKWI.texto, equipamento).toContain(equipamento)
     }
   })
   it('diz que no aparelho real esses LEDs e essa chave não existem', () => {
-    expect(WOKWI.nota).toMatch(/não existem/)
+    expect(WOKWI.texto).toMatch(/não existem/)
+  })
+  it('é curto: não há mais os cartões de cada peça nem a nota separada', () => {
+    expect(WOKWI).not.toHaveProperty('representacoes')
+    expect(WOKWI).not.toHaveProperty('nota')
+    expect(WOKWI.texto.length).toBeLessThan(400)
   })
   it('os links externos são o Wokwi e o repositório do Edge', () => {
     expect(WOKWI.links.map((l) => l.url)).toEqual([URL_WOKWI, URL_REPOSITORIO_EDGE])
   })
 })
 
-describe('ORIGEM (de onde vem a ideia)', () => {
-  it('cita a norma IEC 61511 e os diodos de dados', () => {
-    const texto = ORIGEM.itens.map((i) => i.texto).join(' ')
-    expect(texto).toMatch(/IEC 61511/)
-    expect(texto).toMatch(/diodos de dados/)
-  })
-  it('é honesta sobre o limite do protótipo e leva à página da equipe', () => {
-    expect(ORIGEM.limite.texto).toMatch(/software/)
-    expect(ORIGEM.limite.texto).toMatch(/roadmap/)
-    expect(ORIGEM.link.para).toBe('/nexus-dev')
+describe('a página não tem mais a origem da ideia (cortada em 13/11)', () => {
+  it('o conteúdo não exporta ORIGEM', async () => {
+    const conteudo = await import('../src/content/comoFunciona.js')
+    expect(conteudo).not.toHaveProperty('ORIGEM')
   })
 })
 
