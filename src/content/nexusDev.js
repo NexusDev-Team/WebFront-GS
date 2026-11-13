@@ -10,7 +10,7 @@
  */
 
 /*
- * nexusDev.js — os textos da página da equipe: visão, cultura e "Sobre a GS".
+ * nexusDev.js — os textos da página da equipe: a visão e a cultura (o "Sobre a GS" foi cortado em 13/11).
  *
  * RASCUNHO: escrito a partir do plano do projeto (docs/specs/PLANO-GS.md) para a equipe revisar
  * e trocar pelas próprias palavras. Os fatos sobre a GS e o produto são os do plano; a visão e a
@@ -29,11 +29,6 @@ export const CULTURA = [
       'É a frase do produto e o jeito como a gente pensa: olhar tudo de qualquer lugar, mas só aceitar ordem de quem está presente. O C-Shield só envia dados; a liberação é com a mão, no aparelho.',
   },
   {
-    titulo: 'Simples para quem não é de tecnologia',
-    texto:
-      'Se a enfermeira ou o dono do mercado precisam de um manual, falhamos. Por isso o emulador é um jogo e os textos usam palavras do dia a dia.',
-  },
-  {
     titulo: 'Testar antes de afirmar',
     texto:
       'A lógica do C-Shield tem testes automáticos, conferidos contra o código do aparelho. Só dizemos que funciona depois de ver funcionando.',
@@ -48,10 +43,4 @@ export const CULTURA = [
     texto:
       'Contraste forte, teclado funcionando, respeito a quem pede menos movimento na tela. Segurança que só alguns conseguem usar não protege a cidade.',
   },
-]
-
-export const SOBRE_GS = [
-  'A Global Solution 2026.2 da FIAP, com o tema CitizenTech, pede um projeto de tecnologia para o cidadão: um problema real de São Paulo e uma pessoa real que convive com ele.',
-  'O nosso problema nasceu das notícias da Europa: invasores entraram pela internet nos controladores de refrigeração de supermercados e de um banco de sangue e mandaram tudo esquentar. O risco existe aqui também, onde estão as vacinas das UBS, o plasma dos hemocentros e a comida dos mercados de bairro.',
-  'A resposta é o C-Shield: um aparelho ao lado da câmara fria que mede com sensores próprios, decide com uma política gravada nele e assume o controle quando uma ordem perigosa chega. O projeto é dividido em partes que se encaixam: o aparelho (Edge), a central e os cálculos, este site, a experiência do usuário e o pitch. Este site é a entrega de Front-end Design e Web Development.',
 ]
