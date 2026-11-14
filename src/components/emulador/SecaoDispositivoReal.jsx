@@ -10,7 +10,7 @@
  */
 
 // Seção "Dispositivo real", no fim do emulador (antes era a página /simulador-real): a imagem de
-// como o C-Shield seria e o circuito dele rodando no Wokwi. Em faixa, como as outras seções.
+// como o C-Shield seria e o circuito dele rodando no Wokwi.
 // Não lê o FIWARE; aqui nada envia ordem ao C-Shield.
 import ImagemDispositivo from './ImagemDispositivo.jsx'
 import WokwiEmbed from './WokwiEmbed.jsx'
@@ -26,7 +26,6 @@ export default function SecaoDispositivoReal() {
       rotulo="De verdade"
       titulo="Dispositivo real"
       subtitulo="Tudo acima é um jogo; o C-Shield de verdade roda num ESP32. Nem este site consegue dar ordens ao C-Shield: ele só envia dados."
-      faixa
     >
       <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-12">
         <Revelar>

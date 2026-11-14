@@ -102,23 +102,6 @@
     mask-image: radial-gradient(ellipse 45% 60% at 40% 50%, transparent 0%, rgba(0, 0, 0, 0.25) 45%, #000 85%);
   }
 
-  /* O fundo "cyber" (binários e circuitos) some aos poucos em cima e embaixo, por máscara: sem linha
-     nem mudança de tom onde ele termina, e a atmosfera global aparece por trás. */
-  .fundo-cyber {
-    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 12%, black 70%, transparent 100%);
-    mask-image: linear-gradient(to bottom, transparent 0%, black 12%, black 70%, transparent 100%);
-  }
-
-  .faixa-suave {
-    background-image: linear-gradient(
-      to bottom,
-      transparent 0%,
-      color-mix(in srgb, var(--color-noite-900) 55%, transparent) 22%,
-      color-mix(in srgb, var(--color-noite-900) 55%, transparent) 78%,
-      transparent 100%
-    );
-  }
-
   .titulo-ciano {
     color: var(--color-ciano);
   }
@@ -141,39 +124,9 @@
     color: var(--color-gelo-300);
   }
 
-  /* Fundo cyber: coluna de binários que sobe devagar (50 s), com as pontas esmaecidas. */
-  .binario-coluna {
-    overflow: hidden;
-    color: var(--color-gelo-azul);
-    opacity: 0.12;
-    -webkit-mask-image: linear-gradient(to bottom, transparent, #000 15%, #000 85%, transparent);
-    mask-image: linear-gradient(to bottom, transparent, #000 15%, #000 85%, transparent);
-  }
-
-  .binario-sobe {
-    animation: binario-sobe 50s linear infinite;
-  }
-
-  /* Brilho que percorre o circuito: um trecho curto do traço corre pela linha (10 s por volta). */
-  .circuito-brilho {
-    stroke-dasharray: 8 92;
-    opacity: 0.55;
-    animation: circuito-brilho 10s linear infinite;
-  }
-
-  .circuito-brilho-b {
-    animation-delay: -5s;
-  }
-
   /* Pulso de luz que corre pela linha entre os passos do "como funciona" (6 s por volta). */
   .pulso-linha {
     animation: pulso-linha 6s linear infinite;
-  }
-
-  /* Fora da tela, as animações ambientais pausam. */
-  .fundo-cyber[data-pausado='true'] .binario-sobe,
-  .fundo-cyber[data-pausado='true'] .circuito-brilho {
-    animation-play-state: paused;
   }
 
 }
@@ -192,15 +145,6 @@
     stroke-dasharray: 1;
     stroke-dashoffset: 0;
   }
-}
-
-@keyframes binario-sobe {
-  to { transform: translateY(-50%); }
-}
-
-@keyframes circuito-brilho {
-  from { stroke-dashoffset: 0; }
-  to { stroke-dashoffset: -100; }
 }
 
 @keyframes pulso-linha {
@@ -248,8 +192,6 @@
   .gira,
   .linha-fluxo,
   .fumaca-fundo,
-  .binario-sobe,
-  .circuito-brilho,
   .pulso-linha {
     animation: none;
   }

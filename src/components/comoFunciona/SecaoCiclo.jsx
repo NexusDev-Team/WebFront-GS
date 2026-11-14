@@ -13,7 +13,7 @@ import PassoSolucao from '../inicio/PassoSolucao.jsx'
 import Secao from '../ui/Secao.jsx'
 
 // "O ciclo de proteção": os quatro verbos (medir, decidir, assumir, alertar), com o texto completo.
-// Reaproveita o passo numerado da página inicial. Seção lisa (sem faixa).
+// Reaproveita o passo numerado da página inicial.
 export default function SecaoCiclo({ conteudo }) {
   return (
     <Secao id="titulo-ciclo" ancora={conteudo.id} rotulo="O ciclo" titulo={conteudo.titulo} subtitulo={conteudo.subtitulo}>

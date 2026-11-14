@@ -46,7 +46,7 @@ export default function NexusDev() {
         </div>
       </Secao>
 
-      <Secao id="titulo-proposito" rotulo="Propósito" titulo="Nosso propósito" faixa>
+      <Secao id="titulo-proposito" rotulo="Propósito" titulo="Nosso propósito">
         <div className="flex flex-col gap-12">
           <Revelar>
             <p className="max-w-4xl border-l-2 border-ciano pl-6 text-[clamp(1.5rem,2.6vw,2.25rem)] leading-snug text-gelo-50">

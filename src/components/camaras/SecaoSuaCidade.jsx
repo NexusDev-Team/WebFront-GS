@@ -21,7 +21,6 @@ import BotaoLed from '../ui/BotaoLed.jsx'
 import Carregando from '../ui/Carregando.jsx'
 import ErroMensagem from '../ui/ErroMensagem.jsx'
 import PainelVidro from '../ui/PainelVidro.jsx'
-import FundoCyber from '../ui/FundoCyber.jsx'
 import Secao from '../ui/Secao.jsx'
 import CartaoCamara from './CartaoCamara.jsx'
 import FormCamara from './FormCamara.jsx'
@@ -36,7 +35,6 @@ export default function SecaoSuaCidade({ children = null }) {
       rotulo="Cadastro do bairro"
       titulo="E na sua cidade?"
       subtitulo="Os mesmos equipamentos atacados na Europa existem aqui. Cadastre uma câmara fria do seu bairro: a padaria, a UBS, o hemocentro."
-      fundo={<FundoCyber />}
     >
       <div className="flex flex-col gap-4">
         <div className="flex flex-wrap items-end gap-4">

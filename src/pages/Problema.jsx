@@ -42,7 +42,7 @@ export default function Problema() {
         </Revelar>
       </Secao>
 
-      <Secao id="linha-do-tempo" rotulo="Linha do tempo" titulo="Como tudo aconteceu" faixa>
+      <Secao id="linha-do-tempo" rotulo="Linha do tempo" titulo="Como tudo aconteceu">
         <Revelar>
           <LinhaDoTempo eventos={LINHA_DO_TEMPO} />
         </Revelar>
@@ -65,7 +65,7 @@ export default function Problema() {
         </Revelar>
       </SecaoSuaCidade>
 
-      <Secao id="mais-noticias" rotulo="Mais notícias" titulo="Outras matérias do caso" faixa>
+      <Secao id="mais-noticias" rotulo="Mais notícias" titulo="Outras matérias do caso">
         <ListaMaterias noticias={noticiasOrdenadas()} />
       </Secao>
     </>

@@ -15,7 +15,7 @@ import DiagramaArquitetura from './DiagramaArquitetura.jsx'
 
 // "Uma direção só": o diagrama da arquitetura e, logo abaixo, a mesma história em texto (a lista
 // de etapas é o equivalente do diagrama para leitor de tela e para quem prefere ler) e a nota
-// honesta do limite do protótipo. Em faixa.
+// honesta do limite do protótipo.
 export default function SecaoArquitetura({ conteudo }) {
   return (
     <Secao
@@ -24,7 +24,6 @@ export default function SecaoArquitetura({ conteudo }) {
       rotulo="Arquitetura"
       titulo={conteudo.titulo}
       subtitulo={conteudo.subtitulo}
-      faixa
     >
       <div className="flex flex-col gap-10">
         <Revelar>

@@ -9,7 +9,7 @@
  *   Nicolas Cinel — RM572940
  */
 
-// Página Emulador: cabeçalho no estilo do hero, o jogo em seção compacta e o dispositivo real em faixa. "Seja o hacker". Um card só conta a história: em cima o atacante, com os botões
+// Página Emulador: cabeçalho no estilo do hero, o jogo em seção compacta e o dispositivo real. "Seja o hacker". Um card só conta a história: em cima o atacante, com os botões
 // das ações dele logo abaixo; no meio o mapa da cidade com 5 locais; embaixo a defesa, com o que
 // dá para fazer no local escolhido (ativar ou desativar o C-Shield). Ao lado fica a câmara por
 // dentro do local escolhido; depois vem a seção do dispositivo real. A página só liga as peças: o jogo inteiro vem

@@ -10,7 +10,6 @@
  */
 
 import { motion } from 'framer-motion'
-import FundoCyber from './FundoCyber.jsx'
 import { ENTRADA_CONTAINER, ENTRADA_ITEM } from './movimento.js'
 
 // Impede a quebra de linha no hífen do nome ("C-" / "Shield"): o nome vai num trecho sem quebra.
@@ -32,7 +31,6 @@ export default function CabecalhoPagina({
   destaque,
   subtitulo,
   variante = 'repouso',
-  fundo = true,
   className = '',
   children,
 }) {
@@ -42,7 +40,6 @@ export default function CabecalhoPagina({
       aria-labelledby={id}
       className={`relative overflow-hidden pt-20 pb-16 md:pt-28 md:pb-24 ${className}`}
     >
-      {fundo ? <FundoCyber /> : null}
       <motion.div
         variants={ENTRADA_CONTAINER}
         initial="hidden"

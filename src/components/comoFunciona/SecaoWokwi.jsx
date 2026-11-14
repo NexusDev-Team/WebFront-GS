@@ -15,10 +15,10 @@ import Secao from '../ui/Secao.jsx'
 
 // "No simulador Wokwi" (W26c): um texto curto explica que os LEDs laranja, azul e verde e a chave
 // "Controlador" são representações (o simulador não tem os equipamentos; no aparelho real eles não
-// existem) e dois botões levam ao Wokwi e ao repositório do Edge. Em faixa.
+// existem) e dois botões levam ao Wokwi e ao repositório do Edge.
 export default function SecaoWokwi({ conteudo }) {
   return (
-    <Secao id="titulo-wokwi" ancora={conteudo.id} rotulo="Simulador" titulo={conteudo.titulo} subtitulo={conteudo.texto} faixa>
+    <Secao id="titulo-wokwi" ancora={conteudo.id} rotulo="Simulador" titulo={conteudo.titulo} subtitulo={conteudo.texto}>
       <Revelar className="flex flex-wrap gap-3">
         {conteudo.links.map((link, indice) => (
           <BotaoLed
