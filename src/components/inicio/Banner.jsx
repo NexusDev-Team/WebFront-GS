@@ -14,6 +14,7 @@ import { ArrowDown, Play } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import BotaoLed from '../ui/BotaoLed.jsx'
 import { ENTRADA_CONTAINER as CONTAINER, ENTRADA_ITEM as ITEM } from '../ui/movimento.js'
+import VeuBanner from '../ui/VeuBanner.jsx'
 import ImagemHero from './ImagemHero.jsx'
 
 // Hero da página inicial (Design System v1.0, referência de composição): texto à esquerda e o
@@ -34,14 +35,7 @@ export default function Banner({ conteudo }) {
           alt={conteudo.imagem.alt}
           className="object-[88%_top] md:object-[center_center]"
         />
-        <div
-          aria-hidden="true"
-          className="absolute inset-0 bg-linear-to-b from-noite-950/80 via-noite-950/45 to-noite-950/85 md:bg-linear-to-r md:from-noite-950 md:via-noite-950/55 md:to-transparent md:to-70%"
-        />
-        <div
-          aria-hidden="true"
-          className="absolute inset-x-0 top-0 h-28 bg-linear-to-b from-noite-950 via-noite-950/60 to-transparent md:h-40"
-        />
+        <VeuBanner />
       </div>
 
       <motion.div
