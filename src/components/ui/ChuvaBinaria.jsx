@@ -107,5 +107,5 @@ export default function ChuvaBinaria() {
     }
   }, [parado])
 
-  return <canvas ref={canvasRef} aria-hidden="true" className="chuva-binaria absolute inset-0 size-full opacity-60" />
+  return <canvas ref={canvasRef} aria-hidden="true" className="chuva-binaria absolute inset-0 size-full opacity-50" />
 }

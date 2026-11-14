@@ -82,18 +82,65 @@
       radial-gradient(ellipse 80% 60% at 50% 50%, rgba(100, 207, 255, 0.04), transparent 75%);
   }
 
-  /* Fumaça gelada: a arte de fumaça do banner, ancorada embaixo. O preto da imagem some com a mistura
-     "screen"; a máscara dissolve o alto, então não há borda. Deriva lenta (para com movimento reduzido). */
-  .fumaca-fundo {
-    background-image: var(--imagem-fumaca);
-    background-size: cover;
-    background-position: center bottom;
-    background-repeat: no-repeat;
+  /* Fumaça gelada: a arte de fumaça do banner em tamanho natural (sem ampliar, para ficar nítida),
+     uma cópia em cada canto de baixo, a da esquerda espelhada. O preto da imagem some com a mistura
+     "screen"; as máscaras dissolvem o alto e a borda de dentro, então não há aresta. O invólucro
+     (.fumaca-lado) leva a deriva lenta e a imagem (.fumaca-img) leva o espelho, para os dois
+     transform não brigarem. Para com movimento reduzido. */
+  .fumaca-lado {
+    position: absolute;
+    bottom: 0;
+    width: min(52vw, 834px);
+    aspect-ratio: 834 / 941;
     mix-blend-mode: screen;
-    opacity: 0.4;
-    -webkit-mask-image: linear-gradient(to bottom, transparent 30%, #000 85%);
-    mask-image: linear-gradient(to bottom, transparent 30%, #000 85%);
+    opacity: 0.28;
     animation: fumaca-deriva 22s ease-in-out infinite alternate;
+  }
+
+  .fumaca-img {
+    position: absolute;
+    inset: 0;
+    background-image: var(--imagem-fumaca);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+  }
+
+  .fumaca-direita {
+    right: 0;
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 55%), linear-gradient(to right, transparent 0%, #000 35%);
+    -webkit-mask-composite: source-in;
+    mask-image: linear-gradient(to bottom, transparent 0%, #000 55%), linear-gradient(to right, transparent 0%, #000 35%);
+    mask-composite: intersect;
+  }
+
+  .fumaca-esquerda {
+    left: 0;
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 55%), linear-gradient(to left, transparent 0%, #000 35%);
+    -webkit-mask-composite: source-in;
+    mask-image: linear-gradient(to bottom, transparent 0%, #000 55%), linear-gradient(to left, transparent 0%, #000 35%);
+    mask-composite: intersect;
+  }
+
+  .fumaca-esquerda .fumaca-img {
+    transform: scaleX(-1);
+  }
+
+  /* No celular só a da direita, na largura da tela; a esquerda some. */
+  @media (max-width: 767px) {
+    .fumaca-direita {
+      width: 100vw;
+    }
+
+    .fumaca-esquerda {
+      display: none;
+    }
+  }
+
+  /* Fim do banner da Home: a imagem some por transparência e revela o fundo fixo (fumaça e chuva),
+     em vez de terminar numa cor sólida. */
+  .banner-dissolve {
+    -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 62%, transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 0%, #000 62%, transparent 100%);
   }
 
   /* Chuva de binários: forte nas bordas, quase apagada no miolo, onde fica o texto. */
@@ -132,8 +179,8 @@
 }
 
 @keyframes fumaca-deriva {
-  from { transform: translate3d(0, 0, 0) scale(1.04); opacity: 0.3; }
-  to { transform: translate3d(-12px, -8px, 0) scale(1.07); opacity: 0.45; }
+  from { transform: translate3d(0, 0, 0); opacity: 0.22; }
+  to { transform: translate3d(-10px, -6px, 0); opacity: 0.32; }
 }
 
 @keyframes desenha {
@@ -191,7 +238,7 @@
   .led-pisca,
   .gira,
   .linha-fluxo,
-  .fumaca-fundo,
+  .fumaca-lado,
   .pulso-linha {
     animation: none;
   }
