@@ -20,7 +20,7 @@ import LinkSeta from '../components/ui/LinkSeta.jsx'
 import Revelar from '../components/ui/Revelar.jsx'
 import Secao from '../components/ui/Secao.jsx'
 import { NEXUS } from '../content/inicio.js'
-import { CULTURA, VISAO } from '../content/nexusDev.js'
+import { PROPOSITO } from '../content/nexusDev.js'
 
 export default function NexusDev() {
   return (
@@ -51,23 +51,9 @@ export default function NexusDev() {
       <Secao id="titulo-proposito" rotulo="Propósito" titulo="Nosso propósito">
         <div className="flex flex-col gap-12">
           <div className="nevoa-texto max-w-4xl">
-          <Revelar>
-            <p className="max-w-4xl border-l-2 border-ciano pl-6 text-[clamp(1.5rem,2.6vw,2.25rem)] leading-snug text-gelo-50">
-              {VISAO}
-            </p>
-          </Revelar>
-          </div>
-          <div className="nevoa-texto">
-          <Revelar atraso={0.1}>
-            <ul className="divide-y divide-borda border-y border-borda">
-              {CULTURA.map((c) => (
-                <li key={c.titulo} className="grid gap-2 py-6 md:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] md:gap-8">
-                  <h3 className="text-xl font-semibold text-gelo-50">{c.titulo}</h3>
-                  <p className="text-gelo-300">{c.texto}</p>
-                </li>
-              ))}
-            </ul>
-          </Revelar>
+            <Revelar>
+              <p className="max-w-4xl border-l-2 border-ciano pl-6 text-lg leading-relaxed text-gelo-100 sm:text-xl">{PROPOSITO}</p>
+            </Revelar>
           </div>
           <Revelar atraso={0.15}>
             <LinkSeta to="/como-funciona">Entender como o C-Shield funciona</LinkSeta>
