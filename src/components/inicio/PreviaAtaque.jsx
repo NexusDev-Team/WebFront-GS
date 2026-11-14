@@ -9,14 +9,14 @@
  *   Nicolas Cinel — RM572940
  */
 
-// Prévia ilustrada do emulador (referência: a arte aprovada do card): a ordem do atacante (linha
+import imagemLogo from '../../assets/logo-c-shield.png'
+
+// Prévia ilustrada do emulador (referência: a arte aprovada do card, com a logo oficial como escudo): a ordem do atacante (linha
 // vermelha tracejada, que corre até o alvo) bate no escudo de gelo do C-Shield e não passa; do
 // outro lado, a câmara fria segue estável. É só uma figura (o jogo de verdade fica em /emulador).
 // A linha, a geada e o halo animam devagar e param com prefers-reduced-motion (classes em
 // efeitos.css); a figura inteira tem texto alternativo. O estado (bloqueado, estável) também está
 // escrito, nunca só na cor.
-const ESCUDO = 'M24 3 L43 8.5 V29 L24 53 L5 29 V8.5 Z'
-const ESCUDO_INTERNO = 'M24 9 L37.5 12.8 V28 L24 45 L10.5 28 V12.8 Z'
 // Um braço do floco de neve (do centro para cima, com duas ramificações); o resto é rotação.
 const BRACO = 'M0 0 V-13 M0 -8 L-4 -12 M0 -8 L4 -12'
 const ROTACOES = [0, 60, 120, 180, 240, 300]
@@ -59,10 +59,6 @@ export default function PreviaAtaque({ className = '' }) {
       fill="none"
     >
       <defs>
-        <linearGradient id="previa-escudo" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" style={{ stopColor: 'var(--color-gelo-100)' }} />
-          <stop offset="1" style={{ stopColor: 'var(--color-ciano)' }} />
-        </linearGradient>
         <linearGradient id="previa-ataque" gradientUnits="userSpaceOnUse" x1="184" y1="0" x2="262" y2="0">
           <stop offset="0" style={{ stopColor: 'var(--color-ataque)', stopOpacity: 0.55 }} />
           <stop offset="1" style={{ stopColor: 'var(--color-ataque)' }} />
@@ -154,17 +150,7 @@ export default function PreviaAtaque({ className = '' }) {
           style={{ animationDelay: `${atraso}s` }}
         />
       ))}
-      <g transform="translate(277 112) scale(2.2)" filter="url(#previa-brilho)">
-        <path d={ESCUDO} stroke="url(#previa-escudo)" strokeWidth="2" strokeLinejoin="round" fill="var(--color-noite-950)" fillOpacity="0.85" />
-        <path d={ESCUDO_INTERNO} stroke="var(--color-ciano)" strokeOpacity="0.55" strokeWidth="1" strokeLinejoin="round" fill="var(--color-gelo-azul)" fillOpacity="0.14" />
-      </g>
-      <Floco x={330} y={174} escala={2.9} stroke="var(--color-ciano)" largura={1.6} />
-      <g stroke="var(--color-gelo-100)" strokeOpacity="0.7" strokeLinecap="round" strokeWidth="1.8">
-        <path d="M308 238 V248" />
-        <path d="M322 244 V256" />
-        <path d="M338 244 V254" />
-        <path d="M352 236 V246" />
-      </g>
+      <image href={imagemLogo} x="258" y="108" width="144" height="128" preserveAspectRatio="xMidYMid meet" />
       <text x="330" y="276" textAnchor="middle" className="fill-gelo-100 font-mono text-[15px] tracking-widest">
         C-SHIELD
       </text>
