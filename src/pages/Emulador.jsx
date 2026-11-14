@@ -27,6 +27,7 @@ import MapaCidade from '../components/emulador/MapaCidade.jsx'
 import SecaoDispositivoReal from '../components/emulador/SecaoDispositivoReal.jsx'
 import BotaoLed from '../components/ui/BotaoLed.jsx'
 import CabecalhoPagina from '../components/ui/CabecalhoPagina.jsx'
+import bannerSimulador from '../assets/banner_simulador.webp'
 import PainelVidro from '../components/ui/PainelVidro.jsx'
 import Secao from '../components/ui/Secao.jsx'
 import { useCidadeSimulada } from '../hooks/useCidadeSimulada.js'
@@ -52,6 +53,7 @@ export default function Emulador() {
   return (
     <>
       <CabecalhoPagina
+        imagem={{ src: bannerSimulador }}
         rotulo="Simulador"
         titulo="Seja o hacker"
         variante={algumSobAtaque(jogo.cidade) ? 'ataque' : 'repouso'}
