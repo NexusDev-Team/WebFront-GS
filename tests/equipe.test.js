@@ -12,7 +12,7 @@
 // Conteúdo da página Nexus Dev: os 5 integrantes (nomes e RMs conferidos) e os textos da equipe.
 import { describe, expect, it } from 'vitest'
 import { EQUIPE, iniciaisDe } from '../src/content/equipe.js'
-import { CULTURA, VISAO } from '../src/content/nexusDev.js'
+import { PROPOSITO } from '../src/content/nexusDev.js'
 
 describe('EQUIPE', () => {
   it('são os 5 integrantes, na ordem do cabeçalho do grupo, com os RMs certos', () => {
@@ -40,22 +40,19 @@ describe('EQUIPE', () => {
   })
 })
 
-describe('textos da página (enxuta: visão e cultura, sem "Sobre a GS")', () => {
-  it('tem a visão e uma cultura curta, de 3 a 4 valores', () => {
-    expect(VISAO.length).toBeGreaterThan(40)
-    expect(CULTURA.length).toBeGreaterThanOrEqual(3)
-    expect(CULTURA.length).toBeLessThanOrEqual(4)
-    for (const c of CULTURA) {
-      expect(c.titulo).toBeTruthy()
-      expect(c.texto.length).toBeGreaterThan(30)
-    }
+describe('textos da página (uma tela: equipe e propósito, sem visão nem cultura)', () => {
+  it('o propósito é o texto escrito pela equipe em 14/11', () => {
+    expect(PROPOSITO.startsWith('Acreditamos que a tecnologia deve proteger tanto quanto ela transforma.')).toBe(true)
+    expect(PROPOSITO).toContain('bem-estar coletivo')
+    expect(PROPOSITO).toContain('confiar na tecnologia que as cerca')
   })
-  it('a seção "Sobre a GS" foi cortada em 13/11', async () => {
+  it('a seção "Sobre a GS" foi cortada em 13/11 e a visão e a cultura em 14/11', async () => {
     const conteudo = await import('../src/content/nexusDev.js')
-    expect(conteudo).not.toHaveProperty('SOBRE_GS')
+    expect(conteudo.SOBRE_GS).toBeUndefined()
+    expect(conteudo.VISAO).toBeUndefined()
+    expect(conteudo.CULTURA).toBeUndefined()
   })
   it('nunca sugere que o C-Shield recebe comandos pela rede (W43)', () => {
-    const tudo = [VISAO, ...CULTURA.map((c) => c.texto)].join(' ').toLowerCase()
-    expect(tudo).not.toMatch(/recebe (comandos|ordens)|comandar (o )?c-shield/)
+    expect(PROPOSITO.toLowerCase()).not.toMatch(/recebe (comandos|ordens)|comandar (o )?c-shield/)
   })
 })
