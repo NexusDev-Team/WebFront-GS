@@ -40,45 +40,49 @@ export default function CabecalhoPagina({
       aria-labelledby={id}
       className={`relative overflow-hidden pt-20 pb-16 md:pt-28 md:pb-24 ${className}`}
     >
-      <motion.div
-        variants={ENTRADA_CONTAINER}
-        initial="hidden"
-        animate="visivel"
-        className="conteudo relative flex flex-col items-start gap-6"
-      >
-        <motion.p variants={ENTRADA_ITEM} className="rotulo-tecnico flex w-full items-center gap-5 md:max-w-2xl">
-          <span>{rotulo}</span>
-          <span aria-hidden="true" className="hidden h-px flex-1 bg-linear-to-r from-gelo-azul/50 to-transparent sm:block" />
-        </motion.p>
+      <div className="conteudo relative">
+        <div className="nevoa-texto w-fit max-w-full">
+          <motion.div
+            variants={ENTRADA_CONTAINER}
+            initial="hidden"
+            animate="visivel"
+            className="flex flex-col items-start gap-6"
+          >
+            <motion.p variants={ENTRADA_ITEM} className="rotulo-tecnico flex w-full items-center gap-5 md:max-w-2xl">
+              <span>{rotulo}</span>
+              <span aria-hidden="true" className="hidden h-px flex-1 bg-linear-to-r from-gelo-azul/50 to-transparent sm:block" />
+            </motion.p>
 
-        <motion.h1
-          id={id}
-          variants={ENTRADA_ITEM}
-          className={`max-w-3xl text-[clamp(2.5rem,5vw,4.5rem)] leading-[1.08] font-bold tracking-tight text-balance ${
-            ataque ? 'led-falha text-critico' : 'text-gelo-50'
-          }`}
-        >
-          {semQuebraNoNome(titulo)}
-          {destaque ? (
-            <>
-              <br />
-              <span className={ataque ? '' : 'titulo-ciano'}>{semQuebraNoNome(destaque)}</span>
-            </>
-          ) : null}
-        </motion.h1>
+            <motion.h1
+              id={id}
+              variants={ENTRADA_ITEM}
+              className={`max-w-3xl text-[clamp(2.5rem,5vw,4.5rem)] leading-[1.08] font-bold tracking-tight text-balance ${
+                ataque ? 'led-falha text-critico' : 'text-gelo-50'
+              }`}
+            >
+              {semQuebraNoNome(titulo)}
+              {destaque ? (
+                <>
+                  <br />
+                  <span className={ataque ? '' : 'titulo-ciano'}>{semQuebraNoNome(destaque)}</span>
+                </>
+              ) : null}
+            </motion.h1>
 
-        {subtitulo ? (
-          <motion.p variants={ENTRADA_ITEM} className="max-w-2xl text-lg text-gelo-100 sm:text-xl">
-            {subtitulo}
-          </motion.p>
-        ) : null}
+            {subtitulo ? (
+              <motion.p variants={ENTRADA_ITEM} className="max-w-2xl text-lg text-gelo-100 sm:text-xl">
+                {subtitulo}
+              </motion.p>
+            ) : null}
 
-        {children ? (
-          <motion.div variants={ENTRADA_ITEM} className="flex flex-wrap items-center gap-x-4 gap-y-3 pt-2">
-            {children}
+            {children ? (
+              <motion.div variants={ENTRADA_ITEM} className="flex flex-wrap items-center gap-x-4 gap-y-3 pt-2">
+                {children}
+              </motion.div>
+            ) : null}
           </motion.div>
-        ) : null}
-      </motion.div>
+        </div>
+      </div>
     </section>
   )
 }

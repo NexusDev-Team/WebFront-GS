@@ -48,11 +48,14 @@ export default function NexusDev() {
 
       <Secao id="titulo-proposito" rotulo="Propósito" titulo="Nosso propósito">
         <div className="flex flex-col gap-12">
+          <div className="nevoa-texto max-w-4xl">
           <Revelar>
             <p className="max-w-4xl border-l-2 border-ciano pl-6 text-[clamp(1.5rem,2.6vw,2.25rem)] leading-snug text-gelo-50">
               {VISAO}
             </p>
           </Revelar>
+          </div>
+          <div className="nevoa-texto">
           <Revelar atraso={0.1}>
             <ul className="divide-y divide-borda border-y border-borda">
               {CULTURA.map((c) => (
@@ -63,6 +66,7 @@ export default function NexusDev() {
               ))}
             </ul>
           </Revelar>
+          </div>
           <Revelar atraso={0.15}>
             <LinkSeta to="/como-funciona">Entender como o C-Shield funciona</LinkSeta>
           </Revelar>

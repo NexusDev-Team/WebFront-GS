@@ -25,7 +25,7 @@ export default function SecaoProblema({ conteudo }) {
       titulo={conteudo.titulo}
       subtitulo={conteudo.texto}
     >
-      <div className="grid gap-10 md:grid-cols-3 md:gap-12">
+      <div className="nevoa-texto grid gap-10 md:grid-cols-3 md:gap-12">
         {conteudo.fatos.map((fato, indice) => (
           <FatoNumero
             key={fato.fonteId}

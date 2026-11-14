@@ -24,6 +24,7 @@ export default function SecaoEstados({ estados }) {
       titulo="Os cinco estados"
       subtitulo="O aparelho está sempre em um destes estados. O mais grave vale primeiro: crítico, bloqueio, falha de sensor, atenção e normal."
     >
+      <div className="nevoa-texto">
       <Revelar>
         <ul className="divide-y divide-borda border-y border-borda">
           {estados.map((estado) => (
@@ -38,6 +39,7 @@ export default function SecaoEstados({ estados }) {
           ))}
         </ul>
       </Revelar>
+      </div>
     </Secao>
   )
 }

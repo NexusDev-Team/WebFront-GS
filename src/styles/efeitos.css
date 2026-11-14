@@ -143,6 +143,56 @@
     mask-image: linear-gradient(to bottom, #000 0%, #000 62%, transparent 100%);
   }
 
+  /* Névoa atrás dos blocos de texto: o fundo (chuva e fumaça) aparece desfocado e levemente escurecido,
+     com as bordas dissolvidas por máscara (sem caixa visível), para o texto ler limpo. Vai sempre num
+     invólucro estático, FORA de Revelar e motion: o backdrop-filter só enxerga o que está atrás até
+     o primeiro ancestral com opacidade ou transform, e esses animam ao entrar. */
+  .nevoa-texto {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .nevoa-texto::before {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    pointer-events: none;
+    inset: -1.5rem -2.5rem;
+    background: rgba(2, 9, 18, 0.38);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    -webkit-mask-image: radial-gradient(ellipse closest-side at 50% 50%, #000 55%, transparent 100%);
+    mask-image: radial-gradient(ellipse closest-side at 50% 50%, #000 55%, transparent 100%);
+  }
+
+  /* No celular a névoa não passa da margem da tela (sem rolagem horizontal). */
+  @media (max-width: 767px) {
+    .nevoa-texto::before {
+      inset: -1rem -1rem;
+      -webkit-backdrop-filter: blur(8px);
+      backdrop-filter: blur(8px);
+    }
+  }
+
+  /* Névoa do rodapé: mais densa e só sobe do fim da página, sem borda de topo. */
+  .nevoa-rodape {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .nevoa-rodape::before {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    pointer-events: none;
+    inset: 0;
+    background: rgba(2, 9, 18, 0.55);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 45%);
+    mask-image: linear-gradient(to bottom, transparent 0%, #000 45%);
+  }
+
   /* Chuva de binários: forte nas bordas, quase apagada no miolo, onde fica o texto. */
   .chuva-binaria {
     -webkit-mask-image: radial-gradient(ellipse 45% 60% at 40% 50%, transparent 0%, rgba(0, 0, 0, 0.25) 45%, #000 85%);

@@ -23,7 +23,7 @@ export default function ChamadaFinal({ conteudo }) {
     <Secao id="titulo-chamada" ancora="simulacao" rotulo={conteudo.rotulo} titulo={conteudo.titulo}>
       <div className="grid items-center gap-12 lg:grid-cols-[1fr_1.1fr] lg:gap-16">
         <Revelar className="flex flex-col items-start gap-8">
-          <div className="flex max-w-xl flex-col gap-3 text-lg leading-relaxed sm:text-xl">
+          <div className="nevoa-texto flex max-w-xl flex-col gap-3 text-lg leading-relaxed sm:text-xl">
             <p className="text-gelo-100">{conteudo.texto}</p>
             <p className="text-gelo-300">{conteudo.convite}</p>
           </div>

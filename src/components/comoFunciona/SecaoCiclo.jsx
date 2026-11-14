@@ -17,11 +17,13 @@ import Secao from '../ui/Secao.jsx'
 export default function SecaoCiclo({ conteudo }) {
   return (
     <Secao id="titulo-ciclo" ancora={conteudo.id} rotulo="O ciclo" titulo={conteudo.titulo} subtitulo={conteudo.subtitulo}>
+      <div className="nevoa-texto">
       <ol className="grid gap-10 sm:grid-cols-2 lg:gap-12">
         {conteudo.passos.map((passo, indice) => (
           <PassoSolucao key={passo.numero} {...passo} atraso={indice * 0.08} ultimo />
         ))}
       </ol>
+      </div>
     </Secao>
   )
 }

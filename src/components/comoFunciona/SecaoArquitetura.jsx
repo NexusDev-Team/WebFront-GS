@@ -29,6 +29,7 @@ export default function SecaoArquitetura({ conteudo }) {
         <Revelar>
           <DiagramaArquitetura descricao={conteudo.descricao} />
         </Revelar>
+        <div className="nevoa-texto flex flex-col gap-10">
         <Revelar atraso={0.1}>
           <ol className="grid list-decimal gap-x-10 gap-y-3 pl-6 text-gelo-300 marker:text-led-forte md:grid-cols-2">
             {conteudo.etapas.map((etapa) => (
@@ -41,6 +42,7 @@ export default function SecaoArquitetura({ conteudo }) {
         <Revelar atraso={0.15}>
           <p className="max-w-prose text-sm text-gelo-300">{conteudo.limite}</p>
         </Revelar>
+        </div>
       </div>
     </Secao>
   )

@@ -25,6 +25,7 @@ export default function SecaoSolucao({ conteudo }) {
       titulo={conteudo.titulo}
       subtitulo={conteudo.texto}
     >
+      <div className="nevoa-texto">
       <ol className="grid gap-12 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8">
         {conteudo.passos.map((passo, indice) => (
           <PassoSolucao
@@ -35,6 +36,7 @@ export default function SecaoSolucao({ conteudo }) {
           />
         ))}
       </ol>
+      </div>
 
       <LinkSeta to={conteudo.link.para} className="mt-14">
         {conteudo.link.rotulo}

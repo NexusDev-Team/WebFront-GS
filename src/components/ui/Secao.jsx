@@ -39,13 +39,15 @@ export default function Secao({
       {fundo}
       <div className="relative conteudo">
         {titulo ? (
-          <Revelar className="mb-12 flex max-w-3xl flex-col gap-4 md:mb-16">
-            {rotulo ? <p className="rotulo-tecnico">{rotulo}</p> : null}
-            <h2 id={id} className="text-[clamp(1.875rem,3.5vw,3rem)] leading-[1.1] font-semibold text-balance text-gelo-50">
-              {titulo}
-            </h2>
-            {subtitulo ? <p className="text-base leading-relaxed text-gelo-300 sm:text-lg">{subtitulo}</p> : null}
-          </Revelar>
+          <div className="nevoa-texto mb-12 max-w-3xl md:mb-16">
+            <Revelar className="flex flex-col gap-4">
+              {rotulo ? <p className="rotulo-tecnico">{rotulo}</p> : null}
+              <h2 id={id} className="text-[clamp(1.875rem,3.5vw,3rem)] leading-[1.1] font-semibold text-balance text-gelo-50">
+                {titulo}
+              </h2>
+              {subtitulo ? <p className="text-base leading-relaxed text-gelo-300 sm:text-lg">{subtitulo}</p> : null}
+            </Revelar>
+          </div>
         ) : null}
         {children}
       </div>
