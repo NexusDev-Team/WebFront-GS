@@ -34,15 +34,20 @@ export default function NexusDev() {
       />
 
       <Secao rotuloAria="A equipe e o nosso propósito" compacta>
-        <div className="grid gap-12 lg:grid-cols-2 lg:items-start lg:gap-16">
-          <div className="nevoa-texto">
-            <Revelar className="flex flex-col gap-6">
-              <div className="flex flex-col gap-3">
-                <p className="rotulo-tecnico">Equipe</p>
-                <h2 id="titulo-equipe" className="text-[clamp(1.875rem,3.5vw,3rem)] leading-[1.1] font-semibold text-gelo-50">
-                  A equipe
-                </h2>
-              </div>
+        {/* Duas linhas no desktop: o título "A equipe" fica sozinho na primeira, e o conteúdo da
+            esquerda e o propósito começam juntos na segunda, na mesma altura. */}
+        <div className="grid gap-x-16 gap-y-10 lg:grid-cols-2 lg:grid-rows-[auto_1fr]">
+          <div className="nevoa-texto lg:col-start-1 lg:row-start-1">
+            <Revelar className="flex flex-col gap-3">
+              <p className="rotulo-tecnico">Equipe</p>
+              <h2 id="titulo-equipe" className="text-[clamp(1.875rem,3.5vw,3rem)] leading-[1.1] font-semibold text-gelo-50">
+                A equipe
+              </h2>
+            </Revelar>
+          </div>
+
+          <div className="nevoa-texto lg:col-start-1 lg:row-start-2">
+            <Revelar atraso={0.05} className="flex flex-col gap-6">
               <div>
                 <p className="rotulo-tecnico mb-3">Tecnologias</p>
                 <ListaTecnologias tecnologias={NEXUS.tecnologias} />
@@ -54,7 +59,7 @@ export default function NexusDev() {
             </Revelar>
           </div>
 
-          <div className="nevoa-texto">
+          <div className="nevoa-texto lg:col-start-2 lg:row-start-2">
             <Revelar atraso={0.1} className="flex flex-col items-start gap-6">
               <div className="flex flex-col gap-3">
                 <p className="rotulo-tecnico">Propósito</p>
