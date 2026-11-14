@@ -53,10 +53,10 @@
   --color-menta-texto: #052e16;
   --color-alerta-fundo: rgba(255, 64, 88, 0.12);
 
-  --font-titulo: "Space Grotesk", system-ui, sans-serif;
-  --font-texto: "Inter", system-ui, sans-serif;
-  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
-  --font-lcd: "IBM Plex Mono", ui-monospace, monospace;
+  --font-titulo: "Chakra Petch", system-ui, sans-serif;
+  --font-texto: "Geist", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --font-lcd: "JetBrains Mono", ui-monospace, monospace;
 
   /* Forma e movimento */
   --radius-card: 16px;
