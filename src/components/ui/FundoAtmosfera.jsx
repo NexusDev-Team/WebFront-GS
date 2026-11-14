@@ -9,10 +9,18 @@
  *   Nicolas Cinel — RM572940
  */
 
-// Fundo atmosférico do site: uma camada fixa atrás de todas as páginas, com brilho glacial, azul
-// profundo, grade técnica sutil e grão de gelo (classe .fundo-atmosfera, em efeitos.css). Por ser
-// uma só camada fixa, não há emenda entre as seções, e como não anima nem usa blur, não pesa na
-// rolagem. É só enfeite (aria-hidden).
+import fumaca from '../../assets/fundo-fumaca.jpg'
+import ChuvaBinaria from './ChuvaBinaria.jsx'
+
+// Fundo único do site, uma camada fixa atrás de todas as páginas (por isso a rolagem parece uma
+// tela só, sem emendas entre as seções): base noite com brilhos glaciais (.fundo-atmosfera), a
+// fumaça gelada da mesma arte do banner (.fumaca-fundo) e a chuva de binários discreta em canvas.
+// É só enfeite (aria-hidden, sem foco, sem cliques).
 export default function FundoAtmosfera() {
-  return <div aria-hidden="true" className="fundo-atmosfera pointer-events-none fixed inset-0 -z-10" />
+  return (
+    <div aria-hidden="true" className="fundo-atmosfera pointer-events-none fixed inset-0 -z-10 overflow-hidden">
+      <div className="fumaca-fundo absolute inset-0" style={{ '--imagem-fumaca': `url(${fumaca})` }} />
+      <ChuvaBinaria />
+    </div>
+  )
 }

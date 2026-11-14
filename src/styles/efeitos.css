@@ -82,26 +82,24 @@
       radial-gradient(ellipse 80% 60% at 50% 50%, rgba(100, 207, 255, 0.04), transparent 75%);
   }
 
-  .fundo-atmosfera::before,
-  .fundo-atmosfera::after {
-    content: '';
-    position: absolute;
-    inset: 0;
+  /* Fumaça gelada: a arte de fumaça do banner, ancorada embaixo. O preto da imagem some com a mistura
+     "screen"; a máscara dissolve o alto, então não há borda. Deriva lenta (para com movimento reduzido). */
+  .fumaca-fundo {
+    background-image: var(--imagem-fumaca);
+    background-size: cover;
+    background-position: center bottom;
+    background-repeat: no-repeat;
+    mix-blend-mode: screen;
+    opacity: 0.4;
+    -webkit-mask-image: linear-gradient(to bottom, transparent 30%, #000 85%);
+    mask-image: linear-gradient(to bottom, transparent 30%, #000 85%);
+    animation: fumaca-deriva 22s ease-in-out infinite alternate;
   }
 
-  .fundo-atmosfera::before {
-    background-image:
-      linear-gradient(to right, rgba(100, 207, 255, 0.045) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(100, 207, 255, 0.045) 1px, transparent 1px);
-    background-size: 48px 48px;
-    -webkit-mask-image: radial-gradient(ellipse at 50% 30%, black 30%, transparent 75%);
-    mask-image: radial-gradient(ellipse at 50% 30%, black 30%, transparent 75%);
-  }
-
-  .fundo-atmosfera::after {
-    opacity: 0.05;
-    mix-blend-mode: overlay;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='r'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23r)'/%3E%3C/svg%3E");
+  /* Chuva de binários: forte nas bordas, quase apagada no miolo, onde fica o texto. */
+  .chuva-binaria {
+    -webkit-mask-image: radial-gradient(ellipse 45% 60% at 40% 50%, transparent 0%, rgba(0, 0, 0, 0.25) 45%, #000 85%);
+    mask-image: radial-gradient(ellipse 45% 60% at 40% 50%, transparent 0%, rgba(0, 0, 0, 0.25) 45%, #000 85%);
   }
 
   /* O fundo "cyber" (binários e circuitos) some aos poucos em cima e embaixo, por máscara: sem linha
@@ -180,6 +178,11 @@
 
 }
 
+@keyframes fumaca-deriva {
+  from { transform: translate3d(0, 0, 0) scale(1.04); opacity: 0.3; }
+  to { transform: translate3d(-12px, -8px, 0) scale(1.07); opacity: 0.45; }
+}
+
 @keyframes desenha {
   from {
     stroke-dasharray: 1;
@@ -244,6 +247,7 @@
   .led-pisca,
   .gira,
   .linha-fluxo,
+  .fumaca-fundo,
   .binario-sobe,
   .circuito-brilho,
   .pulso-linha {
