@@ -33,13 +33,7 @@
 
   body {
     @apply bg-noite-950 font-texto text-base leading-normal text-gelo-50 antialiased;
-    /* Um único gradiente fraco de azul-glacial no topo da página, sem padrão repetido. */
-    background-image: radial-gradient(
-      ellipse 80% 40% at 50% 0%,
-      rgba(0, 207, 255, 0.06),
-      transparent 70%
-    );
-    background-repeat: no-repeat;
+    /* A atmosfera (brilhos, grade e grão) vem do componente FundoAtmosfera; aqui fica só a cor base. */
   }
 
   h1, h2, h3, h4 {
