@@ -33,3 +33,8 @@ dist-ssr
 
 # Capturas do Playwright MCP (locais)
 .playwright-mcp/
+
+# Documentos internos de planejamento e instruções do agente (ficam só na máquina)
+CLAUDE.md
+docs/*
+!docs/img/
