@@ -47,24 +47,24 @@ Hero (referência de composição): texto à esquerda e aparelho à direita, 90 
 
 Mudanças de texto em relação ao doc original: o produto **não recebe comandos** e só destrava presencialmente, então "bloqueio de sinais suspeitos e recuperação automática" vira "ignora ordens da rede" e "liberação só presencial", fiéis a "Vê de longe. Só obedece de perto."
 
-Componentes novos: `FundoCyber` (binários e circuitos), `Secao` (espaçamento e título), `Revelar` (entrada ao rolar), `ImagemHero`, `GraficoTemperatura` (recharts) e `SecaoNexusDev`. Ícones vêm do `lucide-react`; animações de entrada vêm do `framer-motion`.
+Componentes novos: `FundoAtmosfera` (fundo fixo único; substituiu o `FundoCyber` em 13/11), `Secao` (espaçamento e título), `Revelar` (entrada ao rolar), `ImagemHero`, `GraficoTemperatura` (recharts) e `SecaoNexusDev`. Ícones vêm do `lucide-react`; animações de entrada vêm do `framer-motion`.
 
 ### Padrão das páginas internas (13/11)
 
 Todas as rotas seguem o ritmo da página inicial; ver `docs/specs/web/plano-padronizacao.md`.
 
 - **Cabeçalho:** `CabecalhoPagina` é o hero das páginas internas, sem imagem: rótulo técnico com fio degradê, título grande (a 2ª linha, `destaque`, em ciano), subtítulo opcional, ações opcionais e `FundoCyber` atrás, com a entrada escalonada de `ui/movimento.js`. No emulador, `variante="ataque"` deixa o título vermelho com falha de energia.
-- **Seções:** só `Secao` (rótulo, título, subtítulo, `Revelar`). `faixa` aplica o fundo de faixa e alterna com seções lisas; `compacta` reduz o respiro e serve só ao jogo do emulador. Sem `Pagina`, `TituloSecao` nem `TituloLed` de nível 2 nas páginas (o `TituloLed` ficou só dentro do card da câmara do jogo).
+- **Seções:** só `Secao` (rótulo, título, subtítulo, `Revelar`). (sem `faixa`: o fundo é único e fixo desde 13/11); `compacta` reduz o respiro e serve só ao jogo do emulador. Sem `Pagina`, `TituloSecao` nem `TituloLed` de nível 2 nas páginas (o `TituloLed` ficou só dentro do card da câmara do jogo).
 - **Pouco cartão:** números, equipe, cultura e manchete usam fios finos; `.cartao` só onde agrupa de verdade (estados, representações do Wokwi, notícias, chamada).
 - **Link com seta:** `LinkSeta`, o mesmo da página inicial.
-- **Ritmo (L = lisa, F = faixa):** Como funciona: L, F, L, F, L · Emulador: jogo (L, compacta), dispositivo real (F) · Notícias: manchete (L), linha do tempo (F), "E na sua cidade?" com a chamada (L), mais notícias (F, por último) · Nexus Dev: integrantes (L), visão (F), cultura (L), GS (F).
+- **Ritmo:** as seções alternam só pelo respiro e pelo conteúdo; desde 13/11 não há faixas de fundo (histórico: antes alternavam lisa e faixa).
 - **Equipe:** `ListaEquipe` (iniciais, nome, RM; `comFuncao` na página Nexus Dev) e `ListaTecnologias`, as mesmas da página inicial. Os cartões com foto saíram.
 
 ### Decisões de 13/11 (Home, Problema, fundo e fontes)
 
 - **Rotas:** o menu passou a ser Home, Como funciona, Problema e Nexus Dev. `/problema` é a antiga página de notícias (mantém o cadastro de câmaras na API externa); `/noticias` e `/incidentes` redirecionam para ela.
 - **Conteúdo enxuto:** a Home perdeu a prévia da equipe e a fileira de alertas, variação e relés (ficam a leitura e o gráfico); a linha do tempo do Problema tem 5 marcos e as matérias abrem com "Ver todas"; Como funciona perdeu "De onde vem a ideia", mostra os estados em lista e o Wokwi em duas frases; Nexus Dev junta visão e cultura em "Nosso propósito" e perdeu "Sobre a GS".
-- **Uma paleta de fundo, sem corte entre seções:** uma camada fixa (`FundoAtmosfera`, classe `.fundo-atmosfera`) fica atrás de todas as páginas, com brilho glacial à direita, azul profundo embaixo à esquerda, névoa fria, grade técnica sutil e grão de gelo. Nenhuma seção tem fundo sólido ou borda própria: `faixa` é um degradê que aparece e some (`.faixa-suave`), e o fundo cyber dos cabeçalhos some por máscara em cima e embaixo. O header e o banner se dissolvem no fundo por degradê.
+- **Uma tela só, sem corte entre seções:** uma camada fixa (`FundoAtmosfera`) fica atrás de todas as páginas: base noite com brilhos glaciais (`.fundo-atmosfera`), fumaça gelada recortada da mesma arte do banner (`src/assets/fundo-fumaca.jpg`, classe `.fumaca-fundo`, mistura `screen`, deriva lenta) e uma chuva de binários discreta em canvas (`ChuvaBinaria`, lógica pura em `chuvaBinaria.js`, ~30 quadros por segundo, pausa com a aba oculta, parada com movimento reduzido), mais forte nas bordas e quase apagada atrás do texto. Sem grade. Não existem mais faixas (`faixa`), `FundoCyber` nem fundo próprio por seção ou no rodapé: rolar do topo ao fim parece um único fundo. O header e o banner se dissolvem no fundo por degradê.
 - **Esquemas:** a prévia do ataque na Home e o diagrama de Como funciona foram redesenhados (terminal do atacante, selos de estado em texto, halos, linha de ataque que corre e para com movimento reduzido).
 
 ## 0.1 Histórico: "Glacial industrial" (12/11, tarde)
