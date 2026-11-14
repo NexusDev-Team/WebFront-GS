@@ -28,7 +28,7 @@ export default function Banner({ conteudo }) {
       aria-labelledby="titulo-banner"
       className="relative flex flex-col overflow-hidden md:min-h-[calc(100svh-5rem)]"
     >
-      <div className="absolute inset-0">
+      <div className="banner-dissolve absolute inset-0">
         <ImagemHero
           src={conteudo.imagem.src}
           alt={conteudo.imagem.alt}
@@ -41,10 +41,6 @@ export default function Banner({ conteudo }) {
         <div
           aria-hidden="true"
           className="absolute inset-x-0 top-0 h-28 bg-linear-to-b from-noite-950 via-noite-950/60 to-transparent md:h-40"
-        />
-        <div
-          aria-hidden="true"
-          className="absolute inset-x-0 bottom-0 h-40 bg-linear-to-t from-noite-950 via-noite-950/70 to-transparent md:h-56"
         />
       </div>
 
