@@ -10,7 +10,7 @@ Global Solution 2026.2 "CitizenTech" (FIAP), equipe **Nexus Dev** (Engenharia de
 
 O produto é o **C-Shield** (de Cyber Shield): um ESP32 instalado junto da câmara fria que mede com sensores próprios, decide com uma política gravada nele e, diante de um ataque ao controlador comercial, assume o controle localmente pelos relés. **Ele não recebe nenhum comando pela rede: só envia dados ao FIWARE.** O bloqueio só termina presencialmente (botão segurado por 3 s). Frase do produto: "Vê de longe. Só obedece de perto."
 
-O site tem: página inicial com scrollytelling (`/`), emulador "seja o hacker" com uma cidade de 5 locais (`/emulador`), seção "Dispositivo real" no fim do emulador (Wokwi embutido e imagem do aparelho; `/simulador-real` redireciona para ela), notícias com o cadastro de câmaras do bairro em API externa (`/noticias`), `/como-funciona`, Nexus Dev e 404.
+O site tem: página inicial (`/`, Home), emulador "seja o hacker" com uma cidade de 5 locais (`/emulador`), seção "Dispositivo real" no fim do emulador (Wokwi embutido e imagem do aparelho; `/simulador-real` redireciona para ela), a página Problema, com as notícias e o cadastro de câmaras do bairro em API externa (`/problema`; `/noticias` redireciona para ela), `/como-funciona`, Nexus Dev e 404.
 
 **Princípio central: o site nunca dá ordens ao C-Shield.** O site não tem nenhuma ligação de rede com o dispositivo (sem `api/` nem leitura do FIWARE, decisão D18). A política (faixa segura) aparece só para leitura, com a etiqueta "gravada no dispositivo".
 

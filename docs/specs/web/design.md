@@ -39,7 +39,7 @@ Tokens (valores de `src/styles/tokens.css`):
 | `texto-mudo` | `#6F8597` | Legendas e apoio (o `#657B8D` do doc original dá 4,54:1 sobre `noite-950`, mas só 4,19:1 sobre `noite-900` e 3,97:1 sobre `superficie`; por isso foi clareado para `#6F8597`, com 5,21:1, 4,81:1 e 4,55:1). Ainda não é usado em nenhum componente |
 | `ok` / `atencao` / `critico` e `ataque` | `#00E59B` / `#FFB547` / `#FF4058` | Só estado real |
 
-Tipografia (Google Fonts): títulos em **Space Grotesk** (500 a 700), texto em **Inter** (400 a 600) e elementos técnicos em **IBM Plex Mono** (400 e 500). Escala: H1 de 40 a 76 px, H2 de 30 a 48 px, H3 de 22 a 28 px, corpo de 16 a 18 px, labels técnicos de 11 a 13 px em caixa alta com tracking largo. Line-height de 1,05 a 1,15 nos títulos e cerca de 1,6 no corpo.
+Tipografia (Google Fonts): títulos em **Chakra Petch** (500 a 700), texto em **Geist** (400 a 600) e elementos técnicos em **JetBrains Mono** (400 e 500). Em 13/11 a equipe trocou Space Grotesk, Inter e IBM Plex Mono por esta trinca, que combina melhor com a estética hacker e gelo (cantos chanfrados nos títulos, texto limpo e mono de terminal); a Inter, além disso, é a fonte mais genérica da lista. Escala: H1 de 40 a 76 px, H2 de 30 a 48 px, H3 de 22 a 28 px, corpo de 16 a 18 px, labels técnicos de 11 a 13 px em caixa alta com tracking largo. Line-height de 1,05 a 1,15 nos títulos e cerca de 1,6 no corpo.
 
 Layout: conteúdo até 1440 px, container de 88% no desktop e 24 px de margem no celular; navbar de 80 px; seções com 120 a 160 px de espaçamento; cards com 12 a 18 px de raio; botões em pílula (999 px) com 48 a 56 px de altura e hover com brilho e 1 a 2 px de deslocamento.
 
@@ -59,6 +59,13 @@ Todas as rotas seguem o ritmo da página inicial; ver `docs/specs/web/plano-padr
 - **Link com seta:** `LinkSeta`, o mesmo da página inicial.
 - **Ritmo (L = lisa, F = faixa):** Como funciona: L, F, L, F, L · Emulador: jogo (L, compacta), dispositivo real (F) · Notícias: manchete (L), linha do tempo (F), "E na sua cidade?" com a chamada (L), mais notícias (F, por último) · Nexus Dev: integrantes (L), visão (F), cultura (L), GS (F).
 - **Equipe:** `ListaEquipe` (iniciais, nome, RM; `comFuncao` na página Nexus Dev) e `ListaTecnologias`, as mesmas da página inicial. Os cartões com foto saíram.
+
+### Decisões de 13/11 (Home, Problema, fundo e fontes)
+
+- **Rotas:** o menu passou a ser Home, Como funciona, Problema e Nexus Dev. `/problema` é a antiga página de notícias (mantém o cadastro de câmaras na API externa); `/noticias` e `/incidentes` redirecionam para ela.
+- **Conteúdo enxuto:** a Home perdeu a prévia da equipe e a fileira de alertas, variação e relés (ficam a leitura e o gráfico); a linha do tempo do Problema tem 5 marcos e as matérias abrem com "Ver todas"; Como funciona perdeu "De onde vem a ideia", mostra os estados em lista e o Wokwi em duas frases; Nexus Dev junta visão e cultura em "Nosso propósito" e perdeu "Sobre a GS".
+- **Uma paleta de fundo, sem corte entre seções:** uma camada fixa (`FundoAtmosfera`, classe `.fundo-atmosfera`) fica atrás de todas as páginas, com brilho glacial à direita, azul profundo embaixo à esquerda, névoa fria, grade técnica sutil e grão de gelo. Nenhuma seção tem fundo sólido ou borda própria: `faixa` é um degradê que aparece e some (`.faixa-suave`), e o fundo cyber dos cabeçalhos some por máscara em cima e embaixo. O header e o banner se dissolvem no fundo por degradê.
+- **Esquemas:** a prévia do ataque na Home e o diagrama de Como funciona foram redesenhados (terminal do atacante, selos de estado em texto, halos, linha de ataque que corre e para com movimento reduzido).
 
 ## 0.1 Histórico: "Glacial industrial" (12/11, tarde)
 

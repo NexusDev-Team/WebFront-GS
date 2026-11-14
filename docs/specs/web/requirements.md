@@ -23,11 +23,11 @@ Fontes: `docs/PROMPT-WEB.md`, `docs/specs/PLANO-GS.md` e, no repositório do Edg
 
 > **Decisão do João (12/11):** a página inicial não terá scrollytelling. W5 a W9 ficam como histórico e valem os requisitos abaixo.
 
-- **W5'.** QUANDO a pessoa abrir `/`, O SITE DEVE mostrar, nesta ordem, o banner (título "Proteção inteligente para a cadeia de frio", frase do produto, os botões "Simular um ataque" e "Como funciona" e a imagem da câmara fria), a seção de monitoramento de temperatura, a seção do problema (os números 3h30, 12.976 e 110 °C, cada um com a fonte linkada), o painel do C-Shield, a seção da solução (os quatro passos: medir, decidir, assumir, alertar) e a faixa final de chamada para o emulador.
+- **W5'.** QUANDO a pessoa abrir `/`, O SITE DEVE mostrar, nesta ordem, o banner (título "Proteção inteligente para a cadeia de frio", frase do produto, os botões "Simular um ataque" e "Como funciona" e a imagem da câmara fria), a seção do problema (os números 3h30, 12.976 e 110 °C, cada um com a fonte linkada), a seção da solução (os quatro passos: medir, decidir, assumir, alertar), o monitoramento de temperatura (só o cartão de leitura e o gráfico) e a faixa final de chamada para o emulador. Em 13/11 a Home perdeu a prévia da equipe e a fileira de alertas, variação e relés.
 - **W5a'.** QUANDO o arquivo da imagem do banner não existir, O SITE DEVE mostrar um espaço reservado com o escudo da logo, sem imagem quebrada.
 - **W5b'.** QUANDO o texto da página inicial for escrito, O SITE NUNCA DEVE usar leet (o leet fica só no emulador) nem sugerir que o C-Shield recebe comandos pela rede (W43).
 - **W5c'.** QUANDO a página inicial mostrar leituras, gráficos, alertas ou relés, O SITE DEVE dizer na tela que são dados simulados no navegador (W16a), e o gráfico DEVE ter uma tabela equivalente para leitor de tela, guia e valor ao passar o mouse e linha que já aparece inteira com movimento reduzido.
-- **W5d'.** QUANDO o painel do C-Shield mostrar o estado dos relés, O SITE DEVE desenhá-los como indicadores só de leitura (estado em texto, sem botão e sem foco), com a nota "Os relés só mudam pelo próprio C-Shield." (W42).
+- **W5d'.** *(Substituído em 13/11: a Home não mostra mais os relés; a regra de só leitura continua valendo onde eles aparecerem, no emulador.)* QUANDO o painel do C-Shield mostrar o estado dos relés, O SITE DEVE desenhá-los como indicadores só de leitura (estado em texto, sem botão e sem foco), com a nota "Os relés só mudam pelo próprio C-Shield." (W42).
 
 
 - **W5.** QUANDO a pessoa abrir `/`, O SITE DEVE apresentar 4 capítulos em rolagem: Madrugada, A invasão, O C-Shield e A prova, com os textos da seção 2.5 do prompt.
@@ -112,7 +112,7 @@ Num equipamento real esses LEDs não existem: o relé corta ou libera o aquecedo
 
 ## Como funciona
 
-- **W44.** QUANDO a pessoa abrir `/como-funciona`, O SITE DEVE mostrar os 4 verbos (medir, decidir, assumir, alertar), os 5 estados com as cores do LED, a arquitetura em uma direção (dispositivo → FIWARE → site), o link do Wokwi, o link do repositório do Edge e a equipe com RMs.
+- **W44.** QUANDO a pessoa abrir `/como-funciona`, O SITE DEVE mostrar os 4 verbos (medir, decidir, assumir, alertar), os 5 estados com as cores do LED, a arquitetura em uma direção (dispositivo → FIWARE → site), o link do Wokwi e o link do repositório do Edge. Em 13/11 saíram a seção "De onde vem a ideia" e a equipe com RMs (que fica só na página Nexus Dev).
 
 ## Acessibilidade e responsividade
 
