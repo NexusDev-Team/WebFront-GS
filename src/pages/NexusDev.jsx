@@ -33,7 +33,7 @@ export default function NexusDev() {
         subtitulo="Cinco estudantes de Engenharia de Software da FIAP, no primeiro ano, criando o C-Shield para a Global Solution 2026.2."
       />
 
-      <Secao rotuloAria="A equipe e o nosso propósito" compacta>
+      <Secao rotuloAria="A equipe e o nosso propósito" compacta className="md:pb-28">
         {/* Duas linhas no desktop: o título "A equipe" fica sozinho na primeira, e o conteúdo da
             esquerda e o propósito começam juntos na segunda, na mesma altura. */}
         <div className="grid gap-x-16 gap-y-10 lg:grid-cols-2 lg:grid-rows-[auto_1fr]">
@@ -54,7 +54,7 @@ export default function NexusDev() {
               </div>
               <div>
                 <p className="rotulo-tecnico mb-3">Integrantes</p>
-                <ListaEquipe comFuncao />
+                <ListaEquipe />
               </div>
             </Revelar>
           </div>
