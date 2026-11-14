@@ -9,17 +9,50 @@
  *   Nicolas Cinel — RM572940
  */
 
-// Prévia ilustrada do emulador: a ordem do atacante (linha vermelha tracejada, que corre até o
-// alvo) bate no escudo do C-Shield e não passa; do outro lado, a câmara fria segue estável. É
-// só uma figura (o jogo de verdade fica em /emulador). A linha para com prefers-reduced-motion
-// (classe .linha-fluxo, em efeitos.css) e a figura inteira tem texto alternativo. O estado
-// (bloqueado, estável) também está escrito, nunca só na cor.
+// Prévia ilustrada do emulador (referência: a arte aprovada do card): a ordem do atacante (linha
+// vermelha tracejada, que corre até o alvo) bate no escudo de gelo do C-Shield e não passa; do
+// outro lado, a câmara fria segue estável. É só uma figura (o jogo de verdade fica em /emulador).
+// A linha, a geada e o halo animam devagar e param com prefers-reduced-motion (classes em
+// efeitos.css); a figura inteira tem texto alternativo. O estado (bloqueado, estável) também está
+// escrito, nunca só na cor.
 const ESCUDO = 'M24 3 L43 8.5 V29 L24 53 L5 29 V8.5 Z'
+const ESCUDO_INTERNO = 'M24 9 L37.5 12.8 V28 L24 45 L10.5 28 V12.8 Z'
+// Um braço do floco de neve (do centro para cima, com duas ramificações); o resto é rotação.
+const BRACO = 'M0 0 V-13 M0 -8 L-4 -12 M0 -8 L4 -12'
+const ROTACOES = [0, 60, 120, 180, 240, 300]
+
+function Floco({ x, y, escala, stroke, largura }) {
+  return (
+    <g
+      transform={`translate(${x} ${y}) scale(${escala})`}
+      stroke={stroke}
+      strokeWidth={largura}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      {ROTACOES.map((r) => (
+        <path key={r} d={BRACO} transform={`rotate(${r})`} />
+      ))}
+    </g>
+  )
+}
+
+// Fragmentos de geada ao redor do escudo: [x, y, raio, atraso (s)].
+const GEADA = [
+  [236, 120, 1.8, 0],
+  [250, 214, 1.4, 1.2],
+  [226, 170, 1.2, 2.4],
+  [404, 126, 1.8, 0.6],
+  [414, 196, 1.5, 1.8],
+  [392, 232, 1.2, 3],
+  [300, 96, 1.2, 2],
+  [346, 100, 1.5, 0.8],
+]
 
 export default function PreviaAtaque({ className = '' }) {
   return (
     <svg
-      viewBox="0 0 560 260"
+      viewBox="0 0 640 340"
       role="img"
       aria-label="Ilustração: a ordem do atacante bate no escudo do C-Shield e não passa; a câmara fria continua estável, a menos 19 graus."
       className={className}
@@ -27,125 +60,150 @@ export default function PreviaAtaque({ className = '' }) {
     >
       <defs>
         <linearGradient id="previa-escudo" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" style={{ stopColor: 'var(--color-gelo-azul)' }} />
+          <stop offset="0" style={{ stopColor: 'var(--color-gelo-100)' }} />
           <stop offset="1" style={{ stopColor: 'var(--color-ciano)' }} />
         </linearGradient>
-        <linearGradient id="previa-ataque" gradientUnits="userSpaceOnUse" x1="124" y1="0" x2="240" y2="0">
-          <stop offset="0" style={{ stopColor: 'var(--color-ataque)', stopOpacity: 0.35 }} />
+        <linearGradient id="previa-ataque" gradientUnits="userSpaceOnUse" x1="184" y1="0" x2="262" y2="0">
+          <stop offset="0" style={{ stopColor: 'var(--color-ataque)', stopOpacity: 0.55 }} />
           <stop offset="1" style={{ stopColor: 'var(--color-ataque)' }} />
         </linearGradient>
         <radialGradient id="previa-halo-escudo">
-          <stop offset="0" style={{ stopColor: 'var(--color-ciano)', stopOpacity: 0.32 }} />
+          <stop offset="0.55" style={{ stopColor: 'var(--color-ciano)', stopOpacity: 0.1 }} />
+          <stop offset="0.9" style={{ stopColor: 'var(--color-ciano)', stopOpacity: 0.3 }} />
           <stop offset="1" style={{ stopColor: 'var(--color-ciano)', stopOpacity: 0 }} />
         </radialGradient>
         <radialGradient id="previa-halo-ataque">
-          <stop offset="0" style={{ stopColor: 'var(--color-ataque)', stopOpacity: 0.22 }} />
+          <stop offset="0" style={{ stopColor: 'var(--color-ataque)', stopOpacity: 0.28 }} />
           <stop offset="1" style={{ stopColor: 'var(--color-ataque)', stopOpacity: 0 }} />
         </radialGradient>
         <radialGradient id="previa-halo-ok">
-          <stop offset="0" style={{ stopColor: 'var(--color-ok)', stopOpacity: 0.18 }} />
+          <stop offset="0" style={{ stopColor: 'var(--color-ok)', stopOpacity: 0.22 }} />
           <stop offset="1" style={{ stopColor: 'var(--color-ok)', stopOpacity: 0 }} />
         </radialGradient>
-        <pattern id="previa-grade" width="28" height="28" patternUnits="userSpaceOnUse">
-          <path d="M28 0 H0 V28" stroke="var(--color-gelo-azul)" strokeOpacity="0.07" strokeWidth="1" />
+        <filter id="previa-brilho" x="-30%" y="-30%" width="160%" height="160%">
+          <feGaussianBlur stdDeviation="4" result="desfoque" />
+          <feMerge>
+            <feMergeNode in="desfoque" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+        <pattern id="previa-grade" width="30" height="30" patternUnits="userSpaceOnUse">
+          <path d="M30 0 H0 V30" stroke="var(--color-gelo-azul)" strokeOpacity="0.1" strokeWidth="1" />
         </pattern>
         <linearGradient id="previa-mascara" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0" stopColor="#fff" stopOpacity="0" />
-          <stop offset="0.15" stopColor="#fff" />
-          <stop offset="0.85" stopColor="#fff" />
-          <stop offset="1" stopColor="#fff" stopOpacity="0" />
+          <stop offset="0" stopColor="#fff" stopOpacity="0.2" />
+          <stop offset="0.2" stopColor="#fff" />
+          <stop offset="0.8" stopColor="#fff" />
+          <stop offset="1" stopColor="#fff" stopOpacity="0.2" />
         </linearGradient>
         <mask id="previa-mascara-grade">
-          <rect width="560" height="260" fill="url(#previa-mascara)" />
+          <rect width="640" height="340" fill="url(#previa-mascara)" />
         </mask>
       </defs>
 
-      {/* Grade técnica de fundo, esmaecida nas pontas */}
-      <rect width="560" height="260" fill="url(#previa-grade)" mask="url(#previa-mascara-grade)" />
+      {/* Moldura interna arredondada e grade técnica */}
+      <rect x="8" y="8" width="624" height="324" rx="24" fill="var(--color-noite-950)" fillOpacity="0.55" stroke="var(--color-gelo-azul)" strokeOpacity="0.3" />
+      <rect x="8" y="8" width="624" height="324" rx="24" fill="url(#previa-grade)" mask="url(#previa-mascara-grade)" />
 
       {/* Halos de cada lado */}
-      <circle cx="70" cy="125" r="70" fill="url(#previa-halo-ataque)" />
-      <circle cx="280" cy="125" r="80" fill="url(#previa-halo-escudo)" />
-      <circle cx="490" cy="125" r="70" fill="url(#previa-halo-ok)" />
+      <circle cx="105" cy="178" r="90" fill="url(#previa-halo-ataque)" />
+      <circle cx="540" cy="178" r="90" fill="url(#previa-halo-ok)" />
 
-      {/* Atacante: janela de terminal */}
-      <rect x="22" y="92" width="96" height="66" rx="10" fill="var(--color-noite-950)" stroke="var(--color-ataque)" strokeWidth="1.5" />
-      <path d="M22 108 H118" stroke="var(--color-ataque)" strokeOpacity="0.4" />
-      <circle cx="34" cy="100" r="2.5" fill="var(--color-ataque)" />
-      <circle cx="44" cy="100" r="2.5" fill="var(--color-ataque)" fillOpacity="0.5" />
-      <circle cx="54" cy="100" r="2.5" fill="var(--color-ataque)" fillOpacity="0.25" />
-      <text x="32" y="130" className="fill-gelo-50 font-mono text-[13px]">
+      {/* Atacante: janela de terminal com brilho vermelho */}
+      <g filter="url(#previa-brilho)">
+        <rect x="40" y="130" width="130" height="96" rx="14" fill="var(--color-ataque)" fillOpacity="0.14" stroke="var(--color-ataque)" strokeWidth="2" />
+      </g>
+      <rect x="40" y="130" width="130" height="96" rx="14" fill="var(--color-noite-950)" fillOpacity="0.6" />
+      <path d="M40 160 H170" stroke="var(--color-ataque)" strokeOpacity="0.7" />
+      <circle cx="56" cy="145" r="4" fill="var(--color-ataque)" />
+      <circle cx="70" cy="145" r="4" fill="var(--color-ataque)" fillOpacity="0.75" />
+      <circle cx="84" cy="145" r="4" fill="var(--color-ataque)" fillOpacity="0.5" />
+      <text x="54" y="190" className="fill-gelo-50 font-mono text-[16px]">
         {'$ set_temp'}
       </text>
-      <text x="32" y="147" className="fill-ataque font-mono text-[13px]">
+      <text x="54" y="212" className="fill-ataque font-mono text-[16px]">
         {'> +40 °C'}
       </text>
-      <text x="70" y="182" textAnchor="middle" className="fill-gelo-300 font-mono text-[11px] tracking-widest">
+      <text x="105" y="252" textAnchor="middle" className="fill-gelo-300 font-mono text-[14px] tracking-widest">
         ATACANTE
       </text>
 
-      {/* A ordem corre até o escudo e se desfaz no impacto */}
-      <path className="linha-fluxo" d="M124 125 H236" stroke="url(#previa-ataque)" strokeWidth="2.5" strokeLinecap="round" />
-      <path d="M242 125 L232 118 M242 125 L232 132" stroke="var(--color-ataque)" strokeWidth="2.5" strokeLinecap="round" />
-      <g stroke="var(--color-ataque)" strokeLinecap="round" strokeWidth="1.8" strokeOpacity="0.8">
-        <path d="M244 100 L252 108" />
-        <path d="M244 150 L252 142" />
-        <path d="M240 90 V98" />
-        <path d="M240 160 V152" />
+      {/* A ordem corre até o escudo (tracejada, grossa) e termina em chevron */}
+      <path className="linha-fluxo" d="M184 178 H252" stroke="url(#previa-ataque)" strokeWidth="3.5" strokeLinecap="round" />
+      <path d="M254 166 L268 178 L254 190" stroke="var(--color-ataque)" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" />
+      {/* Colchetes de impacto */}
+      <g stroke="var(--color-ataque)" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2">
+        <path d="M262 128 V152 L276 166" />
+        <path d="M262 228 V204 L276 190" />
       </g>
 
-      {/* Escudo do C-Shield */}
-      <g transform="translate(254 94) scale(1.25)">
-        <path d={ESCUDO} stroke="url(#previa-escudo)" strokeWidth="2.4" strokeLinejoin="round" fill="var(--color-noite-950)" />
-        <path
-          d="M24 15 V40 M13 21.5 L35 33.5 M35 21.5 L13 33.5"
-          stroke="url(#previa-escudo)"
-          strokeWidth="2"
-          strokeLinecap="round"
-        />
+      {/* Escudo de gelo: halo, geada, escudo, floco de neve e pingentes */}
+      <g className="halo-respira">
+        <circle cx="330" cy="178" r="96" fill="url(#previa-halo-escudo)" />
+        <circle cx="330" cy="178" r="92" stroke="var(--color-ciano)" strokeOpacity="0.35" strokeWidth="1.5" />
       </g>
-      <text x="284" y="182" textAnchor="middle" className="fill-gelo-300 font-mono text-[11px] tracking-widest">
+      {GEADA.map(([x, y, r, atraso]) => (
+        <circle
+          key={`${x}-${y}`}
+          className="geada-flutua"
+          cx={x}
+          cy={y}
+          r={r}
+          fill="var(--color-gelo-100)"
+          fillOpacity="0.7"
+          style={{ animationDelay: `${atraso}s` }}
+        />
+      ))}
+      <g transform="translate(277 112) scale(2.2)" filter="url(#previa-brilho)">
+        <path d={ESCUDO} stroke="url(#previa-escudo)" strokeWidth="2" strokeLinejoin="round" fill="var(--color-noite-950)" fillOpacity="0.85" />
+        <path d={ESCUDO_INTERNO} stroke="var(--color-ciano)" strokeOpacity="0.55" strokeWidth="1" strokeLinejoin="round" fill="var(--color-gelo-azul)" fillOpacity="0.14" />
+      </g>
+      <Floco x={330} y={174} escala={2.9} stroke="var(--color-ciano)" largura={1.6} />
+      <g stroke="var(--color-gelo-100)" strokeOpacity="0.7" strokeLinecap="round" strokeWidth="1.8">
+        <path d="M308 238 V248" />
+        <path d="M322 244 V256" />
+        <path d="M338 244 V254" />
+        <path d="M352 236 V246" />
+      </g>
+      <text x="330" y="276" textAnchor="middle" className="fill-gelo-100 font-mono text-[15px] tracking-widest">
         C-SHIELD
       </text>
-      <g>
-        <rect x="240" y="40" width="88" height="26" rx="13" fill="var(--color-noite-950)" stroke="var(--color-led-forte)" strokeOpacity="0.7" />
-        <text x="284" y="57" textAnchor="middle" className="fill-led-forte font-mono text-[11px] font-semibold tracking-widest">
-          BLOQUEADO
-        </text>
+      <g filter="url(#previa-brilho)">
+        <rect x="278" y="40" width="104" height="32" rx="16" fill="var(--color-noite-950)" stroke="var(--color-led-forte)" strokeWidth="1.5" />
       </g>
-      <path d="M284 66 V90" stroke="var(--color-led-forte)" strokeOpacity="0.5" strokeDasharray="2 4" />
+      <rect x="278" y="40" width="104" height="32" rx="16" fill="var(--color-noite-950)" stroke="var(--color-led-forte)" strokeWidth="1.5" />
+      <text x="330" y="61" textAnchor="middle" className="fill-led-forte font-mono text-[14px] font-bold tracking-widest">
+        BLOQUEADO
+      </text>
+      <path d="M330 72 V84" stroke="var(--color-led-forte)" strokeOpacity="0.6" strokeDasharray="2 4" />
 
       {/* Do outro lado, a ordem não chega: só o rastro apagado */}
-      <path d="M330 125 H418" stroke="var(--color-gelo-300)" strokeOpacity="0.3" strokeWidth="2" strokeDasharray="2 8" strokeLinecap="round" />
+      <path d="M420 178 H474" stroke="var(--color-gelo-300)" strokeOpacity="0.45" strokeWidth="2.5" strokeDasharray="2 9" strokeLinecap="round" />
 
-      {/* Câmara fria */}
-      <rect x="426" y="88" width="88" height="74" rx="14" fill="var(--color-superficie)" stroke="var(--color-ok)" strokeWidth="1.5" />
-      <path
-        d="M470 98 V114 M463 102 L477 110 M477 102 L463 110"
-        stroke="var(--color-gelo-azul)"
-        strokeWidth="1.6"
-        strokeLinecap="round"
-      />
-      <text x="470" y="144" textAnchor="middle" className="fill-gelo-50 font-mono text-[18px] font-semibold">
+      {/* Câmara fria: borda verde com brilho */}
+      <g filter="url(#previa-brilho)">
+        <rect x="480" y="130" width="120" height="96" rx="18" fill="var(--color-ok)" fillOpacity="0.12" stroke="var(--color-ok)" strokeWidth="2" />
+      </g>
+      <rect x="480" y="130" width="120" height="96" rx="18" fill="var(--color-noite-950)" fillOpacity="0.55" />
+      <Floco x={540} y={162} escala={1.15} stroke="var(--color-gelo-azul)" largura={1.8} />
+      <text x="540" y="208" textAnchor="middle" className="fill-gelo-50 font-mono text-[28px] font-bold">
         -19 °C
       </text>
-      <text x="470" y="182" textAnchor="middle" className="fill-gelo-300 font-mono text-[11px] tracking-widest">
+      <text x="540" y="252" textAnchor="middle" className="fill-gelo-300 font-mono text-[14px] tracking-widest">
         CÂMARA FRIA
       </text>
-      <g>
-        <rect x="438" y="40" width="64" height="26" rx="13" fill="var(--color-noite-950)" stroke="var(--color-ok)" strokeOpacity="0.7" />
-        <text x="470" y="57" textAnchor="middle" className="fill-ok font-mono text-[11px] font-semibold tracking-widest">
-          ESTÁVEL
-        </text>
-      </g>
-      <path d="M470 66 V86" stroke="var(--color-ok)" strokeOpacity="0.5" strokeDasharray="2 4" />
+      <rect x="500" y="40" width="80" height="32" rx="16" fill="var(--color-noite-950)" stroke="var(--color-ok)" strokeWidth="1.5" />
+      <text x="540" y="61" textAnchor="middle" className="fill-ok font-mono text-[14px] font-bold tracking-widest">
+        ESTÁVEL
+      </text>
+      <path d="M540 72 V128" stroke="var(--color-ok)" strokeOpacity="0.6" strokeDasharray="2 4" />
 
       {/* Rodapé: a ordem vem de fora, a decisão fica dentro */}
-      <path d="M22 220 H538" stroke="var(--color-borda)" />
-      <text x="22" y="244" className="fill-gelo-300 font-mono text-[11px]">
+      <path d="M40 290 H600" stroke="var(--color-gelo-azul)" strokeOpacity="0.35" />
+      <text x="40" y="314" className="fill-gelo-300 font-mono text-[13px]">
         ordem de fora: não passa
       </text>
-      <text x="538" y="244" textAnchor="end" className="fill-gelo-300 font-mono text-[11px]">
+      <text x="600" y="314" textAnchor="end" className="fill-gelo-300 font-mono text-[13px]">
         decisão no aparelho
       </text>
     </svg>

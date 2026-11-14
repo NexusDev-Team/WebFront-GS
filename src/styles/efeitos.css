@@ -38,6 +38,17 @@
     animation: linha-fluxo 0.7s linear infinite;
   }
 
+  /* Prévia do ataque: a geada flutua devagar e o halo do escudo respira (ciclos de 4 s ou mais, nada pisca). */
+  .geada-flutua {
+    animation: geada-flutua 6s ease-in-out infinite;
+  }
+
+  .halo-respira {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: halo-respira 5s ease-in-out infinite;
+  }
+
   /* O C-Shield assumiu: o texto fica na cor da marca, firme e sem oscilar. Sem brilho no texto
      (o detector de design aponta o brilho colorido como marca de interface genérica). */
   .led-forte {
@@ -272,6 +283,16 @@
   to { transform: rotate(360deg); }
 }
 
+@keyframes geada-flutua {
+  0%, 100% { transform: translateY(0); opacity: 0.5; }
+  50% { transform: translateY(-6px); opacity: 0.9; }
+}
+
+@keyframes halo-respira {
+  0%, 100% { transform: scale(1); opacity: 0.85; }
+  50% { transform: scale(1.04); opacity: 1; }
+}
+
 @keyframes linha-fluxo {
   to { stroke-dashoffset: -24; }
 }
@@ -288,6 +309,8 @@
   .led-pisca,
   .gira,
   .linha-fluxo,
+  .geada-flutua,
+  .halo-respira,
   .fumaca-lado,
   .pulso-linha {
     animation: none;
