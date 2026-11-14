@@ -9,9 +9,9 @@
  *   Nicolas Cinel — RM572940
  */
 
-// Página Nexus Dev: quem fez o C-Shield. Enxuta (decisão de 13/11): o cabeçalho, os cinco
-// integrantes ao lado das tecnologias e uma única seção "Nosso propósito", que junta a visão e os
-// valores da equipe. Textos em src/content (rascunho para a equipe revisar).
+// Página Nexus Dev: quem fez o C-Shield. Numa tela só (decisão de 14/11): o cabeçalho e uma seção
+// com a equipe à esquerda (tecnologias e, embaixo, os cinco integrantes) e o propósito à direita.
+// O texto do propósito, escrito pela equipe, fica em src/content/nexusDev.js.
 import ListaEquipe from '../components/equipe/ListaEquipe.jsx'
 import ListaTecnologias from '../components/equipe/ListaTecnologias.jsx'
 import CabecalhoPagina from '../components/ui/CabecalhoPagina.jsx'
@@ -33,31 +33,39 @@ export default function NexusDev() {
         subtitulo="Cinco estudantes de Engenharia de Software da FIAP, no primeiro ano, criando o C-Shield para a Global Solution 2026.2."
       />
 
-      <Secao id="titulo-integrantes" rotulo="Integrantes" titulo="A equipe">
-        <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
-          <Revelar className="flex flex-col items-start gap-8">
-            <div>
-              <p className="rotulo-tecnico mb-4">Tecnologias</p>
-              <ListaTecnologias tecnologias={NEXUS.tecnologias} />
-            </div>
-          </Revelar>
-          <Revelar atraso={0.1}>
-            <p className="rotulo-tecnico mb-4">Integrantes</p>
-            <ListaEquipe comFuncao />
-          </Revelar>
-        </div>
-      </Secao>
-
-      <Secao id="titulo-proposito" rotulo="Propósito" titulo="Nosso propósito">
-        <div className="flex flex-col gap-12">
-          <div className="nevoa-texto max-w-4xl">
-            <Revelar>
-              <p className="max-w-4xl border-l-2 border-ciano pl-6 text-lg leading-relaxed text-gelo-100 sm:text-xl">{PROPOSITO}</p>
+      <Secao rotuloAria="A equipe e o nosso propósito" compacta>
+        <div className="grid gap-12 lg:grid-cols-2 lg:items-start lg:gap-16">
+          <div className="nevoa-texto">
+            <Revelar className="flex flex-col gap-6">
+              <div className="flex flex-col gap-3">
+                <p className="rotulo-tecnico">Equipe</p>
+                <h2 id="titulo-equipe" className="text-[clamp(1.875rem,3.5vw,3rem)] leading-[1.1] font-semibold text-gelo-50">
+                  A equipe
+                </h2>
+              </div>
+              <div>
+                <p className="rotulo-tecnico mb-3">Tecnologias</p>
+                <ListaTecnologias tecnologias={NEXUS.tecnologias} />
+              </div>
+              <div>
+                <p className="rotulo-tecnico mb-3">Integrantes</p>
+                <ListaEquipe comFuncao />
+              </div>
             </Revelar>
           </div>
-          <Revelar atraso={0.15}>
-            <LinkSeta to="/como-funciona">Entender como o C-Shield funciona</LinkSeta>
-          </Revelar>
+
+          <div className="nevoa-texto">
+            <Revelar atraso={0.1} className="flex flex-col items-start gap-6">
+              <div className="flex flex-col gap-3">
+                <p className="rotulo-tecnico">Propósito</p>
+                <h2 id="titulo-proposito" className="text-[clamp(1.875rem,3.5vw,3rem)] leading-[1.1] font-semibold text-gelo-50">
+                  Nosso propósito
+                </h2>
+              </div>
+              <p className="border-l-2 border-ciano pl-6 text-lg leading-relaxed text-gelo-100 sm:text-xl">{PROPOSITO}</p>
+              <LinkSeta to="/como-funciona">Entender como o C-Shield funciona</LinkSeta>
+            </Revelar>
+          </div>
         </div>
       </Secao>
     </>
