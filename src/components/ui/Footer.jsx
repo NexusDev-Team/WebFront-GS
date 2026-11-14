@@ -30,17 +30,17 @@ function LinkExterno({ href, children }) {
 
 export default function Footer() {
   return (
-    <footer>
+    <footer className="nevoa-rodape">
       <div aria-hidden="true" className="h-px bg-linear-to-r from-transparent via-borda to-transparent" />
-      <div className="conteudo py-14">
-        <div className="grid gap-10 md:grid-cols-[1.4fr_1fr_1fr]">
-          <div className="flex flex-col gap-4">
+      <div className="conteudo py-8">
+        <div className="grid gap-6 md:grid-cols-[1fr_1.6fr_1.2fr]">
+          <div className="flex flex-col gap-2">
             <Logo variante="compacta" />
             <p className="max-w-sm text-gelo-300">Vê de longe. Só obedece de perto.</p>
           </div>
           <nav aria-label="Páginas do site">
-            <p className="rotulo-tecnico mb-2">Site</p>
-            <ul>
+            <p className="rotulo-tecnico mb-1">Site</p>
+            <ul className="flex flex-wrap gap-x-5">
               <li><Link to="/emulador" className={CLASSE_LINK}>Emulador</Link></li>
               <li><Link to="/como-funciona" className={CLASSE_LINK}>Como funciona</Link></li>
               <li><Link to="/problema" className={CLASSE_LINK}>Problema</Link></li>
@@ -48,14 +48,14 @@ export default function Footer() {
             </ul>
           </nav>
           <div>
-            <p className="rotulo-tecnico mb-2">Projeto</p>
-            <ul>
+            <p className="rotulo-tecnico mb-1">Projeto</p>
+            <ul className="flex flex-wrap gap-x-5">
               <li><LinkExterno href={URL_REPOSITORIO_EDGE}>Repositório do Edge</LinkExterno></li>
               <li><LinkExterno href={URL_WOKWI}>Simulação no Wokwi</LinkExterno></li>
             </ul>
           </div>
         </div>
-        <p className="mt-12 border-t border-borda/60 pt-6 font-mono text-xs tracking-wider text-gelo-300 uppercase">
+        <p className="mt-6 border-t border-borda/60 pt-4 font-mono text-xs tracking-wider text-gelo-300 uppercase">
           GS 2026.2 · FIAP · Nexus Dev
         </p>
       </div>
