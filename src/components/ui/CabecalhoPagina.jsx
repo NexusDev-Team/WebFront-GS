@@ -10,7 +10,9 @@
  */
 
 import { motion } from 'framer-motion'
+import ImagemHero from '../inicio/ImagemHero.jsx'
 import { ENTRADA_CONTAINER, ENTRADA_ITEM } from './movimento.js'
+import VeuBanner from './VeuBanner.jsx'
 
 // Impede a quebra de linha no hífen do nome ("C-" / "Shield"): o nome vai num trecho sem quebra.
 function semQuebraNoNome(texto) {
@@ -24,6 +26,8 @@ function semQuebraNoNome(texto) {
 // (`children`), com entrada escalonada. `id` é o id do h1 e liga a seção a ele.
 // `variante="ataque"` (só no emulador, durante um ataque) deixa o título vermelho com falha de
 // energia; vermelho é cor de ataque real, então o destaque ciano some nesse caso.
+// `imagem` ({ src, posicao }) põe a arte de fundo como na Home: imagem decorativa, véu escuro por
+// cima e a seção mais alta, com o texto centrado na vertical. `posicao` é a classe object-position.
 export default function CabecalhoPagina({
   id = 'titulo-pagina',
   rotulo,
@@ -31,6 +35,7 @@ export default function CabecalhoPagina({
   destaque,
   subtitulo,
   variante = 'repouso',
+  imagem = null,
   className = '',
   children,
 }) {
@@ -38,9 +43,23 @@ export default function CabecalhoPagina({
   return (
     <section
       aria-labelledby={id}
-      className={`relative overflow-hidden pt-20 pb-16 md:pt-28 md:pb-24 ${className}`}
+      className={`relative overflow-hidden ${
+        imagem
+          ? 'flex items-center py-16 md:min-h-[min(78svh,760px)] md:py-20'
+          : 'pt-16 pb-12 md:pt-20 md:pb-16'
+      } ${className}`}
     >
-      <div className="conteudo relative">
+      {imagem ? (
+        <div className="banner-dissolve absolute inset-0">
+          <ImagemHero
+            src={imagem.src}
+            alt=""
+            className={imagem.posicao ?? 'object-[80%_center] md:object-center'}
+          />
+          <VeuBanner />
+        </div>
+      ) : null}
+      <div className="conteudo relative w-full">
         <div className="nevoa-texto w-fit max-w-full">
           <motion.div
             variants={ENTRADA_CONTAINER}

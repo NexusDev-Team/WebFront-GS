@@ -17,6 +17,7 @@ import SecaoCiclo from '../components/comoFunciona/SecaoCiclo.jsx'
 import SecaoEstados from '../components/comoFunciona/SecaoEstados.jsx'
 import SecaoWokwi from '../components/comoFunciona/SecaoWokwi.jsx'
 import CabecalhoPagina from '../components/ui/CabecalhoPagina.jsx'
+import bannerComoFunciona from '../assets/banner_comofunciona.webp'
 import {
   ARQUITETURA,
   CABECALHO,
@@ -29,6 +30,7 @@ export default function ComoFunciona() {
   return (
     <>
       <CabecalhoPagina
+        imagem={{ src: bannerComoFunciona }}
         rotulo={CABECALHO.rotulo}
         titulo={CABECALHO.titulo}
         destaque={CABECALHO.destaque}

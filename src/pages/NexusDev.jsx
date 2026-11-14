@@ -15,6 +15,7 @@
 import ListaEquipe from '../components/equipe/ListaEquipe.jsx'
 import ListaTecnologias from '../components/equipe/ListaTecnologias.jsx'
 import CabecalhoPagina from '../components/ui/CabecalhoPagina.jsx'
+import bannerEquipe from '../assets/banner_equipe.webp'
 import LinkSeta from '../components/ui/LinkSeta.jsx'
 import Revelar from '../components/ui/Revelar.jsx'
 import Secao from '../components/ui/Secao.jsx'
@@ -25,6 +26,7 @@ export default function NexusDev() {
   return (
     <>
       <CabecalhoPagina
+        imagem={{ src: bannerEquipe }}
         rotulo="A equipe"
         titulo="Nexus Dev"
         destaque="Quem constrói o C-Shield"

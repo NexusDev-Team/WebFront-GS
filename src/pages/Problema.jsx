@@ -20,6 +20,7 @@ import LinhaDoTempo from '../components/noticias/LinhaDoTempo.jsx'
 import ManchetePrincipal from '../components/noticias/ManchetePrincipal.jsx'
 import BotaoLed from '../components/ui/BotaoLed.jsx'
 import CabecalhoPagina from '../components/ui/CabecalhoPagina.jsx'
+import bannerProblema from '../assets/banner_problema.webp'
 import PainelVidro from '../components/ui/PainelVidro.jsx'
 import Revelar from '../components/ui/Revelar.jsx'
 import Secao from '../components/ui/Secao.jsx'
@@ -30,6 +31,7 @@ export default function Problema() {
   return (
     <>
       <CabecalhoPagina
+        imagem={{ src: bannerProblema }}
         rotulo="O problema"
         titulo="Invadiram o frio"
         destaque="pela internet"
@@ -49,7 +51,7 @@ export default function Problema() {
       </Secao>
 
       <SecaoSuaCidade>
-        <Revelar className="mt-16">
+        <Revelar className="mt-12">
           <PainelVidro as="section" aria-labelledby="chamada" className="flex flex-col items-start gap-4 p-6 sm:p-8">
             <h3 id="chamada" className="led-forte text-2xl font-semibold text-balance">
               Os monitores avisam. O C-Shield avisa e age.
