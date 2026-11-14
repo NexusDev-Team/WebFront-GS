@@ -11,6 +11,7 @@
 
 import { Link } from 'react-router-dom'
 import { URL_REPOSITORIO_EDGE, URL_WOKWI } from '../../content/links.js'
+import { BORDAO } from '../../domain/produto.js'
 import Logo from './Logo.jsx'
 
 // Rodapé minimalista (Design System v1.0): a marca com a frase do produto, a navegação do site,
@@ -36,7 +37,7 @@ export default function Footer() {
         <div className="grid gap-6 md:grid-cols-[1fr_1.6fr_1.2fr]">
           <div className="flex flex-col gap-2">
             <Logo variante="compacta" />
-            <p className="max-w-sm text-gelo-300">Vê de longe. Só obedece de perto.</p>
+            <p className="max-w-sm text-gelo-300">{BORDAO}</p>
           </div>
           <nav aria-label="Páginas do site">
             <p className="rotulo-tecnico mb-1">Site</p>

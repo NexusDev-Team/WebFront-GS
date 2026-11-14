@@ -9,11 +9,11 @@
  *   Nicolas Cinel — RM572940
  */
 
-// A seção "E na sua cidade?" da página Notícias: depois de ver o que aconteceu na Europa, a pessoa
+// A seção "E na sua cidade?" da página Problema: depois de ver o que aconteceu na Europa, a pessoa
 // cadastra uma câmara fria do bairro dela. É o CRUD em API externa do site: cadastrar, listar
 // (com filtro por tipo), editar e excluir, com carregando, erro e lista vazia. A seção só
 // desenha: os dados vêm do hook useCamaras. `children` aparece logo abaixo do cadastro (a página
-// Notícias põe ali a chamada para o emulador).
+// Problema põe ali a chamada para o emulador).
 import { useState } from 'react'
 import { ROTULOS_TIPO, TIPOS } from '../../domain/camaras.js'
 import { useCamaras } from '../../hooks/useCamaras.js'

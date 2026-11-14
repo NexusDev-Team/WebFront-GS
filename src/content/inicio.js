@@ -108,7 +108,7 @@ export const SOLUCAO = {
       verbo: 'Alertar e bloquear',
       icone: 'sino',
       texto:
-        'Luz, som e mensagem no local avisam na hora, e o bloqueio fica ativo: as ordens do controlador são ignoradas. Para liberar, é preciso estar presente e segurar o botão por 3 segundos.',
+        'Luz, som e mensagem no local avisam na hora, e o bloqueio fica ativo: as ordens do controlador são ignoradas. Para liberar, é preciso estar presente e usar o botão físico do aparelho.',
     },
   ],
   link: { rotulo: 'Entender o funcionamento', para: '/como-funciona' },
@@ -133,7 +133,7 @@ export const NEXUS = {
   rotulo: 'Nexus Dev',
   titulo: 'Quem constrói o C-Shield',
   texto:
-    'Cinco estudantes de Engenharia de Software da FIAP, na Global Solution 2026.2, criando uma proteção para o frio que não depende de ninguém acordar às 2 da manhã.',
+    'Cinco estudantes de Engenharia de Software da FIAP, na Global Solution 2026.2, criando uma proteção para refrigeradores que não depende de ninguém acordar às 2 da manhã.',
   tecnologias: ['React', 'Vite', 'Tailwind CSS', 'ESP32', 'FIWARE'],
   link: { rotulo: 'Conhecer a equipe', para: '/nexus-dev' },
 }

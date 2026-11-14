@@ -8,7 +8,7 @@ Este arquivo nasceu do `CLAUDE.md` do repositório do Edge (`C:\Users\isacn\Desk
 
 Global Solution 2026.2 "CitizenTech" (FIAP), equipe **Nexus Dev** (Engenharia de Software, 1º ano). Este site é **uma única aplicação entregue em duas disciplinas**: Front-end Design e Web Development.
 
-O produto é o **C-Shield** (de Cyber Shield): um ESP32 instalado junto da câmara fria que mede com sensores próprios, decide com uma política gravada nele e, diante de um ataque ao controlador comercial, assume o controle localmente pelos relés. **Ele não recebe nenhum comando pela rede: só envia dados ao FIWARE.** O bloqueio só termina presencialmente (botão segurado por 3 s). Frase do produto: "Vê de longe. Só obedece de perto."
+O produto é o **C-Shield** (de Cyber Shield): um ESP32 instalado junto da câmara fria que mede com sensores próprios, decide com uma política gravada nele e, diante de um ataque ao controlador comercial, assume o controle localmente pelos relés. **Ele não recebe nenhum comando pela rede: só envia dados ao FIWARE.** O bloqueio só termina presencialmente (botão físico do aparelho). Frase do produto: "Alarmes avisam. O C-Shield age."
 
 O site tem: página inicial (`/`, Home), emulador "seja o hacker" com uma cidade de 5 locais (`/emulador`), seção "Dispositivo real" no fim do emulador (Wokwi embutido e imagem do aparelho; `/simulador-real` redireciona para ela), a página Problema, com as notícias e o cadastro de câmaras do bairro em API externa (`/problema`; `/noticias` redireciona para ela), `/como-funciona`, Nexus Dev e 404.
 

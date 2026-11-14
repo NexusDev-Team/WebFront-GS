@@ -19,14 +19,14 @@
 
 export const VISAO =
   'Que nenhuma vacina, bolsa de sangue ou alimento estrague porque alguém, de longe, mexeu num botão. ' +
-  'A proteção do frio não pode depender de ninguém acordar às 2 da manhã: ela precisa estar ali, medindo e decidindo, ' +
+  'A proteção dos refrigeradores não pode depender de ninguém acordar às 2 da manhã: ela precisa estar ali, medindo e decidindo, ' +
   'inclusive para quem não tem equipe de segurança, como o açougue do bairro e a sala de vacina da UBS.'
 
 export const CULTURA = [
   {
-    titulo: 'Vê de longe, só obedece de perto',
+    titulo: 'Alarmes avisam, o C-Shield age',
     texto:
-      'É a frase do produto e o jeito como a gente pensa: olhar tudo de qualquer lugar, mas só aceitar ordem de quem está presente. O C-Shield só envia dados; a liberação é com a mão, no aparelho.',
+      'É a frase do produto e o jeito como a gente pensa: avisar não basta, é preciso agir na hora, ali no aparelho. O C-Shield decide sozinho, só envia dados, e a liberação é com a mão, no botão físico do aparelho.',
   },
   {
     titulo: 'Testar antes de afirmar',

@@ -9,7 +9,7 @@
  *   Nicolas Cinel — RM572940
  */
 
-// A manchete de capa da página Notícias: texto largo, no estilo de portal, sem imagem. Em vez de
+// A manchete de capa da página Problema: texto largo, no estilo de portal, sem imagem. Em vez de
 // cartão, um fio fino no topo (como os números da página inicial), para sobrar espaço vazio.
 import BotaoLed from '../ui/BotaoLed.jsx'
 import { formatarDataLonga } from './formato.js'

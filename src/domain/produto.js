@@ -11,3 +11,6 @@
 
 // Constante única do nome exibido do produto (CLAUDE.md §6).
 export const NOME_PRODUTO = 'C-Shield'
+
+// Frase do produto: o alarme só avisa, o C-Shield age. Aparece no rodapé e no cabeçalho de Como funciona.
+export const BORDAO = 'Alarmes avisam. O C-Shield age.'

@@ -24,6 +24,7 @@ import {
 import { URL_REPOSITORIO_EDGE, URL_WOKWI } from '../src/content/links.js'
 import { corLed } from '../src/domain/cshield-saida.js'
 import { ESTADOS } from '../src/domain/nomes.js'
+import { BORDAO } from '../src/domain/produto.js'
 
 const TUDO = JSON.stringify({ CABECALHO, CICLO, ARQUITETURA, ESTADOS_DA_PAGINA, WOKWI })
 
@@ -38,8 +39,9 @@ describe('CABECALHO', () => {
   it('tem rótulo, título com destaque (a 2ª linha em ciano) e a frase do produto', () => {
     expect(CABECALHO.rotulo).toBe('O dispositivo')
     expect(CABECALHO.titulo).toBe('Como o C-Shield')
-    expect(CABECALHO.destaque).toBe('protege o frio')
-    expect(CABECALHO.subtitulo).toBe('Vê de longe. Só obedece de perto.')
+    expect(CABECALHO.destaque).toBe('protege dos ataques')
+    expect(CABECALHO.subtitulo).toBe(BORDAO)
+    expect(BORDAO).toBe('Alarmes avisam. O C-Shield age.')
   })
 })
 
@@ -57,10 +59,11 @@ describe('CICLO (os quatro verbos)', () => {
     expect(assumir.texto).toMatch(/calor/i)
     expect(assumir.texto).toMatch(/frio/i)
   })
-  it('alertar e bloquear diz que o bloqueio só termina com o botão do aparelho, segurado por 3 segundos', () => {
+  it('alertar e bloquear diz que o bloqueio só termina só termina no botão físico do aparelho', () => {
     const alertar = CICLO.passos.find((p) => p.verbo === 'Alertar e bloquear')
     expect(alertar.texto).toMatch(/bloqueio/)
-    expect(alertar.texto).toMatch(/3 segundos/)
+    expect(alertar.texto).toMatch(/botão físico/)
+    expect(alertar.texto).not.toMatch(/3 segundos/)
   })
 })
 

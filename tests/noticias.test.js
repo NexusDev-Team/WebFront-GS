@@ -9,7 +9,7 @@
  *   Nicolas Cinel — RM572940
  */
 
-// Conteúdo da página Notícias: estrutura das matérias e da linha do tempo.
+// Conteúdo da página Problema: estrutura das matérias e da linha do tempo.
 import { describe, expect, it } from 'vitest'
 import { LINHA_DO_TEMPO } from '../src/content/linhaDoTempo.js'
 import { NOTICIAS, noticiaDestaque, noticiasOrdenadas } from '../src/content/noticias.js'

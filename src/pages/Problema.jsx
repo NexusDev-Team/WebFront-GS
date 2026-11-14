@@ -9,7 +9,7 @@
  *   Nicolas Cinel — RM572940
  */
 
-// Página Problema (antes Notícias): POR QUE o C-Shield existe. Ordem: cabeçalho, a manchete (sem imagem), a linha do
+// Página Problema (antes chamada Notícias): POR QUE o C-Shield existe. Ordem: cabeçalho, a manchete (sem imagem), a linha do
 // tempo do caso, "E na sua cidade?" (cadastro de câmaras do bairro, o CRUD em API externa) com a
 // chamada para o emulador logo abaixo, e por último as outras matérias (3 à vista e um botão para ver todas). O conteúdo é fixo
 // (src/content) e cada cartão leva à matéria original.
@@ -24,6 +24,7 @@ import bannerProblema from '../assets/banner_problema.webp'
 import PainelVidro from '../components/ui/PainelVidro.jsx'
 import Revelar from '../components/ui/Revelar.jsx'
 import Secao from '../components/ui/Secao.jsx'
+import { BORDAO } from '../domain/produto.js'
 import { LINHA_DO_TEMPO } from '../content/linhaDoTempo.js'
 import { noticiaDestaque, noticiasOrdenadas } from '../content/noticias.js'
 
@@ -33,7 +34,7 @@ export default function Problema() {
       <CabecalhoPagina
         imagem={{ src: bannerProblema }}
         rotulo="O problema"
-        titulo="Invadiram o frio"
+        titulo="Invadiram os refrigeradores"
         destaque="pela internet"
         subtitulo="Em 2026, invasores mandaram esquentar supermercados e um banco de sangue na Europa. Ninguém entrou nos prédios."
       />
@@ -54,7 +55,7 @@ export default function Problema() {
         <Revelar className="mt-12">
           <PainelVidro as="section" aria-labelledby="chamada" className="flex flex-col items-start gap-4 p-6 sm:p-8">
             <h3 id="chamada" className="led-forte text-2xl font-semibold text-balance">
-              Os monitores avisam. O C-Shield avisa e age.
+              {BORDAO}
             </h3>
             <p className="max-w-prose text-gelo-50">
               Na Europa, passaram 3h30 até alguém perceber. O C-Shield decide em segundos, ali mesmo, e
