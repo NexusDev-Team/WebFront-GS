@@ -59,7 +59,7 @@ export default function CabecalhoPagina({
           <VeuBanner />
         </div>
       ) : null}
-      <div className="conteudo relative w-full">
+      <div className="conteudo relative">
         <div className="nevoa-texto w-fit max-w-full">
           <motion.div
             variants={ENTRADA_CONTAINER}
