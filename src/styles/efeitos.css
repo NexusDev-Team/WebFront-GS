@@ -104,6 +104,13 @@
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='r'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23r)'/%3E%3C/svg%3E");
   }
 
+  /* O fundo "cyber" (binários e circuitos) some aos poucos em cima e embaixo, por máscara: sem linha
+     nem mudança de tom onde ele termina, e a atmosfera global aparece por trás. */
+  .fundo-cyber {
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 12%, black 70%, transparent 100%);
+    mask-image: linear-gradient(to bottom, transparent 0%, black 12%, black 70%, transparent 100%);
+  }
+
   .faixa-suave {
     background-image: linear-gradient(
       to bottom,

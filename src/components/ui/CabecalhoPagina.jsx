@@ -43,8 +43,6 @@ export default function CabecalhoPagina({
       className={`relative overflow-hidden pt-20 pb-16 md:pt-28 md:pb-24 ${className}`}
     >
       {fundo ? <FundoCyber /> : null}
-      {/* O mesmo degradê do fim do banner: o fundo some aos poucos, sem uma linha de corte. */}
-      <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-linear-to-t from-noite-950 to-transparent md:h-32" />
       <motion.div
         variants={ENTRADA_CONTAINER}
         initial="hidden"
