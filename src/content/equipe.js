@@ -11,10 +11,9 @@
 
 /*
  * equipe.js — os integrantes da Nexus Dev para a página da equipe. Nomes e RMs são os do
- * cabeçalho do grupo. A função de cada um e as fotos ficam com a equipe:
- *   - funcao: trocar o texto "Função a definir" pela função de cada um no projeto;
- *   - foto: colocar o arquivo em public/equipe/ com o nome indicado (ver o README da pasta).
- * Enquanto a foto não existe, a página mostra um avatar com as iniciais.
+ * cabeçalho do grupo. As fotos (recortes quadrados de 256 px no rosto) ficam em public/equipe/,
+ * com o nome indicado abaixo; se uma não carregar, a página mostra um avatar com as iniciais.
+ * A função de cada um (hoje "Função a definir") não aparece em nenhuma página.
  */
 
 const FUNCAO_PENDENTE = 'Função a definir'
