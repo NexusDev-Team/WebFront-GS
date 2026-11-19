@@ -150,8 +150,8 @@ function DiagramaLargo() {
       </g>
       <text x={300} y={242} textAnchor="middle" className="fill-ataque text-[14px] font-semibold">não escuta a rede</text>
 
-      {/* a liberação é presencial: só o botão físico libera */}
-      <No base={base} x={535} y={410} largura={180} altura={50} titulo="Botão no aparelho" detalhe="físico, só ele libera" />
+      {/* a liberação é presencial: só o cartão NFC libera */}
+      <No base={base} x={535} y={410} largura={180} altura={50} titulo="Cartão NFC" detalhe="presencial, só ele libera" />
       <Seta d="M625 408 V394" cor={COR.neutro} marcador={neutro} />
     </svg>
   )
@@ -221,7 +221,7 @@ function DiagramaEmColunas() {
             <path d="M3 3l10 10M13 3 3 13" />
           </svg>
           Não escuta a rede.
-        </span> Só o botão físico do aparelho libera o bloqueio.
+        </span> Só um cartão NFC cadastrado, encostado no aparelho, libera o bloqueio.
       </p>
     </div>
   )

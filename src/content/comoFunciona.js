@@ -10,9 +10,9 @@
  */
 
 /*
- * comoFunciona.js — o texto da página Como funciona (W44, W26c). Os estados e as cores de LED
- * seguem o contrato do Edge (docs/specs/PLANO-GS.md, "Como o Guardião decide"); a página nunca
- * diz que o C-Shield recebe comandos pela rede (W43).
+ * comoFunciona.js — o texto da página Como funciona. Os estados e as cores de LED
+ * seguem o contrato do Edge; a página nunca
+ * diz que o C-Shield recebe comandos pela rede.
  */
 import { BORDAO } from '../domain/produto.js'
 import { URL_REPOSITORIO_EDGE, URL_WOKWI } from './links.js'
@@ -55,7 +55,7 @@ export const CICLO = {
       verbo: 'Alertar e bloquear',
       icone: 'sino',
       texto:
-        'Luz, buzzer e mensagem no display avisam no local, mesmo sem internet, e o bloqueio fica ativo: as ordens do controlador são ignoradas. O aparelho envia o evento ao FIWARE e ao site, só nessa direção. O bloqueio só termina presencialmente: no botão físico do aparelho.',
+        'Luz, buzzer e mensagem no display avisam no local, mesmo sem internet, e o bloqueio fica ativo: as ordens do controlador são ignoradas. O aparelho envia o evento ao FIWARE e ao site, só nessa direção. O bloqueio só termina presencialmente: com um cartão NFC cadastrado, encostado no aparelho. Cada liberação fica registrada com o papel de quem liberou.',
     },
   ],
 }
@@ -73,7 +73,7 @@ export const ARQUITETURA = {
     'O C-Shield mede a câmara com sensores próprios e controla o relé: veta o que aumenta o risco.',
     'O C-Shield só envia dados: para o FIWARE e, de lá, para o site.',
     'O C-Shield não escuta a rede: não existe comando para enviar a ele.',
-    'Só o botão físico do aparelho libera o bloqueio.',
+    'Só um cartão NFC cadastrado, encostado no aparelho, libera o bloqueio.',
   ],
   limite: 'No protótipo, a direção única é garantida pelo software; um diodo de dados físico entra no roadmap.',
 }

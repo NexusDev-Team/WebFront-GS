@@ -13,7 +13,7 @@
  * inicio.js — o texto da página inicial, em três blocos: banner, problema e solução.
  * Os números do problema vêm de notícias que já estão em noticias.js; o fato guarda só o id da
  * notícia (fonteId), e fonteDoFato devolve o veículo e o link. Assim a fonte não se repete aqui.
- * Fatos e fontes: docs/specs/PLANO-GS.md, seção "O caso".
+ * Fatos e fontes: ver cada notícia e a página Problema.
  */
 import imagemHero from '../assets/imghero.jpg'
 import { NOTICIAS } from './noticias.js'
@@ -70,7 +70,7 @@ export const PROBLEMA = {
 
 // O painel do C-Shield: o que o aparelho mostra no local e envia à central. Tudo aqui é leitura. Os
 // relés aparecem como indicadores (nome e estado em texto), e nada na página manda ordem ao
-// aparelho (W43). Os números de alerta são da demonstração, e o texto diz isso.
+// aparelho. Os números de alerta são da demonstração, e o texto diz isso.
 export const PAINEL = {
   titulo: 'Painel do C-Shield',
   subtitulo: 'O que o aparelho mostra no local e envia à central. Nada aqui manda ordens a ele.',
@@ -108,7 +108,7 @@ export const SOLUCAO = {
       verbo: 'Alertar e bloquear',
       icone: 'sino',
       texto:
-        'Luz, som e mensagem no local avisam na hora, e o bloqueio fica ativo: as ordens do controlador são ignoradas. Para liberar, é preciso estar presente e usar o botão físico do aparelho.',
+        'Luz, som e mensagem no local avisam na hora, e o bloqueio fica ativo: as ordens do controlador são ignoradas. Para liberar, é preciso estar presente e encostar no aparelho um cartão NFC cadastrado.',
     },
   ],
   link: { rotulo: 'Entender o funcionamento', para: '/como-funciona' },

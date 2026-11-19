@@ -18,7 +18,7 @@ export default function ImagemDispositivo() {
     <figure className="flex flex-col items-center gap-3">
       <img
         src={imagemDispositivo}
-        alt="O C-Shield: caixa escura com display mostrando o estado e a temperatura, LED verde de estado e botão de liberação"
+        alt="O C-Shield: caixa escura com display mostrando o estado e a temperatura, LED verde de estado e leitor de cartão NFC para a liberação"
         loading="lazy"
         className="w-full max-w-md"
       />

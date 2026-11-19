@@ -10,7 +10,7 @@
  */
 
 
-// Conteúdo da página Como funciona (W44, W26c): o ciclo, a arquitetura em uma direção, os cinco
+// Conteúdo da página Como funciona: o ciclo, a arquitetura em uma direção, os cinco
 // estados e a explicação dos LEDs do Wokwi (a página ficou enxuta: sem a origem da ideia). Os estados e as
 // cores de LED são conferidos contra o próprio domínio, para a página não divergir do firmware.
 import { describe, expect, it } from 'vitest'
@@ -59,10 +59,10 @@ describe('CICLO (os quatro verbos)', () => {
     expect(assumir.texto).toMatch(/calor/i)
     expect(assumir.texto).toMatch(/frio/i)
   })
-  it('alertar e bloquear diz que o bloqueio só termina só termina no botão físico do aparelho', () => {
+  it('alertar e bloquear diz que o bloqueio só termina com um cartão NFC cadastrado', () => {
     const alertar = CICLO.passos.find((p) => p.verbo === 'Alertar e bloquear')
     expect(alertar.texto).toMatch(/bloqueio/)
-    expect(alertar.texto).toMatch(/botão físico/)
+    expect(alertar.texto).toMatch(/cartão NFC/)
     expect(alertar.texto).not.toMatch(/3 segundos/)
   })
 })
@@ -141,7 +141,7 @@ describe('a página não tem mais a origem da ideia (cortada em 13/11)', () => {
   })
 })
 
-describe('regra do produto em todos os textos (W43)', () => {
+describe('regra do produto em todos os textos', () => {
   it('nenhum texto diz que o C-Shield aceita comandos pela rede', () => {
     expect(TUDO).not.toMatch(/aceita (comandos|ordens)|recebe (comandos|ordens) pela rede|pode receber/i)
   })
