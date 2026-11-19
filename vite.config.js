@@ -18,6 +18,8 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   test: {
     environment: 'node',
+    // Os pools padrão (forks/threads) quebram com 'reading config' neste Node 24; vmThreads roda tudo.
+    pool: 'vmThreads',
     include: ['tests/**/*.test.{js,jsx}'],
   },
 })
