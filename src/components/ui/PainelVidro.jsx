@@ -10,7 +10,7 @@
  */
 
 // Cartão padrão do site (classe .cartao): degradê sutil, borda fina e sombra funda, como no mockup.
-// O nome ficou PainelVidro por compatibilidade; o texto é sempre opaco (W45).
+// O nome ficou PainelVidro por compatibilidade; o texto é sempre opaco.
 export default function PainelVidro({
   as: Tag = 'div',
   className = '',

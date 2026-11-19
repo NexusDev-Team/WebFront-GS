@@ -9,7 +9,7 @@
  *   Nicolas Cinel — RM572940
  */
 
-// Confirmação feita na própria página, sem confirm() (W34). Ao abrir, o foco vai para "Cancelar"
+// Confirmação feita na própria página, sem confirm(). Ao abrir, o foco vai para "Cancelar"
 // (o caminho seguro). Quem usa decide quando mostrar e devolve o foco ao botão de origem ao fechar.
 import { useEffect, useRef } from 'react'
 import BotaoLed from './BotaoLed.jsx'

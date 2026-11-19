@@ -79,7 +79,7 @@ describe('textos da página inicial', () => {
   it('não usam leet: o leet fica só no emulador', () => {
     expect(TEXTOS).not.toMatch(/4T4QU3|C4L0R|FR10/i)
   })
-  it('nunca dizem que o C-Shield recebe comandos pela rede (W43)', () => {
+  it('nunca dizem que o C-Shield recebe comandos pela rede', () => {
     expect(TEXTOS).not.toMatch(/recebe (comandos|ordens) pela rede(?!\.)/i)
     expect(SOLUCAO.texto).toMatch(/nenhum comando pela rede/i)
   })
@@ -115,7 +115,7 @@ describe('PAINEL (o texto do monitoramento da página inicial)', () => {
     expect(PAINEL.historico).not.toHaveProperty('reles')
     expect(PAINEL.historico).not.toHaveProperty('nota')
   })
-  it('nenhum texto sugere controle remoto, automação ou comandos pela rede (W43)', () => {
+  it('nenhum texto sugere controle remoto, automação ou comandos pela rede', () => {
     expect(JSON.stringify(PAINEL)).not.toMatch(/automa[cç]|controle t[eé]rmico|comando|liga(r)? o|desliga(r)? o/i)
   })
 })

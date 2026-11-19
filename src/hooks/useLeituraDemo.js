@@ -14,7 +14,7 @@
  * useLeituraDemo — a leitura simulada que alimenta os gráficos da página inicial. Guarda uma
  * janela de n leituras e, a cada 2 s, tira a mais antiga e põe uma nova (a série continua de onde
  * parou, ver domain/serieDemo.js). Com "menos movimento" nas preferências da pessoa, a série fica
- * parada (W47). É uma demonstração com dados fictícios: nada aqui vem do aparelho.
+ * parada. É uma demonstração com dados fictícios: nada aqui vem do aparelho.
  */
 import { useEffect, useState } from 'react'
 import { proximaLeitura, serieSensor } from '../domain/serieDemo.js'

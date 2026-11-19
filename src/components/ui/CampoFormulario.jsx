@@ -10,7 +10,7 @@
  */
 
 // Campo de formulário: rótulo sempre visível, dica opcional e mensagem de erro junto do campo,
-// ligados ao controle por aria-describedby e aria-invalid (W32). O controle vem como função,
+// ligados ao controle por aria-describedby e aria-invalid. O controle vem como função,
 // que recebe as props prontas (id, aria-*, className) para espalhar no input, select ou textarea:
 //   <CampoFormulario id="x" rotulo="Nome" erro={erros.nome}>{(p) => <input {...p} />}</CampoFormulario>
 const CONTROLE =

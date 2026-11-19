@@ -9,7 +9,7 @@
  *   Nicolas Cinel — RM572940
  */
 
-// A câmara por dentro (W20 a W26a), numa coluna só ao lado do mapa: o visor LCD, o LED, os equipamentos desenhados, a
+// A câmara por dentro, numa coluna só ao lado do mapa: o visor LCD, o LED, os equipamentos desenhados, a
 // ordem que o controlador recebeu, o gráfico de temperatura com a faixa segura e o botão de
 // segurar 3 s que libera de verdade. Sem C-Shield no local, só se vê o que o ataque faz. A faixa
 // segura é só leitura: "gravada no dispositivo". Use key={localId} para zerar os avisos ao trocar

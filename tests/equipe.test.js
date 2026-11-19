@@ -52,7 +52,7 @@ describe('textos da página (uma tela: equipe e propósito, sem visão nem cultu
     expect(conteudo.VISAO).toBeUndefined()
     expect(conteudo.CULTURA).toBeUndefined()
   })
-  it('nunca sugere que o C-Shield recebe comandos pela rede (W43)', () => {
+  it('nunca sugere que o C-Shield recebe comandos pela rede', () => {
     expect(PROPOSITO.toLowerCase()).not.toMatch(/recebe (comandos|ordens)|comandar (o )?c-shield/)
   })
 })

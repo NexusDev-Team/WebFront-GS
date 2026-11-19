@@ -280,7 +280,7 @@ describe('passo: histórico', () => {
 
 const sit = (c, id) => situacao(c.locais[id])
 
-describe('situacao (W17)', () => {
+describe('situacao', () => {
   it('local sem ataque é NORMAL', () => {
     expect(sit(criarCidade(), 'farmacia-mooca')).toBe('NORMAL')
     expect(sit(avancar(criarCidade(), 2), 'ubs-vila-mariana')).toBe('NORMAL')
@@ -448,13 +448,13 @@ describe('ataqueEmMassa', () => {
   })
 })
 
-describe('recomecar (W18)', () => {
+describe('recomecar', () => {
   it('volta exatamente ao estado inicial', () => {
     expect(recomecar()).toEqual(criarCidade())
   })
 })
 
-describe('placar (W19)', () => {
+describe('placar', () => {
   it('antes de qualquer ataque mostra as duas UBS sem tempo de reação', () => {
     const p = placar(criarCidade())
     expect(p.map((l) => l.id)).toEqual(['ubs-vila-mariana', 'ubs-brasilandia'])

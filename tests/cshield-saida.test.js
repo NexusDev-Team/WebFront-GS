@@ -45,7 +45,7 @@ describe('corLed', () => {
     expect(corLed({ estado: ESTADOS.FALHA_SENSOR, bloqueado: false })).toBe('amarelo-pisca')
     expect(corLed({ estado: ESTADOS.BLOQUEIO, bloqueado: true })).toBe('azul')
   })
-  it('azul fixo sempre que há bloqueio, mesmo em CRITICO (W22)', () => {
+  it('azul fixo sempre que há bloqueio, mesmo em CRITICO', () => {
     expect(corLed({ estado: ESTADOS.CRITICO, bloqueado: true })).toBe('azul')
     expect(corLed({ estado: ESTADOS.FALHA_SENSOR, bloqueado: true })).toBe('azul')
   })

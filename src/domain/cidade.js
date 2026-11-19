@@ -92,7 +92,7 @@ function registrarAtaque(cidade, localId, agoraRealMs) {
 }
 
 // O atacante manda uma ordem ao controlador comercial do local. CALOR: setpoint perigosamente
-// alto e refrigeração do controlador desligada. FRIO: setpoint baixo demais (W26b).
+// alto e refrigeração do controlador desligada. FRIO: setpoint baixo demais.
 export function atacar(cidade, localId, tipo, agoraRealMs) {
   if (!cidade.locais[localId]) throw new Error(`Local desconhecido: ${localId}`)
   if (tipo !== 'CALOR' && tipo !== 'FRIO') throw new Error(`Tipo de ataque desconhecido: ${tipo}`)
@@ -247,7 +247,7 @@ export function ataqueEmMassa(cidade, tipo, agoraRealMs) {
   return nova
 }
 
-// Volta ao começo do jogo (W18).
+// Volta ao começo do jogo.
 export function recomecar() {
   return criarCidade()
 }

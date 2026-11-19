@@ -19,7 +19,7 @@
  * manchetePublicada: false = a página não abriu na conferência (bloqueio do site); o título é
  *   da equipe, descreve a matéria e a tela avisa "Título da equipe". Conferir quando der.
  *
- * Fatos e fontes: docs/specs/PLANO-GS.md, seção "O caso".
+ * Fatos e fontes: ver cada notícia e a página Problema.
  */
 
 export const NOTICIAS = [

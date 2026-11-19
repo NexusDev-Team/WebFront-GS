@@ -9,7 +9,7 @@
  *   Nicolas Cinel — RM572940
  */
 
-// Região aria-live (W50): anuncia, só para leitor de tela, quando a situação de um local muda
+// Região aria-live: anuncia, só para leitor de tela, quando a situação de um local muda
 // ("UBS Brasilândia: sob ataque."). Fica fora da vista (sr-only). Compara a situação de agora
 // com a anterior durante a renderização, sem efeito colateral.
 import { useState } from 'react'

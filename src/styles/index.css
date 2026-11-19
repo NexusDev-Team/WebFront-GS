@@ -46,7 +46,7 @@
     text-wrap: pretty;
   }
 
-  /* Foco visível em todos os controles (W4). */
+  /* Foco visível em todos os controles. */
   :focus-visible {
     outline: 2px solid var(--color-led-forte);
     outline-offset: 3px;

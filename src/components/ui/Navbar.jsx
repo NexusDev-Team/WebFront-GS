@@ -17,7 +17,7 @@ import Logo from './Logo.jsx'
 
 // Navegação principal (Design System v1.0): barra de 80 px, quatro links em texto e o botão em
 // pílula "Simular ataque →". No celular vira um botão de menu (aria-expanded). NavLink já marca a
-// rota atual com aria-current="page" (W4); a rota atual leva ciano e um sublinhado de 2 px.
+// rota atual com aria-current="page"; a rota atual leva ciano e um sublinhado de 2 px.
 const LINKS = [
   { para: '/', rotulo: 'Home' },
   { para: '/como-funciona', rotulo: 'Como funciona' },

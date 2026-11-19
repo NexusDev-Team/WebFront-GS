@@ -16,7 +16,7 @@
 import { criarContexto } from './cshield.js'
 import { ID_PILOTO } from './cidade.js'
 
-// Instala o C-Shield num local. A política não muda (W26): é a mesma de sempre, gravada no
+// Instala o C-Shield num local. A política não muda: é a mesma de sempre, gravada no
 // dispositivo. Se o local já estava sob ataque, passa a ser protegido dali em diante: a exposição
 // acumulada continua valendo e a reação conta a partir da instalação.
 function instalarNoLocal(nova, local) {

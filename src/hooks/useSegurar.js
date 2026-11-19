@@ -10,7 +10,7 @@
  */
 
 /*
- * useSegurar(ms, aoCompletar) — o gesto de "segurar" do botão de liberação (W23): só vale se
+ * useSegurar(ms, aoCompletar) — o gesto de "segurar" do botão de liberação: só vale se
  * a pessoa segurar por `ms` (3 s no C-Shield). Funciona com mouse, toque e teclado (Espaço ou
  * Enter). Soltar antes cancela e zera. Completa uma única vez por pressão: para repetir, é
  * preciso soltar e segurar de novo.

@@ -38,3 +38,7 @@ dist-ssr
 CLAUDE.md
 docs/*
 !docs/img/
+
+# Skills e configuração do agente (só na máquina)
+.claude/
+skills-lock.json

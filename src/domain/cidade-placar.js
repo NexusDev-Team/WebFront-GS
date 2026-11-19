@@ -10,8 +10,8 @@
  */
 
 /*
- * cidade-placar.js — leituras da cidade para a tela: situação de cada local (W17) e placar
- * comparando a UBS com C-Shield e a sem (W19). Só lê a cidade; quem a altera é o cidade.js.
+ * cidade-placar.js — leituras da cidade para a tela: situação de cada local e placar
+ * comparando a UBS com C-Shield e a sem. Só lê a cidade; quem a altera é o cidade.js.
  */
 
 import { LOCAIS } from './cidade.js'
@@ -44,7 +44,7 @@ export function algumSobAtaque(cidade) {
 // real que inspirou o projeto (ICA). É um dado do caso, não uma simulação.
 export const PERCEPCAO_SEM_CSHIELD_MIN = 210
 
-// As duas UBS comparadas no placar (W19): a que nasce com C-Shield e a que nasce sem.
+// As duas UBS comparadas no placar: a que nasce com C-Shield e a que nasce sem.
 const IDS_PLACAR = ['ubs-vila-mariana', 'ubs-brasilandia']
 
 // Placar: para cada UBS, temperatura, quanto tempo levou para reagir, exposição e situação.

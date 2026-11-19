@@ -15,7 +15,7 @@
  * a caber em uma tela, com a equipe ao lado.
  *
  * O texto é da equipe (enviado em 14/11); os fatos sobre o produto seguem o plano do projeto
- * (docs/specs/PLANO-GS.md).
+ * (plano do projeto).
  */
 
 export const PROPOSITO =

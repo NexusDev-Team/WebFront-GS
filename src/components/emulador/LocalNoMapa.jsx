@@ -11,7 +11,7 @@
 
 // Um local no mapa: o círculo com o ícone do que ele guarda, o escudo azul se tiver C-Shield, a
 // temperatura e a situação em texto. É um botão de verdade (role="button", Tab, Enter e Espaço)
-// e a cor sempre vem acompanhada de texto (W49).
+// e a cor sempre vem acompanhada de texto.
 import { RAIO_ESCUDO, RAIO_LOCAL } from './geometria.js'
 import { COR_SITUACAO, ROTULO_SITUACAO } from './rotulos.js'
 import { formatarGraus as graus } from '../ui/formato.js'

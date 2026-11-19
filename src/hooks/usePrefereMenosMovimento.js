@@ -11,7 +11,7 @@
 
 /*
  * usePrefereMenosMovimento — true quando a pessoa pediu menos movimento no sistema
- * (prefers-reduced-motion). Quem anima (linhas, ventoinha, pulsos) para quando vale true (W47).
+ * (prefers-reduced-motion). Quem anima (linhas, ventoinha, pulsos) para quando vale true.
  */
 import { useSyncExternalStore } from 'react'
 

@@ -11,7 +11,7 @@
  * @vitest-environment jsdom
  */
 
-// Hook do botão de segurar (W23): mouse/toque, teclado, cancelamento e conclusão única.
+// Hook do botão de segurar: mouse/toque, teclado, cancelamento e conclusão única.
 import { act, cleanup, renderHook } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { useSegurar } from '../src/hooks/useSegurar.js'

@@ -9,7 +9,7 @@
  *   Nicolas Cinel — RM572940
  */
 
-// O visor LCD 16x2 do C-Shield (W20, W21). Mostra exatamente os textos do firmware, em 2 linhas
+// O visor LCD 16x2 do C-Shield. Mostra exatamente os textos do firmware, em 2 linhas
 // de 16 colunas (completa com espaço, como o aparelho). Desenhado como um display de vidro:
 // fundo azul-noite e texto azul-gelo em fonte monoespaçada. Para leitor
 // de tela, o visor inteiro é uma imagem com o texto das duas linhas.

@@ -9,7 +9,7 @@
  *   Nicolas Cinel — RM572940
  */
 
-// Página Como funciona (W44, W26c): o ciclo de proteção, a arquitetura em uma direção, os cinco
+// Página Como funciona: o ciclo de proteção, a arquitetura em uma direção, os cinco
 // estados e a explicação dos LEDs do Wokwi (enxuta: sem a origem da ideia). O texto fica em
 // content/comoFunciona.js; a página só liga as seções.
 import SecaoArquitetura from '../components/comoFunciona/SecaoArquitetura.jsx'

@@ -11,7 +11,7 @@
 
 import { ArrowRight } from 'lucide-react'
 
-// Botão (ou link, com as=...) em pílula, com alvo de toque de pelo menos 44 x 44 px (W48).
+// Botão (ou link, com as=...) em pílula, com alvo de toque de pelo menos 44 x 44 px.
 // `ariaLabel` serve aos textos em leet (4T4QU3 = "Ataque").
 // `seta` põe a seta no fim do texto ("Simular ataque →"); `icone` põe um ícone antes do texto
 // (no secundário ele ganha um círculo, como o "Como funciona" do hero). Hover: brilho e 2 px para

@@ -12,7 +12,7 @@
 /*
  * Efeitos do Design System v1.0 "Cyber-criogênico" (design.md §0).
  * Ciano é destaque, não a cor de tudo; vermelho só em ataque e alerta real.
- * Nada pisca mais de 3 vezes por segundo (W46) e tudo para com prefers-reduced-motion (W47).
+ * Nada pisca mais de 3 vezes por segundo e tudo para com prefers-reduced-motion.
  */
 
 @layer components {
@@ -20,7 +20,7 @@
     animation: faisca-pulsa 1.25s ease-in-out infinite;
   }
 
-  /* LED amarelo piscando (FALHA_SENSOR): 0,8 Hz, bem abaixo das 3 piscadas por segundo (W46). */
+  /* LED amarelo piscando (FALHA_SENSOR): 0,8 Hz, bem abaixo das 3 piscadas por segundo. */
   .led-pisca {
     animation: led-pisca 1.25s steps(1, end) infinite;
   }
@@ -297,7 +297,7 @@
   to { stroke-dashoffset: -24; }
 }
 
-/* Sem movimento: nada anima (W47). */
+/* Sem movimento: nada anima. */
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

@@ -11,7 +11,7 @@
 
 // Linha do tempo do caso: lista ordenada, com um marcador por evento. A cor mostra o tipo
 // (vermelho = ataque, amarelo = alerta, azul forte = o C-Shield), mas o tipo também aparece
-// escrito em cada item (W49).
+// escrito em cada item.
 const TIPOS = {
   ataque: { rotulo: 'Ataque', cor: 'var(--color-ataque)' },
   alerta: { rotulo: 'Alerta', cor: 'var(--color-atencao)' },

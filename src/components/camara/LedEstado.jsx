@@ -9,7 +9,7 @@
  *   Nicolas Cinel — RM572940
  */
 
-// O LED de estado do C-Shield (W22): a cor E o que ela quer dizer, escritos (W49). Azul fixo
+// O LED de estado do C-Shield: a cor E o que ela quer dizer, escritos. Azul fixo
 // enquanto houver bloqueio. O amarelo piscando pisca devagar (menos de 1 vez por segundo) e para
 // com prefers-reduced-motion. Serve ao emulador e, depois, à leitura do dispositivo real.
 const LEDS = {

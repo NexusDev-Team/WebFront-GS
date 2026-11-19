@@ -11,7 +11,7 @@
 
 /*
  * linhaDoTempo.js — o caso em ordem, da primeira onda ao que o C-Shield muda (só os marcos que contam). Fatos de
- * docs/specs/PLANO-GS.md ("O caso"). tipo: 'ataque' (vermelho), 'alerta' (amarelo) ou
+ * tipo: 'ataque' (vermelho), 'alerta' (amarelo) ou
  * 'cshield' (azul forte: o que o produto faz).
  */
 

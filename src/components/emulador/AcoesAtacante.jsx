@@ -9,7 +9,7 @@
  *   Nicolas Cinel — RM572940
  */
 
-// As ações do atacante (W12, W15, W18), no alto do card da simulação, logo abaixo do ícone dele:
+// As ações do atacante, no alto do card da simulação, logo abaixo do ícone dele:
 // atacar o local escolhido (um botão só: esquenta a câmara), o ataque em massa, parar o ataque (só desfaz as
 // ordens) e recomeçar (zera o jogo). O botão de ataque fica em leet, com aria-label legível.
 // Proteger um local NÃO está aqui: isso é a zona de defesa, na parte de baixo do card.

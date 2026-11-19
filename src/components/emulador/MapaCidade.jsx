@@ -9,7 +9,7 @@
  *   Nicolas Cinel — RM572940
  */
 
-// O mapa SVG da cidade (W10 a W14): a central no meio e os 5 locais (o atacante fica na zona de cima do card). As linhas
+// O mapa SVG da cidade: a central no meio e os 5 locais (o atacante fica na zona de cima do card). As linhas
 // de ataque saem do atacante; as de dados vão só dos locais com C-Shield até a central. Nunca há
 // linha entre locais. O aviso de ataque coordenado aparece em cima do mapa, na central.
 import { LOCAIS } from '../../domain/cidade.js'

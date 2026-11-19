@@ -9,7 +9,7 @@
  *   Nicolas Cinel — RM572940
  */
 
-// Os equipamentos da câmara, desenhados de verdade (W26a): o aquecedor, a ventoinha de emergência
+// Os equipamentos da câmara, desenhados de verdade: o aquecedor, a ventoinha de emergência
 // e a refrigeração do controlador. No Wokwi eles são representados por LEDs, porque o simulador
 // não tem esses equipamentos; aqui aparecem como são, cada um com o estado escrito ao lado.
 //   aquecedor        estado: 'ligado' | 'cortado' | 'parado'

@@ -11,7 +11,7 @@
 
 /*
  * rotulos.js — as palavras do emulador, em linguagem do dia a dia (nada de jargão), e as cores
- * de cada situação. Cor nunca vem sozinha (W49): sempre acompanha o texto.
+ * de cada situação. Cor nunca vem sozinha: sempre acompanha o texto.
  */
 
 export const ROTULO_SITUACAO = {

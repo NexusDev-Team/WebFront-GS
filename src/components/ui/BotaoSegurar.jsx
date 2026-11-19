@@ -9,7 +9,7 @@
  *   Nicolas Cinel — RM572940
  */
 
-// O botão de segurar (W23): "Só obedece de perto" virado em gesto. É preciso SEGURAR por 3 s,
+// O botão de segurar: "Só obedece de perto" virado em gesto. É preciso SEGURAR por 3 s,
 // com a barra de 16 blocos enchendo como no visor do aparelho; soltar antes cancela. Funciona com
 // mouse, toque e teclado (Espaço ou Enter). O gesto vem de useSegurar, que o painel usa para
 // também mostrar o progresso no LCD; aqui só se desenha. Compacto, para caber ao lado do LED.

@@ -9,7 +9,7 @@
  *   Nicolas Cinel — RM572940
  */
 
-// Estado do C-Shield em cor E texto (W49): nunca só pela cor.
+// Estado do C-Shield em cor E texto: nunca só pela cor.
 // O texto fica em gelo-50 (contraste alto); a cor do estado vai no ponto e na borda.
 // Nomes de estado canônicos, iguais ao Edge. BLOQUEIO é azul, como o LED do aparelho.
 const ESTADOS = {
