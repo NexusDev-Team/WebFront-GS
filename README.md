@@ -16,6 +16,7 @@
   <p>
     <a href="https://c-shield-eight.vercel.app"><img src="https://img.shields.io/badge/SITE_PUBLICADO-2563EB?style=for-the-badge&logo=vercel&logoColor=white" alt="Site publicado na Vercel"></a>
     <a href="https://wokwi.com/projects/480328417992209409"><img src="https://img.shields.io/badge/SIMULA%C3%87%C3%83O_NO_WOKWI-0B1F3A?style=for-the-badge&logo=arduino&logoColor=white" alt="Simulação no Wokwi"></a>
+    <a href="https://youtu.be/TzsLjDiHPpE?si=FygEoofMBZzM18Sk"><img src="https://img.shields.io/badge/%E2%96%B6%EF%B8%8F_V%C3%8DDEO_NO_YOUTUBE-34D399?style=for-the-badge&logo=youtube&logoColor=0B1F3A" alt="Vídeo no YouTube"></a>
     <a href="https://github.com/NexusDev-Team/C-Shield-Edge"><img src="https://img.shields.io/badge/REPOSIT%C3%93RIO_EDGE-00B8D9?style=for-the-badge&logo=github&logoColor=0B1F3A" alt="Repositório do Edge"></a>
   </p>
 
